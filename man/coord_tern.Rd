@@ -1,0 +1,40 @@
+\name{coord_tern}
+\alias{coord_tern}
+\title{Ternary Coordinate System}
+\usage{
+  coord_tern(T = "x", L = "y", R = "z", xlim = c(0, 1),
+    ylim = c(0, 1), Tlim = NULL, Llim = NULL, Rlim = NULL,
+    clockwise = FALSE)
+}
+\arguments{
+  \item{T}{the Top Mapping (default x)}
+
+  \item{L}{the Left Mapping (default y)}
+
+  \item{R}{the Right Mapping (default z)}
+
+  \item{xlim}{the range of x in the cartesian space}
+
+  \item{ylim}{the range of y in the cartesian space}
+
+  \item{Tlim}{the range of T in the ternary space}
+
+  \item{Llim}{the range of L in the ternary space}
+
+  \item{Rlim}{the range of R in the ternary space}
+
+  \item{clockwise}{logical (default \code{FALSE})
+  indicating whether the precession of axes is clockwise
+  (\code{TRUE}) or counter-clockwise (\code{FALSE}).}
+}
+\value{
+  ternary coordinate system object.
+}
+\description{
+  \code{coord_tern} is a function which creates a
+  transformation mechanism between the ternary system, and,
+  the cartesian system. It inherits from the fixed
+  coordinate system, employing fixed ratio between x and y
+  axes once transformed.
+}
+
