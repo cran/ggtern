@@ -1,4 +1,4 @@
-.internals <- c(".all_aesthetics",
+.internals <- unique(c(".all_aesthetics",
                 "set_last_plot",
                 "coord_transform.cartesian",
                 "scale_clone",
@@ -35,15 +35,15 @@
                 "is.zero",
                 "plot_clone",
                 "set_last_plot",
-                "add_theme",
                 "make_labels",
                 "update_guides",
                 "zeroGrob",
                 "el_def"
-) 
-.internals <- unique(.internals)
+))
 
-
+#' \code{ggint} is a structure which holds all the internal functions from the ggplot2 namespace, which can be used conveniently
+#' via \code{ggint$ABC}.
+#' @rdname undocumented
 ggint <- structure(
   mapply(function(.internals, i) getFromNamespace(i,"ggplot2"),.internals, .internals),
   class=c("internal")

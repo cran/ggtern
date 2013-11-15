@@ -1,4 +1,6 @@
 \name{ggtern}
+\alias{aaa}
+\alias{constructor}
 \alias{ggtern}
 \title{Ternary Diagrams in R}
 \usage{
@@ -17,6 +19,22 @@
   which is an implementation of Wilkinsons "The Grammar of
   Graphics".
 }
+\details{
+  Plots in \code{ggtern} are instigated via the default
+  constructor: \code{ggtern(...)}, for additional
+  information, see below:
+}
+\section{ggtern Constructor}{
+  Plots in \code{ggtern} are instigated via the default
+  constructor: \code{ggtern(...)}, which is essentially a
+  convenience wrapper for the following: \code{ggplot{...}
+  + coord_tern()}, indeed, if one wishes to use
+  \code{ggplot{...} + coord_tern()} then this is quite
+  satisfactory. For further information on the
+  \code{coord_tern(...)} coordinate system, click
+  \link[=coord_tern]{HERE}.
+}
+
 \section{Valid Geometries for ggtern}{
   ggplot2, using the \code{\link{grid}} and
   \code{\link{proto}} architectures, makes provision for a
@@ -27,9 +45,17 @@
   \strong{not relevant} (or wont function) with ternary
   plots. As such, a limited number of 'approved' geometries
   can be used, includes the following in the first
-  instance: \enumerate{ \item point \item path \item
-  segment \item polygon \item smooth \item text \item
-  density2d \item rug }
+  instance: \enumerate{ \item
+  \code{\link[=geom_point]{Point}} \item
+  \code{\link[=geom_path]{Path}} \item
+  \code{\link[=geom_segment]{Segment}} \item
+  \code{\link[=geom_polygon]{Polygon}} \item
+  \code{\link[=geom_smooth]{Smooth}} \item
+  \code{\link[=geom_text]{Text}} \item
+  \code{\link[=geom_density2d]{Density2d}} \item
+  \code{\link[=geom_rug]{Rug}} } Additionally, ggterin
+  incldues novel geometries, including: \enumerate{ \item
+  \code{\link[=geom_confidence]{Confidence}} }
 }
 
 \section{Handling Non-Approved Geometries}{
@@ -48,6 +74,12 @@
   heirarchies which can be tailored on a case-by-case
   basis. The full list of new elements can is provided
   \link[=newelements]{HERE}.
+}
+
+\section{Theme Element Convenience Functions}{
+  \code{ggtern} has made available a number of convenience
+  functions, for rapid tweaking of common theme elements,
+  for a comprehensive list, see \link[=convenience]{HERE}.
 }
 
 \section{Modification to Required Aesthetics}{
@@ -169,9 +201,9 @@ last_plot() + coord_tern(Tlim=c(.3,.8),Llim=c(.1,0.6),Rlim=c(.1,0.6)) +
 plot + theme_tern_rgbw()
 
 #Additional themes (uncomment to execute)
-#plot + theme_tern_bw()
-#plot + theme_tern_gray()
-#plot + theme_tern_rgbg()
+#plot + theme_bw()
+#plot + theme_gray()
+#plot + theme_rgbg()
 
 
 ##-----------------------------------------------
@@ -244,7 +276,7 @@ ggtern(data=data.frame(A=0.6,B=0.2,C=0.2,
 ggtern(data=DATA.RANDOM,aes(x,y,z,color=Group)) +
  geom_point() +
  geom_smooth(aes(Group=Group),size=2,n=25) +
- theme_tern_bw()
+ theme_bw()
 
 
 ##-----------------------------------------------
@@ -283,13 +315,19 @@ plot + labs(title="Example of Region Focus") +
 ##-----------------------------------------------
 plot + theme_noarrows() + labs(title="Example of No Arrows")
 
+##-----------------------------------------------
+## Control of Ticks
+##-----------------------------------------------
+plot <- plot + theme_bw()
+plot + theme_ticksinside()  #Ticks Inside
+plot + theme_showsecondary()#Secondary ticks
 
 ##-----------------------------------------------
 ## Example RECESSED Arrows
 ##-----------------------------------------------
 ggtern(data=DATA.RANDOM,mapping=aes(x,y,z)) +
  geom_point() +
- theme_tern_rgbw() +
+ theme_rgbw() +
  tern_limits(labels=c(0,10,20,"","","","","",80,90,100)) + #AFFECT ALL SCALES
  theme(ternary.options=element_ternary(arrowsep=0.03,arrowstart=0.25,arrowfinish=0.75))
 }

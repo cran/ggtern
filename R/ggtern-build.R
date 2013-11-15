@@ -12,7 +12,6 @@
 #' @keywords internal
 #' @export
 ggplot_build <- function(plot) {
-  
   if (length(plot$layers) == 0) stop("No layers in plot", call.=FALSE)
   plot <- ggint$plot_clone(plot)
   
@@ -20,15 +19,14 @@ ggplot_build <- function(plot) {
   if(inherits(plot$coordinates,"ternary")){
     if(!inherits(plot,"ggtern")){
       class(plot) <- c("ggtern",class(plot))
-      plot <- plot + .theme_nocart()
     }
+    plot <- plot + .theme_nocart()
   }
   
   # Initialise panels, add extra data for margins & missing facetting
   # variables, and add on a PANEL variable to data
   panel <- ggint$new_panel()
   #... CONTINUED BELOW...
-  
   
   ##-------------------------------------------------------------------------------
   #IF WE HAVE TERNARY OPTIONS SOMEWHERE...  
@@ -47,34 +45,29 @@ ggplot_build <- function(plot) {
     
     ##Add the missing scales
     ggint$scales_add_missing(plot,scales.tern,environment())
-    scales <- plot$scales
-    scale_T <- function() scales$get_scales("T")
-    scale_L <- function() scales$get_scales("L")
-    scale_R <- function() scales$get_scales("R")
+    for(i in 1:3)
+      assign(paste0("scale_",scales.tern[i]),plot$scales$get_scales(scales.tern[i]))
     
     ##Add the ternary fixed coordinates if it doesn't exist
     if(!inherits(plot$coordinates,"ternary")){plot <- plot + coord_tern()}
     
     ##Update the scales limits from the coordinate
-    for(X in scales.tern){
-      a <- plot$scales$get_scales(X)$limits 
-      b <- plot$coordinates$limits[[X]]
-      plot$coordinates$limits[[X]] <- .is.numericor(.select.lim(a,b),c(0,1))
-    }
+    for(X in scales.tern)
+      plot$coordinates$limits[[X]] <- .is.numericor(.select.lim(plot$scales$get_scales(X)$limits,
+                                                                plot$coordinates$limits[[X]]),c(0,1))
     
     #STORE COORDINATES FOR USE BY OTHER METHODS.
     set_last_coord(plot$coordinates)
     
     #THESE ARE A BIT OF A HACK. NORMALLY THIS INFO IS HANDLED IN THE GRID ARCHITECTURE.
     #BUT THIS IS ONE WAY OF PASSING IT THROUGH...
-    panel <- .train_position_ternary(panel,scale_T(),scale_L(),scale_R())
-    panel$T_scales$name = .Tlabel(panel,plot$labels)
-    panel$L_scales$name = .Llabel(panel,plot$labels)
-    panel$R_scales$name = .Rlabel(panel,plot$labels)
-    panel$Wlabel        = .Wlabel(panel,plot$labels)
-  }else{
-    set_last_coord(NULL)
-  }
+    panel <- .train_position_ternary(panel,get("scale_T"),get("scale_L"),get("scale_R"))
+    panel$Wlabel = .Wlabel(panel,plot$labels)
+    for(i in 1:3){
+      x = scales.tern[i]
+      panel[[paste0(x,"_scales")]]$name <- do.call(paste0(".",x,"label"),list(panel  = panel,labels = plot$labels))
+    } 
+  }else set_last_coord(NULL)
   
   layers <- plot$layers
   layer_data <- lapply(layers, function(y) y$data)

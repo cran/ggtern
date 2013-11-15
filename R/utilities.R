@@ -1,8 +1,7 @@
-
-
-#' Internal Function
-#' 
-#' \code{ifthenelse} function takes input arguments \code{x}, \code{a} and \code{b} and returns \code{a} 
+#' \code{ifthenelse} function takes input arguments \code{x}, \code{a} and \code{b} and returns \code{a} if \code{x} is \code{TRUE}, else, returns \code{b}
+#' @param x logical input to check
+#' @param a value to return if \code{x} is TRUE
+#' @param b value to return if \code{x} is FALSE
 #' @rdname undocumented
 ifthenelse <- function(x,a,b){
   if(!is.logical(x))stop("x argument must be logical")
@@ -16,25 +15,16 @@ ifthenelse <- function(x,a,b){
 }
 "%||%" <- function(a, b) {if (!is.null(a)) a else b}
 
-#' Internal Function
-#' 
 #' \code{get_tern_extremes} determines the limiting ternary coordinates given input coordinates.
 #' @param coordinates ggtern coordinate system, inheriting "ternary" and "coord" classes.
 #' @param verbose logical indicating verbose reporting to console
 #' @param expand numeric value to 
 #' @examples get_tern_extremes(coordinates = coord_tern())
-#' @return data.frame representing the T, L and R amounts (Columns) at each of the tips (extremes) of the ternary plot area (Rows)
+#' @return \code{get_tern_extremes} returns data.frame representing the T, L and R amounts (Columns) at each of the tips (extremes) of the ternary plot area (Rows)
 #' @rdname undocumented
-#' @export
 get_tern_extremes <- function(coordinates,verbose=F,expand=0){
   expand = max(0,.is.numericor(expand[1],0)); 
   expand <- c(-expand/2,expand)
-  
-  #if(!missing(plot)){
-  #  if(inherits(plot,"ternary") & inherits(plot,"coord")){
-  #    coordinates <- plot
-  #  }
-  #}
   
   if(!inherits(coordinates,"ternary") & !inherits(coordinates,"coord"))stop("coordinates must be ternary coordinates")
   
@@ -75,8 +65,11 @@ get_tern_extremes <- function(coordinates,verbose=F,expand=0){
   invisible(ret)
 }
 
-#' Transform Ternary Coordinates to Cartesian Coordinates
+#' Ternary Transformations
 #' 
+#' Functions relating to the transformation from the ternary coordinate systems, to the cartesian coordinate system.
+#' 
+#' @section Transform Ternary Coordinates to Cartesian Coordinates:
 #' \code{transform_tern_to_cart(...)} is a function that takes input numeric vectors for the \code{T}, \code{L} and \code{R} species, 
 #' or, alternatively, a data.frame with columns \code{T}, \code{L} and \code{R} (Mandatory Column Names), and, transforms the data from the ternary space, 
 #' to the cartesian space where \code{x} and \code{y} are in the range \code{[0,1]} and [0,\eqn{sin(\pi/3)}] respectively.
@@ -108,9 +101,11 @@ get_tern_extremes <- function(coordinates,verbose=F,expand=0){
 #' @param Tlim the limits of the top axis
 #' @param Llim the limits of the left axis
 #' @param Rlim the limits of the right axis
-#' @param cw based on clockwise (TRUE) or anti-clockwise(FALSE) axis precession.
-#' @return \code{data.frame} object with columns \code{x} and \code{y} representing the transformed coordinates, and, number of rows
+#' @return \code{transform_tern_to_cart} returns a \code{data.frame} object with columns \code{x} and \code{y} representing the transformed coordinates, and, number of rows
 #' equal to that of the \code{data} argument. In other words, a '1 to 1' transformation from the ternary to the cartesian space. 
+#' @rdname ternary_transformations
+#' @name   ternary_transformations
+#' @aliases transform_tern_to_cart
 #' @examples
 #' #Species Concentrations
 #' T=c(1,0,0) #TOP 
@@ -118,8 +113,7 @@ get_tern_extremes <- function(coordinates,verbose=F,expand=0){
 #' R=c(0,0,1) #RIGHT
 #' #Transform
 #' transform_tern_to_cart(T,L,R)
-#' @export
-transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c(0,1),Llim=c(0,1),Rlim=c(0,1),cw=TRUE,scale=TRUE){
+transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c(0,1),Llim=c(0,1),Rlim=c(0,1),scale=TRUE){
   if(class(data) != "data.frame")stop("data must be of type 'data.frame'")
   if(length(which(c("T","L","R") %in% colnames(data))) < 3) stop("data must contain columns T, L and R")
   
@@ -154,15 +148,12 @@ transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c
   return(data.frame(x=out.X,y=out.Y))
 }
 
-#' Internal Function
-#' 
-#' \code{arrow_label_formatter} is a function that formats the labels directly adjacent to the axes on a ternary plot.
+#' \code{arrow_label_formatter} is a function that formats the labels directly adjacent to the ternary arrows.
 #' @param label character label
 #' @param suffix chacater suffix behind each label
 #' @param sep the seperator between label and suffix 
 #' @rdname undocumented
 #' @examples arrow_label_formatter("TOP","Wt.%",sep="/")
-#' @export
 arrow_label_formatter <- function(label,suffix="",...,sep="/"){
   if(missing(label))stop("label cannot be missing")
   if(!is.character(label) | !is.character(suffix) | !is.character(sep))stop("label, sep and suffix must be characters")
@@ -175,9 +166,7 @@ arrow_label_formatter <- function(label,suffix="",...,sep="/"){
   }
 }
 
-#' Internal Function
-#' 
-#' \code{calc_element_plot} Calculate the element properties, by inheriting properties from its parents, 
+#' \code{calc_element_plot} Calculates the element properties, by inheriting properties from its parents, 
 #' and compares to whether the local plot overrides this value. Based largely off the \code{\link[ggplot2]{calc_element}} 
 #' as provided in \code{\link{ggplot2}}
 #' @seealso \code{\link[ggplot2]{calc_element}}
@@ -198,18 +187,15 @@ calc_element_plot <- function(element,theme=theme_update(),...,plot=NULL,verbose
   ifthenelse(!identical(ret.plot,NULL),ret.plot,ret.theme)
 }
 
-#' Internal Function
-#' 
 #' \code{find_global} is a function that conducts a named search for the \code{name} object instance, within the \code{env} environment. 
-#' If an instance doesn't exist within the \code{env} environment, a search is then conducted within the \code{ggtern} and \code{ggplot2} namespaces \emph{(in that order)}.
-#' 
-#' This is a modified version of the original source as provided in \code{ggplot2}, which has the same functionality, however, the modification is such that the function
+#' If an instance doesn't exist within the \code{env} environment, a search is then conducted within the \code{ggtern} and \code{ggplot2} 
+#' namespaces \emph{(in that order)}. This is a modified version of the original source as provided in \code{ggplot2}, which has the same functionality, however, the modification is such that the function
 #' now additionally searches within the \code{ggtern} namespace prior to the \code{ggplot2} namespace.
 #' @param name character name of object to search for
 #' @param env environment to search within as first priority
 #' @examples find_global('scale_x_continuous')
 #' @rdname undocumented
-#' @return Instance of the named object (if it exists), or \code{NULL} (if it does not).
+#' @return \code{find_global} returns an instance of the named object (if it exists), or \code{NULL} (if it does not).
 find_global <- function (name, env=environment()){  
   if(!is.character(name)){stop("'name' must be provided as a character")}
   if(!inherits(environment(),"environment")){stop("'env' must inherit the environment class")}
@@ -222,15 +208,16 @@ find_global <- function (name, env=environment()){
 }
 
 
-#' Internal Function
-#' 
+#' @section Attempt Transformation from Ternary to Cartesian Coordinates:
 #' \code{trytransform} is an internal function which attempts to make ternary transformation. 
-#' If fails, the original data is returned
+#' If fails, the original data is returned.
 #' @param data the dataset
 #' @param coord the coordinates
-#' @return transformed data
 #' @keywords internal
-#' @rdname undocumented
+#' @aliases trytransform
+#' @return \code{trytransform} returns a \code{data.frame} object regardless of the success of the function operation.
+#' @name   ternary_transformations
+#' @rdname ternary_transformations
 trytransform <- function(data,coord){
   if(missing(coord)){stop("coord are required")}
   bup <- data
@@ -238,7 +225,7 @@ trytransform <- function(data,coord){
   Tlim <- coord$limits$T; Llim <- coord$limits$L; Rlim <- coord$limits$R
   tryCatch({
     if(inherits(coord,"ternary")){  
-      res <- transform_tern_to_cart(T=data[,coord$T],L=data[,coord$L],R=data[,coord$R],Tlim=Tlim,Llim=Llim,Rlim=Rlim, cw=coord$clockwise)[,c("x","y")]
+      res <- transform_tern_to_cart(T=data[,coord$T],L=data[,coord$L],R=data[,coord$R],Tlim=Tlim,Llim=Llim,Rlim=Rlim)[,c("x","y")]
       data <- cbind(res,data[,which(!colnames(data) %in% c(coord$T,coord$L,coord$R))])
     }
   },error=function(e){
@@ -266,11 +253,9 @@ trytransform <- function(data,coord){
   }
 }
 
-#' Internal Function
-#' 
-#' Internal Function
+
+#' \code{remove_outside} is a function that removes, from an input datases, all the rows wich are outside the ternary plot area
 #' @param data data.frame
-#' @return data.frame
 #' @rdname undocumented
 remove_outside <- function(data){
   bup <- data
@@ -279,8 +264,11 @@ remove_outside <- function(data){
     if(inherits(lp,"ggtern")){ #ONLY FOR ggtern object
       if(class(data) != "data.frame"){return(data)}
       if(length(which(c("x","y") %in% names(data))) != 2){warning("x and y are required"); return(data)}
-      tri <- transform_tern_to_cart(data=get_tern_extremes(get_last_coord()))
-      ix <- point.in.polygon(data$x,data$y,tri$x,tri$y)
+      
+      coord <- get_last_coord()
+      lim <- list(Tlim=coord$limits[["T"]],Llim=coord$limits[["L"]],Rlim=coord$limits[["R"]])
+      tri <- transform_tern_to_cart(data=get_tern_extremes(coord),Tlim = lim$Tlim,Llim = lim$Llim,Rlim = lim$Rlim)
+      ix  <- point.in.polygon(data$x,data$y,tri$x,tri$y)
       return(data[which(ix > 0),])
     }
   },error=function(e){
@@ -289,14 +277,10 @@ remove_outside <- function(data){
   return(bup)
 }
 
-
-#' Internal Function
-#' 
-#' Internal Function
+#' \code{sink_density} is a function which permits contours on the ternary surface, without running over the ternary borders.
 #' @param df data.frame
 #' @param remove boolean remove or make zero
-#' @param coord coordinates
-#' @return data.frame
+#' @param coord coordinates of the type 'ternar', ie coord_tern()
 #' @rdname undocumented
 sink_density <- function(df,remove=TRUE,coord=stop("coord is required")){
   if(class(df) != "data.frame"){return(df)}
@@ -329,23 +313,70 @@ sink_density <- function(df,remove=TRUE,coord=stop("coord is required")){
   sqrt((x[-n] - x[-1]) ^ 2 + (y[-n] - y[-1]) ^ 2)
 }
 
-#' Internal Function
-#' 
-#' Check required aesthetics are present
-#' This is used by geoms and stats to give a more helpful error message
+#' \code{check_required_aesthetics} is a local copy of the ggplot2 function that checks 
+#' if the required aesthetics are present. This is used by geoms and stats to give a more helpful error message
 #' when required aesthetics are missing.
-#
 #' @param character vector of required aesthetics
 #' @param character vector of present aesthetics
 #' @param name of object for error message
 #' @keywords internal
-#' @rdname undocumented
+#' @rdname overloaded
 check_required_aesthetics <- function(required, present, name) {
   missing_aes <- setdiff(required, present)
   if (length(missing_aes) == 0) return()
   stop(name, " requires the following missing aesthetics: ", paste(missing_aes, collapse=", "), call. = FALSE)
 }
 
+
+#' Give a deprecation error, warning, or messsage, depending on version number (ggtern version)
+#'
+#' Based on the exported function from ggplot2.
+#' 
+#' Version numbers have the format <major>.<minor>.<subminor>, like 0.9.2.
+#' This function compares the current version number of ggplot2 against the
+#' specified \code{version}, which is the most recent version before the
+#' function (or other object) was deprecated.
+#'
+#' \code{tern_dep} will give an error, warning, or message, depending on the
+#' difference between the current ggtern version and the specified
+#' \code{version}.
+#'
+#' If the current major number is greater than \code{version}'s major number,
+#' or if the current minor number is more than 1 greater than \code{version}'s
+#' minor number, give an error.
+#'
+#' If the current minor number differs from \code{version}'s minor number by
+#' one, give a warning.
+#'
+#' If the current subminor number differs from \code{version}'s subminor
+#' number, print a message.
+#'
+#' @param version The last version of ggtern where this function was good
+#'   (in other words, the last version where it was not deprecated).
+#' @param msg The message to print.
+tern_dep <- function(version, msg) {
+  v <- as.package_version(version)
+  cv <- packageVersion("ggtern")
+  
+  # If current major number is greater than last-good major number, or if
+  #  current minor number is more than 1 greater than last-good minor number,
+  #  give error.
+  if (cv[[1,1]] > v[[1,1]]  ||  cv[[1,2]] > v[[1,2]] + 1) {
+    stop(msg, " (Defunct; last used in version ", version, ")",
+         call. = FALSE)
+    
+    # If minor number differs by one, give warning
+  } else if (cv[[1,2]] > v[[1,2]]) {
+    warning(msg, " (Deprecated; last used in version ", version, ")",
+            call. = FALSE)
+    
+    # If only subminor number is greater, give message
+  } else if (cv[[1,3]] > v[[1,3]]) {
+    message(msg, " (Deprecated; last used in version ", version, ")")
+  }
+  
+  invisible()
+}
 
 
 

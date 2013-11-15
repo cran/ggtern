@@ -4,17 +4,17 @@
 #' @inheritParams ggtern::stat_density2d
 #' @importFrom MASS kde2d
 #' @name stat_density2d
+#' @aliases StatDensity2dtern
 #' @export
 #' @seealso \code{\link[ggtern]{geom_density2d}}
 stat_density2d <- function (mapping = NULL, data = NULL, geom = "density2dtern", position = "identity", na.rm = FALSE, contour = TRUE, n = 100, ...) {
   StatDensity2dtern$new(mapping = mapping, data = data,geom=geom,geometry=geom,position = position, na.rm = na.rm, contour = contour, n = n,...)
 }
 
-#' @rdname undocumented
 StatDensity2dtern <- proto(Statnew, {
   objname <- "density2dtern"
   default_geom <- function(.) GeomDensity2dTern
-  default_aes <- function(.) aes(colour = "#3366FF", size = 0.5)
+  #default_aes <- function(.) aes(colour = "#3366FF")
   required_aes <- c("x", "y")
   calculate <- function(., data, scales, na.rm = FALSE, contour = TRUE, n = 100, geometry="Density2dTern",...) {
     if(empty(data)){return(data.frame())}
@@ -42,7 +42,9 @@ StatDensity2dtern <- proto(Statnew, {
     df <- with(dens, data.frame(expand.grid(x = x, y = y), z = as.vector(z)))
     
     #ggtern
-    if(inherits(last_coord,"ternary")){df <- sink_density(df,remove=!identical(geometry,"polygon"),coord=last_coord)}
+    if(inherits(last_coord,"ternary")){
+      df <- sink_density(df,remove=!identical(geometry,"polygon"),coord=last_coord)
+    }
     df$group <- data$group[1]
     
     if (contour) {

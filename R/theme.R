@@ -1,10 +1,35 @@
-#' Overloaded ggplot2 functions
-#' 
-#' @description The source of the following functions originate from ggplot2, however, minor patches were required in order for them to function
-#' under the ggplot2 framework. Patches were mainly to do with handling the new theme elements and heirarchies. 
+#' @description \code{validate_element} is a local copy of the ggplot2 function which checks the validity of a given theme element 
+#' against the elements table. Since the \code{.elements_tree} is an internal function, which is not exported, and modifications could not be made, 
+#' a new (and equivalent) \code{.element_tree} is created within ggtern to handle the new theme elements created within this package.
+#' @param el the element
+#' @param elname the element name
 #' @rdname overloaded
-#' @aliases overloaded
+validate_element <- function(el, elname) {
+  eldef <- ggint$.element_tree[[elname]]
+  
+  if (is.null(eldef)) {
+    writeLines("testing")
+    stop('"', elname, '" is not a valid theme element name...')
+  }
+  
+  # NULL values for elements are OK
+  if (is.null(el)) return()
+  
+  if (eldef$class == "character") {
+    # Need to be a bit looser here since sometimes it's a string like "top"
+    # but sometimes its a vector like c(0,0)
+    if (!is.character(el) && !is.numeric(el))
+      stop("Element ", elname, " must be a string or numeric vector.")
+    
+  } else if (!inherits(el, eldef$class) && !inherits(el, "element_blank")) {
+    stop("Element ", elname, " must be a ", eldef$class, " object.")
+  }
+  invisible()
+}
+
+#' @rdname overloaded
 #' @inheritParams ggplot2::theme_update
+#' @seealso \code{\link[ggplot2]{theme_update}}
 theme_update <- function(...) {
   # Make a call to theme, then add to theme
   theme_set(theme_get() %+replace% do.call(theme, list(...)))
@@ -30,7 +55,9 @@ theme_update <- function(...) {
 #' axis.tern.line.L axis.tern.line.R axis.tern.text axis.tern.text.T axis.tern.text.L axis.tern.text.R axis.tern.arrow.text axis.tern.arrow.text.T axis.tern.arrow.text.L
 #' axis.tern.arrow.text.R axis.tern.title axis.tern.title.T axis.tern.title.L axis.tern.title.R axis.tern.ticks axis.tern.ticks.major axis.tern.ticks.major.T axis.tern.ticks.major.L
 #' axis.tern.ticks.major.R axis.tern.ticks.minor axis.tern.ticks.minor.T axis.tern.ticks.minor.L axis.tern.ticks.minor.R panel.grid.tern panel.grid.tern.major
-#' panel.grid.tern.major.T panel.grid.tern.major.L panel.grid.tern.major.R panel.grid.tern.minor panel.grid.tern.minor.T panel.grid.tern.minor.L panel.grid.tern.minor.R
+#' panel.grid.tern.major.T panel.grid.tern.major.L panel.grid.tern.major.R panel.grid.tern.minor panel.grid.tern.minor.T panel.grid.tern.minor.L panel.grid.tern.minor.R 
+#' axis.tern.ticks.outside axis.tern.ticklength.major axis.tern.ticklength.minor axis.tern.arrowsep axis.tern.hshift axis.tern.vshift axis.tern.clockwise axis.tern.showarrows
+#' axis.tern.arrowstart axis.tern.arrowfinish axis.tern.padding axis.tern.ticks.showsecondary axis.tern.ticks.showprimary
 #' @name themeelements
 #' @name theme
 #' @section New/Additional Inheritance Structures:
@@ -38,9 +65,16 @@ theme_update <- function(...) {
 #' 
 #' \tabular{llll}{
 #'   \strong{NAME}            \tab \strong{DESCRIPTION}                          \tab \strong{OBJECT}               \tab \strong{INHERITS}      \cr
-#'   \code{ternary.options}   \tab Ternary specific options                      \tab \code{\link{element_ternary}} \tab                        \cr
-#'   \code{panel.background.tern**}    \tab Background of Ternary Plot Area        \tab \code{\link{element_rect}}    \tab \code{rect}  \cr
+#'   \code{panel.background.tern**}    \tab Background of Ternary Plot Area      \tab \code{\link{element_rect}}    \tab \code{rect}            \cr
 #'   \code{axis.tern}         \tab Base line for ggtern object                   \tab \code{\link{element_line}}    \tab \code{line}            \cr
+#'   \code{axis.tern.vshift} \tab Amount to nudge the plot vertically            \tab \code{\link{unit}}            \tab                        \cr
+#'   \code{axis.tern.hshift} \tab Amount to nudge the plot horizontally          \tab \code{\link{unit}}            \tab                        \cr
+#'   \code{axis.tern.clockwise} \tab Clockwise Axis Precession                   \tab \code{\link{logical}}         \tab                        \cr
+#'   \code{axis.tern.showarrows} \tab Show axis arrows or not                   \tab \code{\link{logical}}          \tab                        \cr
+#'   \code{axis.tern.padding} \tab Padding between axes and panel edges          \tab \code{\link{unit}}            \tab                        \cr
+#'   \code{axis.tern.arrowsep}\tab Distance between axes and the ternary arrows  \tab \code{\link{unit}}            \tab                        \cr
+#'   \code{axis.tern.arrowstart} \tab Proportion along ternary axis when arrow starts  \tab \code{\link{numeric}}   \tab                        \cr
+#'   \code{axis.tern.arrowfinish} \tab Proportion along ternary axis when arrow starts  \tab \code{\link{numeric}}   \tab                        \cr
 #'   \code{axis.tern.arrow}   \tab Base line for ternary arrows                  \tab \code{\link{element_line}}    \tab \code{axis.tern}       \cr
 #'   \code{axis.tern.arrow.T} \tab Specific line for TOP ternary arrow           \tab \code{\link{element_line}}    \tab \code{axis.tern.arrow} \cr
 #'   \code{axis.tern.arrow.L} \tab Specific line for LHS ternary arrow           \tab \code{\link{element_line}}    \tab \code{axis.tern.arrow} \cr
@@ -61,7 +95,11 @@ theme_update <- function(...) {
 #'   \code{axis.tern.title.T}  \tab Specific text for TOP Apex Label             \tab \code{\link{element_text}}    \tab \code{axis.tern.title}  \cr
 #'   \code{axis.tern.title.L}  \tab Specific text for LHS Apex Label             \tab \code{\link{element_text}}    \tab \code{axis.tern.title}  \cr
 #'   \code{axis.tern.title.R}  \tab Specific text for RHS Apex Label             \tab \code{\link{element_text}}    \tab \code{axis.tern.title}  \cr
-#'   
+#'   \code{axis.tern.ticklength.major}\tab Major ticklength                      \tab \code{\link{unit}}            \tab                        \cr
+#'   \code{axis.tern.ticklength.minor}\tab Minor ticklength                      \tab \code{\link{unit}}            \tab                        \cr
+#'   \code{axis.tern.ticks.outside}  \tab Base ticks for ggtern object on outside or not \tab \code{\link{logical}} \tab                        \cr
+#'   \code{axis.tern.ticks.showprimary} \tab Show primary tickset                \tab \code{\link{logical}}         \tab                        \cr
+#'   \code{axis.tern.ticks.showsecondary}\tab Show secondary tickset             \tab \code{\link{logical}}         \tab                        \cr
 #'   \code{axis.tern.ticks}          \tab Base ticks for ggtern object           \tab \code{\link{element_line}}    \tab \code{axis.tern}   \cr
 #'   \code{axis.tern.ticks.major}    \tab Base Major ticks for ggtern object     \tab \code{\link{element_line}}    \tab \code{axis.tern.ticks}   \cr
 #'   \code{axis.tern.ticks.major.T}  \tab Major ticks for TOP Axis               \tab \code{\link{element_line}}    \tab \code{axis.tern.ticks.major}  \cr
@@ -81,10 +119,13 @@ theme_update <- function(...) {
 #'   \code{panel.grid.tern.minor.T}  \tab Minor gridline for TOP Axis            \tab \code{\link{element_line}}    \tab \code{panel.grid.tern.minor}  \cr
 #'   \code{panel.grid.tern.minor.L}  \tab Minor gridline for LHS Axis            \tab \code{\link{element_line}}    \tab \code{panel.grid.tern.minor}  \cr
 #'   \code{panel.grid.tern.minor.R}  \tab Minor gridline for RHS Axis            \tab \code{\link{element_line}}    \tab \code{panel.grid.tern.minor}  \cr
+#'   \code{ternary.options} (DEP***)  \tab Ternary specific options                      \tab \code{\link{element_ternary}} \tab                        \cr
 #' }
 #' ** \strong{NB:} For \code{panel.background.tern}, whilst the ternary area is 'triangular' per-se, \code{\link{element_rect}} has been used, 
 #' as it actually holds NO information regarding the geometry (width, height), only fill, color, 
 #' size and linetype border (ie the style of how it will be rendered).
+#' 
+#' *** \strong{NB:} Fully Depreciated since \code{ggtern} version 1.0.1.3
 #' @rdname terntheme
 NULL
 
@@ -98,45 +139,53 @@ theme <- function(..., complete = FALSE) {
   structure(elements, class = c("theme", "gg"), complete = complete)
 }
 
+#' Build a theme (or partial theme) from theme elements (ggtern version)
+#'
+#' \code{opts} is deprecated. See the \code{\link{theme}} function.
+#' @param ... Arguments to be passed on to the \code{theme} function.
 #' @rdname overloaded
+#' @seealso \code{\link[ggplot2]{opts}}
+#' @export
 opts <- function(...) {
-  warning("opts is disabled in ggtern")
-  NULL
+  gg_dep("0.9.1", "'opts' is deprecated. Use 'theme' instead.")
+  
+  # Add check for deprecated elements
+  extra <- NULL
+  elements <- list(...)
+  if (!is.null(elements[["title"]])) {
+    # This is kind of a hack, but fortunately it will be removed in future versions
+    gg_dep("0.9.1", paste(sep = "\n",
+                          'Setting the plot title with opts(title="...") is deprecated.',
+                          ' Use labs(title="...") or ggtitle("...") instead.'))
+    
+    title <- elements$title
+    elements$title <- NULL
+    
+    return(list(ggtitle(title), do.call(theme, elements)))
+  }
+  
+  do.call(theme, elements)
 }
 
 
-#' @details \code{plot_theme} is a local copy of the method that determines the net theme between a plot and the current theme
+#' \code{plot_theme} is a local copy of the method that determines the net theme between a plot and the current global theme.
 #' @param x gg object
 #' @rdname overloaded
 plot_theme <- function(x) {defaults(x$theme, ggtern::theme_get())}
 
 
 .theme_new <- (function() {
-  theme.tern <- theme_tern_gray()
-  theme      <- theme_gray()
+  theme <- theme_gray()
   list(
-    get = function(){
-      ifthenelse(inherits(get_last_coord(),"ternary"),theme.tern,theme)
-    },
-    set = function(new) {
-      ifthenelse(inherits(get_last_coord(), "ternary"),{
-        missing <- setdiff(names(theme_tern_gray()), names(new))
-        if (length(missing) > 0) {
-          warning("New theme missing the following elements: ",paste(missing, collapse = ", "), call. = FALSE)
-        }
-        old <- theme.tern
-        theme.tern <<- new
-        invisible(old)
-      },{
-        missing <- setdiff(names(theme_gray()), names(new))
-        if (length(missing) > 0) {
-          warning("New theme missing the following elements: ",
-                  paste(missing, collapse = ", "), call. = FALSE)
-        }
-        old <- theme
-        theme <<- new
-        invisible(old)
-      })
+    get = function(){theme},
+    set = function(new){
+      thm <- ifthenelse(inherits(get_last_coord(),"ternary"),theme_gray(),ggplot2::theme_gray())
+      missing <- setdiff(names(thm),names(new))
+      if (length(missing) > 0)
+        warning("New theme missing the following elements: ",paste(missing, collapse = ", "), call. = FALSE)
+      old <- theme
+      theme <<- new
+      invisible(old)
     }
   )
 })()
@@ -149,7 +198,55 @@ theme_get <- .theme_new$get
 #' @export
 theme_set <- .theme_new$set
 
-#' @details \code{"\%+replace\%"} replace operator
+
+
+#' \code{add_theme} is a local copy of the ggplot2 function which modifies the current theme, by a proposed theme. 
+#' It is slightly modified to handle 'logical' values the same way it handles 'character' or 'numeric' values, 
+#' which do not inherit from 'element' objects.
+#' @inheritParams ggplot2::add_theme
+#' @seealso \code{\link[ggplot2]{add_theme}}
+#' @rdname overloaded
+add_theme <- function(t1, t2, t2name) {
+  if (!is.theme(t2)) {
+    stop("Don't know how to add ", t2name, " to a theme object",
+         call. = FALSE)
+  }
+  
+  # Iterate over the elements that are to be updated
+  for (item in names(t2)) {
+    x <- t1[[item]]
+    y <- t2[[item]]
+    
+    if (is.null(x) || inherits(x, "element_blank")) {
+      # If x is NULL or element_blank, then just assign it y
+      x <- y
+    } else if (is.null(y) || is.character(y) || is.numeric(y) || is.logical(y) ||
+                 inherits(y, "element_blank")) {
+      # If y is NULL, or a string or numeric vector, or is element_blank, just replace x
+      x <- y
+    } else {
+      # If x is not NULL, then copy over the non-NULL properties from y
+      # Get logical vector of non-NULL properties in y
+      idx <- !vapply(y, is.null, logical(1))
+      # Get the names of TRUE items
+      idx <- names(idx[idx])
+      
+      # Update non-NULL items
+      x[idx] <- y[idx]
+    }
+    
+    # Assign it back to t1
+    # This is like doing t1[[item]] <- x, except that it preserves NULLs.
+    # The other form will simply drop NULL values
+    t1[item] <- list(x)
+  }
+  
+  # If either theme is complete, then the combined theme is complete
+  attr(t1, "complete") <- attr(t1, "complete") || attr(t2, "complete")
+  t1
+}
+
+#' \code{"\%+replace\%"} is a local copy of the ggplot2 replace operator, no different other than being exported from the ggtern namespace.
 #' @rdname overloaded 
 "%+replace%" <- function(e1, e2) {
   if (!is.theme(e1) || !is.theme(e2)) {
@@ -160,7 +257,7 @@ theme_set <- .theme_new$set
   e1
 }
 
-#' @details \code{update_theme} is a local copy of a ggplot2 function, which copies elements from the new theme into an old theme.
+#' \code{update_theme} is a local copy of a ggplot2 function, which copies elements from the new theme into an old theme.
 #' @param oldtheme previous theme object
 #' @param newtheme new theme object
 #' @rdname overloaded
@@ -185,7 +282,7 @@ update_theme <- function(oldtheme, newtheme) {
   oldtheme + newtheme
 }
 
-
+#' \code{calc_element} is a local copy of the ggplot2 function which determines the net element based on inheritances, given input theme.
 #' @inheritParams ggplot2::calc_element
 #' @seealso \code{\link[ggplot2]{calc_element}}
 #' @rdname overloaded
@@ -229,7 +326,7 @@ calc_element <- function(element, theme, verbose = FALSE) {
   Reduce(combine_elements, parents, theme[[element]])
 }
 
-#' @details \code{combine_elements} is a local copy of method that combines two theme elements
+#' \code{combine_elements} is a local copy of the ggplot2 function that combines two theme elements
 #' @rdname overloaded
 #' @param e1 first element
 #' @param e2 second element
