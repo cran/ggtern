@@ -8,14 +8,23 @@
 \alias{axis.tern.arrow.text.L}
 \alias{axis.tern.arrow.text.R}
 \alias{axis.tern.arrow.text.T}
+\alias{axis.tern.arrowfinish}
+\alias{axis.tern.arrowsep}
+\alias{axis.tern.arrowstart}
+\alias{axis.tern.clockwise}
+\alias{axis.tern.hshift}
 \alias{axis.tern.line}
 \alias{axis.tern.line.L}
 \alias{axis.tern.line.R}
 \alias{axis.tern.line.T}
+\alias{axis.tern.padding}
+\alias{axis.tern.showarrows}
 \alias{axis.tern.text}
 \alias{axis.tern.text.L}
 \alias{axis.tern.text.R}
 \alias{axis.tern.text.T}
+\alias{axis.tern.ticklength.major}
+\alias{axis.tern.ticklength.minor}
 \alias{axis.tern.ticks}
 \alias{axis.tern.ticks.major}
 \alias{axis.tern.ticks.major.L}
@@ -25,10 +34,14 @@
 \alias{axis.tern.ticks.minor.L}
 \alias{axis.tern.ticks.minor.R}
 \alias{axis.tern.ticks.minor.T}
+\alias{axis.tern.ticks.outside}
+\alias{axis.tern.ticks.showprimary}
+\alias{axis.tern.ticks.showsecondary}
 \alias{axis.tern.title}
 \alias{axis.tern.title.L}
 \alias{axis.tern.title.R}
 \alias{axis.tern.title.T}
+\alias{axis.tern.vshift}
 \alias{elements}
 \alias{newelements}
 \alias{newtheme}
@@ -87,13 +100,27 @@
 
   \tabular{llll}{ \strong{NAME} \tab \strong{DESCRIPTION}
   \tab \strong{OBJECT} \tab \strong{INHERITS} \cr
-  \code{ternary.options} \tab Ternary specific options \tab
-  \code{\link{element_ternary}} \tab \cr
   \code{panel.background.tern**} \tab Background of Ternary
   Plot Area \tab \code{\link{element_rect}} \tab
   \code{rect} \cr \code{axis.tern} \tab Base line for
   ggtern object \tab \code{\link{element_line}} \tab
-  \code{line} \cr \code{axis.tern.arrow} \tab Base line for
+  \code{line} \cr \code{axis.tern.vshift} \tab Amount to
+  nudge the plot vertically \tab \code{\link{unit}} \tab
+  \cr \code{axis.tern.hshift} \tab Amount to nudge the plot
+  horizontally \tab \code{\link{unit}} \tab \cr
+  \code{axis.tern.clockwise} \tab Clockwise Axis Precession
+  \tab \code{\link{logical}} \tab \cr
+  \code{axis.tern.showarrows} \tab Show axis arrows or not
+  \tab \code{\link{logical}} \tab \cr
+  \code{axis.tern.padding} \tab Padding between axes and
+  panel edges \tab \code{\link{unit}} \tab \cr
+  \code{axis.tern.arrowsep}\tab Distance between axes and
+  the ternary arrows \tab \code{\link{unit}} \tab \cr
+  \code{axis.tern.arrowstart} \tab Proportion along ternary
+  axis when arrow starts \tab \code{\link{numeric}} \tab
+  \cr \code{axis.tern.arrowfinish} \tab Proportion along
+  ternary axis when arrow starts \tab \code{\link{numeric}}
+  \tab \cr \code{axis.tern.arrow} \tab Base line for
   ternary arrows \tab \code{\link{element_line}} \tab
   \code{axis.tern} \cr \code{axis.tern.arrow.T} \tab
   Specific line for TOP ternary arrow \tab
@@ -144,7 +171,16 @@
   \cr \code{axis.tern.title.R} \tab Specific text for RHS
   Apex Label \tab \code{\link{element_text}} \tab
   \code{axis.tern.title} \cr
-
+  \code{axis.tern.ticklength.major}\tab Major ticklength
+  \tab \code{\link{unit}} \tab \cr
+  \code{axis.tern.ticklength.minor}\tab Minor ticklength
+  \tab \code{\link{unit}} \tab \cr
+  \code{axis.tern.ticks.outside} \tab Base ticks for ggtern
+  object on outside or not \tab \code{\link{logical}} \tab
+  \cr \code{axis.tern.ticks.showprimary} \tab Show primary
+  tickset \tab \code{\link{logical}} \tab \cr
+  \code{axis.tern.ticks.showsecondary}\tab Show secondary
+  tickset \tab \code{\link{logical}} \tab \cr
   \code{axis.tern.ticks} \tab Base ticks for ggtern object
   \tab \code{\link{element_line}} \tab \code{axis.tern} \cr
   \code{axis.tern.ticks.major} \tab Base Major ticks for
@@ -196,12 +232,17 @@
   \code{panel.grid.tern.minor} \cr
   \code{panel.grid.tern.minor.R} \tab Minor gridline for
   RHS Axis \tab \code{\link{element_line}} \tab
-  \code{panel.grid.tern.minor} \cr } ** \strong{NB:} For
-  \code{panel.background.tern}, whilst the ternary area is
-  'triangular' per-se, \code{\link{element_rect}} has been
-  used, as it actually holds NO information regarding the
-  geometry (width, height), only fill, color, size and
+  \code{panel.grid.tern.minor} \cr \code{ternary.options}
+  (DEP***) \tab Ternary specific options \tab
+  \code{\link{element_ternary}} \tab \cr } ** \strong{NB:}
+  For \code{panel.background.tern}, whilst the ternary area
+  is 'triangular' per-se, \code{\link{element_rect}} has
+  been used, as it actually holds NO information regarding
+  the geometry (width, height), only fill, color, size and
   linetype border (ie the style of how it will be
   rendered).
+
+  *** \strong{NB:} Fully Depreciated since \code{ggtern}
+  version 1.0.1.3
 }
 

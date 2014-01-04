@@ -2,15 +2,15 @@
   # Get the name of what was passed in as e2, and pass along so that it
   # can be displayed in error messages
   e2name <- deparse(substitute(e2))
-  if      (is.theme(e1))  ggint$add_theme(e1, e2, e2name)
+  if      (is.theme(e1))  add_theme(e1, e2, e2name)
   else if (is.ggplot(e1)) add_ggplot(e1, e2, e2name)
 }
 
-#' @details \code{"\%+\%"} add operator no change other than exporting from this namespace
+#' \code{"\%+\%"} is a local copy of the ggplot2 add operator, no change other than exporting from the ggtern namespace
 #' @rdname overloaded 
 "%+%" <- `+.gg`
 
-#' @details \code{add_ggplot} is a local copy of method that adds elements to a gg object.
+#' \code{add_ggplot} is a local copy of the ggplot2 method that adds elements to an existing gg object.
 #' @param p plot
 #' @param object to add
 #' @param objectname name of obeject
@@ -35,6 +35,7 @@ add_ggplot <- function(p, object, objectname) {
     names(labels) <- names(object)
     p <- update_labels(p, labels)
   } else if (is.coord(object)) {
+    set_last_coord(object)
     p$coordinates <- object
     p
   } else if (is.facet(object)) {
