@@ -8,22 +8,24 @@ ifthenelse <- function(x,a,b){
   if(x){a}else{b}
 }
 
-.is.numericor <- function(a,b){
-  if(missing(b)){stop("b must be provided")}
-  if(!is.numeric(b)){stop("b must be numeric")}
-  ifthenelse(is.numeric(a),a,b)
+#' \code{is.numericor} function takes input arguments \code{A} and \code{B} and returns \code{A} if \code{A} is numeric, else, returns \code{B}
+#' @param A value to return if \code{A} is numeric
+#' @param B value to return if \code{A} is NOT numeric
+#' @rdname undocumented
+is.numericor <- function(A,B){
+  if(missing(B)){stop("b must be provided")}
+  if(!is.numeric(B)){stop("b must be numeric")}
+  ifthenelse(is.numeric(A),A,B)
 }
 "%||%" <- function(a, b) {if (!is.null(a)) a else b}
 
 #' \code{get_tern_extremes} determines the limiting ternary coordinates given input coordinates.
 #' @param coordinates ggtern coordinate system, inheriting "ternary" and "coord" classes.
 #' @param verbose logical indicating verbose reporting to console
-#' @param expand numeric value to 
-#' @examples get_tern_extremes(coordinates = coord_tern())
-#' @return \code{get_tern_extremes} returns data.frame representing the T, L and R amounts (Columns) at each of the tips (extremes) of the ternary plot area (Rows)
+#' @param expand numeric do define the max and min acceptable limits above and below the intended range.
 #' @rdname undocumented
 get_tern_extremes <- function(coordinates,verbose=F,expand=0){
-  expand = max(0,.is.numericor(expand[1],0)); 
+  expand = max(0,is.numericor(expand[1],0)); 
   expand <- c(-expand/2,expand)
   
   if(!inherits(coordinates,"ternary") & !inherits(coordinates,"coord"))stop("coordinates must be ternary coordinates")
@@ -53,9 +55,9 @@ get_tern_extremes <- function(coordinates,verbose=F,expand=0){
       stop("Extremes must sum to unity.")
   }
   if(min(agg) < 0 - min(expand) | max(ret) > 1 + max(expand)){
-    writeLines("ATTENTION: Non-Default Ternary Limits are outside [0,1]")
+    writeLines("ATTENTION: Non-Default Ternary Limits are outside the range [0,1]")
     print(report.data)
-    stop("Negative Values, or Values > 1 are Not Acceptable")
+    stop("Negative Values, or Values > 1 are Not Acceptable",call.=FALSE)
   }else if(verbose){
     writeLines("ATTENTION: Non-Default Ternary Limits are OK.")
     print(report.data)
@@ -105,21 +107,21 @@ get_tern_extremes <- function(coordinates,verbose=F,expand=0){
 #' equal to that of the \code{data} argument. In other words, a '1 to 1' transformation from the ternary to the cartesian space. 
 #' @rdname ternary_transformations
 #' @name   ternary_transformations
-#' @aliases transform_tern_to_cart
+#' @aliases transform_tern_to_cart transform_cart_to_tern
 #' @examples
+#' \donttest{
 #' #Species Concentrations
 #' T=c(1,0,0) #TOP 
 #' L=c(0,1,0) #LEFT
 #' R=c(0,0,1) #RIGHT
 #' #Transform
 #' transform_tern_to_cart(T,L,R)
+#' }
 transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c(0,1),Llim=c(0,1),Rlim=c(0,1),scale=TRUE){
   if(class(data) != "data.frame")stop("data must be of type 'data.frame'")
   if(length(which(c("T","L","R") %in% colnames(data))) < 3) stop("data must contain columns T, L and R")
   
-  Tlim <- sort(Tlim)
-  Rlim <- sort(Rlim)
-  Llim <- sort(Llim)
+  Tlim <- sort(Tlim); Rlim <- sort(Rlim); Llim <- sort(Llim)
   
   d <- data; 
   s <- rowSums(d);
@@ -136,7 +138,11 @@ transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c
   }
   
   #Adjust for the Limits.
-  .adj <- function(input,lim){(input-lim[1])/(lim[length(lim)] - lim[1])}
+  .adj <- function(input,lim){
+    if(is.null(lim))
+      lim=c(0,1)
+    (input-min(lim))/(abs(diff(lim)))
+  }
   d$T <- .adj(d$T,Tlim)
   d$L <- .adj(d$L,Llim)
   d$R <- .adj(d$R,Rlim)
@@ -144,8 +150,39 @@ transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c
   #Calculate
   out.Y <- d$T*tan(pi/3)*0.5
   out.X <- d$R + out.Y*tan(pi/6)
-  
+    
   return(data.frame(x=out.X,y=out.Y))
+}
+transform_cart_to_tern <- function(x,y,data=data.frame(x=x,y=y),...,Tlim=c(0,1),Llim=c(0,1),Rlim=c(0,1)){
+  tryCatch({
+    if(length(which(c("x","y") %in% colnames(data))) < 2) stop("data must contain columns x and y")
+    out.R = data$x - data$y*tan(pi/6)
+    out.T = data$y/(tan(pi/3)*0.5)
+    out.L = 1 - out.R - out.T
+    
+    #Undo Scale
+    .adj.rev <- function(input,lim){
+      input*(abs(diff(lim))) + min(lim)
+    }
+    out.T = .adj.rev(out.T,Tlim)
+    out.L = .adj.rev(out.L,Llim)
+    out.R = .adj.rev(out.R,Rlim)
+    
+    data.frame(T=out.T,L=out.L,R=out.R)
+    },error=function(e){
+      return(data)
+  })
+}
+
+.makevalid <- function(x){
+  x = x[[1]]
+  if(class(x) == 'character'){
+    x = gsub("%","'%'",x)
+    #x = gsub("/","'/'",x)
+    x = gsub('([[:punct:]])\\1+', '\\1', x)
+    x = gsub(" ","~",x)
+  }
+  x
 }
 
 #' \code{arrow_label_formatter} is a function that formats the labels directly adjacent to the ternary arrows.
@@ -153,23 +190,29 @@ transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c
 #' @param suffix chacater suffix behind each label
 #' @param sep the seperator between label and suffix 
 #' @rdname undocumented
-#' @examples arrow_label_formatter("TOP","Wt.%",sep="/")
 arrow_label_formatter <- function(label,suffix="",...,sep="/"){
   if(missing(label))stop("label cannot be missing")
-  if(!is.character(label) | !is.character(suffix) | !is.character(sep))stop("label, sep and suffix must be characters")
-  if(missing(suffix)){
-    label
-  }else if(identical(suffix,NULL) | identical(suffix,"") | missing(suffix)){
-    label
+  label = .makevalid(label)
+  suffix= .makevalid(suffix)
+  sep   = .makevalid(sep)
+  sep   = ifthenelse(identical(suffix,""),"",sep)
+  ret   = label #default
+  if(identical(suffix,NULL) | missing(suffix)){
+    ret = arrow_label_formatter(label=label,sep=sep,suffix="") #recursive
   }else{
-    paste(label,sep,suffix)
+    tryCatch({
+      ret   = ifthenelse(class(label) == 'call',as.expression(ret),ret)
+      ret   = parse(text=paste(ret,sep,gsub(x=suffix,pattern=" ",replacement="~")))
+    },error=function(e){
+      message(e) #to console
+    })
   }
+  return(ret) #result
 }
 
 #' \code{calc_element_plot} Calculates the element properties, by inheriting properties from its parents, 
-#' and compares to whether the local plot overrides this value. Based largely off the \code{\link[ggplot2]{calc_element}} 
-#' as provided in \code{\link{ggplot2}}
-#' @seealso \code{\link[ggplot2]{calc_element}}
+#' and compares to whether the local plot overrides this value. Based largely off the calc_element function as provided
+#' in ggplot2
 #' @param element the element name to calculate
 #' @param theme the theme to inherit from
 #' @param plot the plot to check locally for theme element, NULL is ok.
@@ -193,9 +236,7 @@ calc_element_plot <- function(element,theme=theme_update(),...,plot=NULL,verbose
 #' now additionally searches within the \code{ggtern} namespace prior to the \code{ggplot2} namespace.
 #' @param name character name of object to search for
 #' @param env environment to search within as first priority
-#' @examples find_global('scale_x_continuous')
 #' @rdname undocumented
-#' @return \code{find_global} returns an instance of the named object (if it exists), or \code{NULL} (if it does not).
 find_global <- function (name, env=environment()){  
   if(!is.character(name)){stop("'name' must be provided as a character")}
   if(!inherits(environment(),"environment")){stop("'env' must inherit the environment class")}
@@ -221,7 +262,6 @@ find_global <- function (name, env=environment()){
 trytransform <- function(data,coord){
   if(missing(coord)){stop("coord are required")}
   bup <- data
-  
   Tlim <- coord$limits$T; Llim <- coord$limits$L; Rlim <- coord$limits$R
   tryCatch({
     if(inherits(coord,"ternary")){  
@@ -229,11 +269,23 @@ trytransform <- function(data,coord){
       data <- cbind(res,data[,which(!colnames(data) %in% c(coord$T,coord$L,coord$R))])
     }
   },error=function(e){
-    warning(e)
-    message(e)
+    #warning(e)
+    #message(e)
     data <- bup
   })
   data
+}
+
+#' \code{notransform} is an internal function that permits the input argument (evaluate) to be executed with temporary disabling of
+#' ternary transformations, existing state is restored
+#' @param evaluate code to execute in a protected block from transformation
+#' @keywords internal
+notransform <- function(evaluate){
+ existing <- getOption("tern.dont_transform")    
+ options("tern.dont_transform" = TRUE)
+ res <- evaluate
+ options("tern.dont_transform" = existing)
+ invisible(res)
 }
 
 #select appropriate limits. internal
@@ -241,7 +293,7 @@ trytransform <- function(data,coord){
   if(identical(a,default))a=waiver()
   if(identical(b,default))b=waiver()
   if(identical(a,b)){
-    .is.numericor(a,default)
+    is.numericor(a,default)
   }else if(!is.numeric(a) & is.numeric(b)){
     b
   }else if(is.numeric(a) & !is.numeric(b)){
@@ -268,39 +320,13 @@ remove_outside <- function(data){
       coord <- get_last_coord()
       lim <- list(Tlim=coord$limits[["T"]],Llim=coord$limits[["L"]],Rlim=coord$limits[["R"]])
       tri <- transform_tern_to_cart(data=get_tern_extremes(coord),Tlim = lim$Tlim,Llim = lim$Llim,Rlim = lim$Rlim)
-      ix  <- point.in.polygon(data$x,data$y,tri$x,tri$y)
+      ix  <- sp::point.in.polygon(data$x,data$y,tri$x,tri$y)
       return(data[which(ix > 0),])
     }
   },error=function(e){
     #do nothing
   })
   return(bup)
-}
-
-#' \code{sink_density} is a function which permits contours on the ternary surface, without running over the ternary borders.
-#' @param df data.frame
-#' @param remove boolean remove or make zero
-#' @param coord coordinates of the type 'ternar', ie coord_tern()
-#' @rdname undocumented
-sink_density <- function(df,remove=TRUE,coord=stop("coord is required")){
-  if(class(df) != "data.frame"){return(df)}
-  bup <- df
-  tryCatch({
-    if(inherits(coord,"ternary")){ #ONLY FOR ggtern object
-      tri <- transform_tern_to_cart(data=get_tern_extremes(coord),Tlim=coord$limits$T,Llim=coord$limits$L,Rlim=coord$limits$R)
-      inorout <- point.in.polygon(df$x,df$y,tri$x,tri$y)
-      inorout[which(inorout > 0)] <- 1
-      if(remove){
-        df <- df[which(inorout > 0),]
-      }else{
-        df[which(inorout <= 0),which(names(df) == "z")] <- 0
-      }
-    }
-  },error=function(e){
-    message(e)
-    df <- bup
-  })
-  df
 }
 
 .hjust.flip    <- function(x,clockwise){if(clockwise){0.5 - (x - 0.5)}else{x}}
@@ -354,6 +380,7 @@ check_required_aesthetics <- function(required, present, name) {
 #' @param version The last version of ggtern where this function was good
 #'   (in other words, the last version where it was not deprecated).
 #' @param msg The message to print.
+#' @keywords internal
 tern_dep <- function(version, msg) {
   v <- as.package_version(version)
   cv <- packageVersion("ggtern")
@@ -377,6 +404,8 @@ tern_dep <- function(version, msg) {
   
   invisible()
 }
+
+
 
 
 

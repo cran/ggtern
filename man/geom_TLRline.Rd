@@ -1,4 +1,4 @@
-\name{constant-line}
+\name{geom_TLRline}
 \alias{GeomLline}
 \alias{GeomRline}
 \alias{GeomTline}
@@ -8,13 +8,16 @@
 \alias{StatRline}
 \alias{StatTline}
 \alias{Tline}
-\alias{constant-line}
 \alias{geom_Lline}
 \alias{geom_Rline}
+\alias{geom_TLRline}
 \alias{geom_Tline}
+\alias{lline}
+\alias{rline}
 \alias{stat_Lline}
 \alias{stat_Rline}
 \alias{stat_Tline}
+\alias{tline}
 \title{Add constant lines}
 \usage{
   geom_Tline(mapping = NULL, data = NULL, stat = "Tline",
@@ -85,10 +88,32 @@
 }
 \section{Tline, Lline and Rline}{
   Convenience functions, \code{Tline(...), Lline(...)} and
-  \code{Rline(...)} have been created so that constant
-  lines can be quickly created:
+  \code{Rline(...)} (or the aliasses \code{tline(...),
+  lline(...)} and \code{rline(...)}, respectively) have
+  been created so that constant lines can be quickly
+  created:
+}
+
+\section{Aesthetics}{
+  \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom",
+  "Tline")}
+  \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom",
+  "Lline")}
+  \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom",
+  "Rline")}
+
+  The statistical transformations hold the following
+  aesthetic requirements:
+
+  \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("stat",
+  "Tline")}
+  \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("stat",
+  "Lline")}
+  \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("stat",
+  "Rline")}
 }
 \examples{
+\donttest{
 #Base usage
 ggtern()  +
  geom_Lline(Lintercept=0.5,color="red") +
@@ -100,5 +125,6 @@ ggtern() +
  Tline(0.5,color="red") +
  Lline(0.5,color="green") +
  Rline(0.5,color="blue")
+}
 }
 

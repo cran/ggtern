@@ -1,4 +1,4 @@
-#' @rdname constant-line
+#' @rdname geom_TLRline
 #' @aliases GeomRline
 #' @export
 geom_Rline <- function (mapping = NULL, data = NULL, stat = "Rline", position = "identity", show_guide = FALSE, ...) { 
@@ -16,7 +16,8 @@ GeomRline <- proto(Geom, {
     .super$new(., data = data, mapping = mapping, inherit.aes = FALSE, Rintercept = Rintercept, ...)
   }
   draw <- function(., data, scales, coordinates, ...) {
-    ggint$GeomSegment$draw(unique(data[,which(!colnames(data) %in% "Rintercept")]),scales,coordinates)
+    data <- unique(data[,which(!colnames(data) %in% "Rintercept")])
+    ggint$GeomSegment$draw(data,scales,coordinates,...)
   }
   default_stat <- function(.) StatRline
   default_aes <- function(.) aes(colour="black", size=0.5, linetype=1, alpha = NA)

@@ -1,8 +1,7 @@
-\name{convenience}
+\name{convenience_functions}
 \alias{convenience}
-\alias{convenience-functions}
-\alias{modifynewthemes}
-\alias{modifyterntheme}
+\alias{convenience_functions}
+\alias{theme_convenience}
 \title{Theme Convenience Functions}
 \description{
   \code{ggtern} has made available a number of convenience
@@ -11,35 +10,35 @@
   which can be manually modified, see
   \link[=themeelements]{HERE}.
 }
-\section{Default Themes}{
-  Default themes which ship with \code{ggtern}: \itemize{
-  \item \code{\link[=theme_tern_bw]{Black and White Theme}}
-  \item \code{\link[=theme_tern_gray]{Gray and White
-  Theme}} \item \code{\link[=theme_tern_rgbw]{RGB and White
-  Theme}} \item \code{\link[=theme_tern_rgbg]{RGB and Gray
-  Theme}} }
-}
-
 \section{Convenience Functions}{
   Convenience functions that ship with \code{ggtern}, to
   assist in the rapid modification of key theme elements:
-  \itemize{ \item \code{\link[=theme_noarrows]{Show/Hide
-  Arrows}} \item \code{\link[=theme_nogrid]{Show/Hide
-  Grids}} \item
+  \itemize{ \item \code{\link[=theme_showtitles]{Show/Hide
+  Axis Titles}} \item
+  \code{\link[=theme_showarrows]{Show/Hide Arrows}} \item
+  \code{\link[=theme_showgrid]{Show/Hide Grids}} \item
+  \code{\link[=theme_showprimary]{Show/Hide
+  Primary/Secondary Ticks}} \item
+  \code{\link[=theme_showlabels]{Show/Hide Axis
+  Ticklabels}} \item
   \code{\link[=theme_clockwise]{Clockwise/Anticlockwise
   Axis Precession}} \item
   \code{\link[=theme_ticksoutside]{Ticks Inside or Outside
   of the Main Plot Area}} \item
-  \code{\link[=theme_noticks]{Show or Hide Primary or
-  Secondary Ticks.}} \item
   \code{\link[=atomic_percent]{Atomic or Weight Percent
   Arrow Label Suffix.}} }
 }
 
 \section{Manual Modification}{
   For manual modification on a per-element basis: \itemize{
-  \item \code{\link[=themeelements]{Ternary Theme
+  \item \code{\link[=theme_elements]{Ternary Theme
   Elements}} }
+}
+
+\section{Default Themes}{
+  Default (complete) themes which ship with \code{ggtern}:
+  \itemize{ \item \code{\link[=theme_complete]{Complete
+  Themes}} }
 }
 \examples{
 \donttest{

@@ -1,4 +1,4 @@
-#' @rdname constant-line
+#' @rdname geom_TLRline
 #' @aliases GeomLline
 #' @export
 geom_Lline <- function (mapping = NULL, data = NULL, stat = "Lline", position = "identity", show_guide = FALSE, ...) { 
@@ -16,7 +16,8 @@ GeomLline <- proto(Geom, {
     .super$new(., data = data, mapping = mapping, inherit.aes = FALSE, Lintercept = Lintercept, ...)
   }
   draw <- function(., data, scales, coordinates, ...) {
-    ggint$GeomSegment$draw(unique(data[,which(!colnames(data) %in% "Lintercept")]),scales,coordinates)
+    data <- unique(data[,which(!colnames(data) %in% "Lintercept")])
+    ggint$GeomSegment$draw(data,scales,coordinates,...)
   }
   default_stat <- function(.) StatLline
   default_aes <- function(.) aes(colour="black", size=0.5, linetype=1, alpha = NA)

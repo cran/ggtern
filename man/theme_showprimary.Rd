@@ -1,5 +1,4 @@
-\name{convenience-ticks}
-\alias{convenience-ticks}
+\name{theme_showprimary}
 \alias{theme_hideprimary}
 \alias{theme_hidesecondary}
 \alias{theme_hideticks}
@@ -34,17 +33,17 @@
   primary or secondary ticks.
 
   \code{theme_noprimary} or \code{theme_hideprimary}
-  (Alias) are functions that apepnds to the current theme a
+  (Alias) are functions that apends to the current theme a
   flag to switch OFF the primary ticks
 
-  \code{theme_showprimary} is a function that apepnds to
-  the current theme a flag to switch ON the primary ticks
+  \code{theme_showprimary} is a function that apends to the
+  current theme a flag to switch ON the primary ticks
 
   \code{theme_nosecondary} or \code{theme_hidesecondary}
-  (Alias) are functions that apepnds to the current theme a
+  (Alias) are functions that apends to the current theme a
   flag to switch OFF the secondary ticks
 
-  \code{theme_showsecondary} is a function that apepnds to
+  \code{theme_showsecondary} is a function that apends to
   the current theme a flag to switch ON the secondary ticks
 
   \code{theme_showticks(), themehideticks(),
@@ -75,6 +74,7 @@
   elements respectively.
 }
 \examples{
+\donttest{
 data(Feldspar)
 plot <- ggtern(data=Feldspar,aes(Ab,An,Or)) + geom_point()
 plot
@@ -82,5 +82,6 @@ plot + theme_showsecondary()
 plot + theme_noprimary() + theme_nosecondary()
 plot + theme_showticks()
 plot + theme_hideticks()
+}
 }
 
