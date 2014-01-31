@@ -2,32 +2,35 @@
 
 #' Draw plot on current graphics device.
 #'
+#' \code{print.ggtern} is the default print function for \code{\link{ggtern}} objects.
 #' @inheritParams print.ggplot
-#' @export
+#' @keywords internal
+#' @rdname print
 #' @method print ggtern
-print.ggtern <- function(x, newpage = is.null(vp), vp = NULL, ...) {  
-  print.ggplot(x=x,newpage=newpage,vp=NULL,...)
-}
+#' @export
+print.ggtern <- function(x, newpage = is.null(vp), vp = NULL, ...){print.ggplot(x=x,newpage=newpage,vp=NULL,...)}
 
 #' Draw plot on current graphics device.
 #'
+#' \code{print.ggplot} is the default print function for \code{ggplot} objects.
 #' @param x plot to display
 #' @param newpage draw new (empty) page first?
 #' @param vp viewport to draw plot in
 #' @param ... other arguments not used by this method
 #' @keywords hplot
+#' @rdname print
 #' @export
 #' @method print ggplot
 print.ggplot <- function(x, newpage = is.null(vp), vp = NULL, ...) {
   ggint$set_last_plot(x)
-  if (newpage) grid.newpage()
-  
-  data <- ggplot_build(x)
-  
+  if(newpage) 
+    grid.newpage()
+  data   <- ggplot_build(x)
   gtable <- ggplot_gtable(data)
-  if (is.null(vp)) {
-    grid.draw(gtable) 
-  } else {
+  #print(gtable) #debug
+  if (is.null(vp)){
+    grid.draw(gtable)
+  }else{
     if (is.character(vp)) seekViewport(vp) else pushViewport(vp)
     grid.draw(gtable) 
     upViewport()
@@ -60,8 +63,10 @@ ggplot_gtable <- function(data) {
   theme <- ggtern::plot_theme(plot)
   
   build_grob <- function(layer, layer_data) {
-    if (nrow(layer_data) == 0) return()
-    
+    if(is.null(layer_data))
+      return()
+    if (nrow(layer_data) == 0) 
+      return()
     dlply(layer_data, "PANEL", function(df) {
       panel_i <- match(df$PANEL[1], panel$layout$PANEL)
       layer$make_grob(df, scales = panel$ranges[[panel_i]], cs = plot$coord)
@@ -88,17 +93,21 @@ ggplot_gtable <- function(data) {
   
   panel_dim <-  .find_panel(plot_table)
   
-  xlab_height <- grobHeight(xlabel) + 
-    if (is.null(labels$x)) unit(0, "lines") else unit(0.5, "lines")
-  plot_table <- gtable_add_rows(plot_table, xlab_height)
-  plot_table <- gtable_add_grob(plot_table, xlabel, name = "xlab",
-                                l = panel_dim$l, r = panel_dim$r, t = -1, clip = "off")
   
-  ylab_width <- grobWidth(ylabel) + 
-    if (is.null(labels$y)) unit(0, "lines") else unit(0.5, "lines")
-  plot_table <- gtable_add_cols(plot_table, ylab_width, pos = 0)
-  plot_table <- gtable_add_grob(plot_table, ylabel, name = "ylab",
-                                l = 1, b = panel_dim$b, t = panel_dim$t, clip = "off")
+  #ggtern suppress existing x and y axes
+  if(!inherits(plot$coordinates,"ternary")){
+    xlab_height <- grobHeight(xlabel) + 
+      if (is.null(labels$x)) unit(0, "lines") else unit(0.5, "lines")
+    plot_table <- gtable_add_rows(plot_table, xlab_height)
+    plot_table <- gtable_add_grob(plot_table, xlabel, name = "xlab",
+                                  l = panel_dim$l, r = panel_dim$r, t = -1, clip = "off")
+    
+    ylab_width <- grobWidth(ylabel) + 
+      if (is.null(labels$y)) unit(0, "lines") else unit(0.5, "lines")
+    plot_table <- gtable_add_cols(plot_table, ylab_width, pos = 0)
+    plot_table <- gtable_add_grob(plot_table, ylabel, name = "ylab",
+                                  l = 1, b = panel_dim$b, t = panel_dim$t, clip = "off")
+  }
   
   # Legends
   position <- theme$legend.position

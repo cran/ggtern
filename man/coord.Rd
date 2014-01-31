@@ -14,11 +14,12 @@
   \method{is.linear}{ternary} (coord)
 
   \method{coord_transform}{ternary} (coord, data, details,
-    verbose = FALSE, revertToCart = TRUE,
-    adjustCart = TRUE,
-    discard = getOption("tern.discard.external"))
+    verbose = FALSE, revertToCart = FALSE,
+    passToCartesian = TRUE,
+    discard = getOption("tern.discard.external"),
+    dont_transform = getOption("tern.dont_transform"))
 
-  \method{coord_expand_defaults}{ternary} (coord, scale,
+  \method{coord_expand_defaults}{ternary} (coord, scales,
     aesthetic)
 
   \method{coord_train}{ternary} (coord, scales)
@@ -38,6 +39,10 @@
   \method{coord_render_bg}{ternary} (coord, details, theme)
 }
 \arguments{
+  \item{x}{data}
+
+  \item{y}{data}
+
   \item{coord}{coordinate system}
 
   \item{data}{input data}
@@ -48,20 +53,19 @@
 
   \item{revertToCart}{fall back to cartesian data if error}
 
-  \item{adjustCart}{adjust for the cartesian scale or not}
+  \item{passToCartesian}{after conducting the ternary
+  transformation, then execute the standard cartesian
+  transformation.}
 
   \item{discard}{throw away data outside the plotting
   perimeter}
 
+  \item{dont_transform}{override the ternary
+  transformation}
+
   \item{scales}{plot scales}
 
-  \item{scale}{plot scale}
-
   \item{aesthetic}{mappings}
-
-  \item{x}{data}
-
-  \item{y}{data}
 
   \item{theme}{net theme}
 }

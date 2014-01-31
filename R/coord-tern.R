@@ -4,72 +4,91 @@
 #' \code{coord_tern} is a function which creates a transformation mechanism between the ternary system, and, the cartesian system.
 #' It inherits from the fixed coordinate system, employing fixed ratio between x and y axes once transformed.
 #' 
+#' @section Aesthetics (Required in Each Layer):
+#' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("coord", "tern")}
+#' 
+#' @section Additional Points to Note:
 #' It is important to note that once the \code{coord_tern()} coordinate system has been applied, the base plot object is no longer strictly a ggplot object, 
-#' rather, a ggtern object where several patches have been applied to facilitate correct plotting, including, some limitations on the types of geometries 
-#' which can be used. One such essential patch is, for approved geometries previously requiring \code{x} and \code{y} coordinates, now require an additional \code{z} coordinate. 
-#' \code{\link[ggtern]{geom_segment}} goes one step further in that it requires both an additional \code{z} and \code{zend} coordinate mappings.
-#' @param T the Top Mapping (default x)
-#' @param L the Left Mapping (default y)
-#' @param R the Right Mapping (default z)
+#' rather, a ggtern object where several patches have been applied to facilitate correct plotting.
+#' 
+#' Abovementioned limitations include the types of geometries which can be used (ie approved geometries), 
+#' or modifications to required aesthetic mappings. One such essential patch is, for approved geometries previously 
+#' requiring \code{x} and \code{y} coordinates, now require an additional \code{z} coordinate, and, 
+#' \code{\link[ggtern]{geom_segment}} goes one step further in that it requires both an additional 
+#' \code{z} and \code{zend} coordinate mappings. 
+#' 
+#' In essence, the required aesthetics are the product between what
+#' is required of the 'layer' and what is required of the 'coordinate system'.
+#' @param T the Top Mapping (default ['x', 'y' or 'z'] stored in global option \code{'tern.default.T'})
+#' @param L the Left Mapping (default ['x', 'y' or 'z'] stored in global option \code{'tern.default.L'})
+#' @param R the Right Mapping (default ['x', 'y' or 'z'] stored in global option \code{'tern.default.R'})
 #' @param xlim the range of x in the cartesian space
 #' @param ylim the range of y in the cartesian space
 #' @param Tlim the range of T in the ternary space
 #' @param Llim the range of L in the ternary space
 #' @param Rlim the range of R in the ternary space
-#' @param clockwise (Depreciated) logical (default \code{FALSE}) indicating whether the precession of axes is clockwise (\code{TRUE}) or counter-clockwise (\code{FALSE}).
-#' @return ternary coordinate system object.
+#' @param clockwise DEPRECIATED, replaced by individual theme element, see \code{\link{axis.tern.clockwise}}.
+#' @return \code{coord_tern} returns a ternary coordinate system object.
 #' @export
-coord_tern <- function(T = "x",L="y",R="z",xlim=c(0,1),ylim=c(0,1),Tlim=NULL,Llim=NULL,Rlim=NULL,clockwise) {
-  if(!missing(clockwise)){
+coord_tern <- function(T = getOption("tern.default.T"),
+                       L = getOption("tern.default.L"),
+                       R = getOption("tern.default.R"),
+                       xlim=c(0,1),ylim=c(0,1),Tlim=NULL,Llim=NULL,Rlim=NULL,clockwise) {
+  #clockwise parameter has been depreciated in favour of a specific theme element.
+  if(!missing(clockwise))
     tern_dep("1.0.1.3","clockwise is now controlled by the theme element 'axis.tern.clockwise'")
-  }
   
   ##Validate x and y lims...
-  xlim <- ifthenelse(!is.numeric(xlim) & is.numeric(ylim),ylim,xlim)
-  ylim <- ifthenelse(!is.numeric(ylim) & is.numeric(xlim),xlim,ylim)
-  xlim <- .is.numericor(xlim,c(0,1)); xlim <- sort(xlim); 
-  ylim <- .is.numericor(ylim,c(0,1)); ylim <- sort(ylim);
+  xlim <- sort(is.numericor(ifthenelse(!is.numeric(xlim) & is.numeric(ylim),ylim,xlim),c(0,1)))
+  ylim <- sort(is.numericor(ifthenelse(!is.numeric(ylim) & is.numeric(xlim),xlim,ylim),c(0,1)))
   
-  ##Put into correct aspect.
+  ##Put into correct aspect ratio.
   if(diff(xlim) != diff(ylim)){
     warning("Error in xlim and ylim ratios, adjusting ymax to maintain aspect.",call.=FALSE)
     ylim <- c(min(ylim),min(ylim) + diff(xlim))
   }
   ylim <- c(min(ylim), min(ylim) + diff(ylim)*coord_aspect.ternary())
   
+  #Fallback if invalid values provided.
+  T = ifthenelse(!is.character(T),"x",T[1])
+  L = ifthenelse(!is.character(L),"y",L[1])
+  R = ifthenelse(!is.character(R),"z",R[1])
+  
+  #Run some checks to ensure valid assignment will transpire between T, L, R and x, y and z.
   all.coords <- c("x","y","z")
-  if(length(which(!c(T,L,R) %in% all.coords)) > 0){stop("Options for T, L and R are x,y and z")}
-  if(length(unique(c(T,L,R))) != 3){stop("x, y and z must be assigned to T, L and R in some order and NOT duplicated")}
+  all.axes   <- c("T","L","R")
+  if(length(which(!c(T,L,R) %in% all.coords)) > 0)
+    stop("Options for T, L and R are x,y and z",call.=FALSE)
+  if(length(unique(c(T,L,R))) != 3)
+    stop("x, y and z must be assigned to T, L and R in some order and NOT duplicated",call.=FALSE)
   
+  #Progressively assign to T, L and R.
   T <- match.arg(T, all.coords)
-  L <- match.arg(L, all.coords[which(!all.coords %in% c(T  ))]) #T is picked
-  R <- match.arg(R, all.coords[which(!all.coords %in% c(T,L))]) #T & L are picked
+  L <- match.arg(L, all.coords[which(!all.coords %in% c(T  ))]) #T      is picked, L and R to remain
+  R <- match.arg(R, all.coords[which(!all.coords %in% c(T,L))]) #T & L are picked, R       to remain
   
+  #return coordinate object of fixed ratio.
   coord(
     T = T, 
-    L = L,
+    L = L, 
     R = R,
-    limits = list(x = xlim, y = ylim,T = Tlim,L = Llim,R = Rlim),
-    required_aes=c("x","y","z"),
-    subclass = c("ternary","fixed")
+    limits = list(x = xlim, 
+                  y = ylim,
+                  T = Tlim,
+                  L = Llim,
+                  R = Rlim),
+    #required_aes is now a function of the coordinate system, as well as the geometries.
+    required_aes = all.coords, 
+    required_axes= all.axes,
+    #the class, ternary fixed ratio.
+    subclass     = c("ternary","fixed")
   )
 }
 
 #' S3 Method Is Linear
 #'
-#' @param coord coordinate system
-#' @param data input data
-#' @param details scales details
-#' @param verbose verbose reporting
-#' @param revertToCart fall back to cartesian data if error
-#' @param adjustCart adjust for the cartesian scale or not
-#' @param discard throw away data outside the plotting perimeter
-#' @param scales plot scales 
-#' @param scale plot scale
-#' @param aesthetic mappings
 #' @param x data
 #' @param y data
-#' @param theme net theme
 #' @rdname coord
 #' @keywords internal
 #' @method is.linear ternary
@@ -78,52 +97,75 @@ is.linear.ternary <- function(coord) TRUE
 
 #' S3 Method Coordinate Transform
 #'
+#' @param coord coordinate system
+#' @param data input data
+#' @param details scales details
+#' @param verbose verbose reporting
+#' @param revertToCart fall back to cartesian data if error
+#' @param passToCartesian after conducting the ternary transformation, then execute the standard cartesian transformation.
+#' @param discard throw away data outside the plotting perimeter
+#' @param dont_transform override the ternary transformation
 #' @rdname coord
 #' @method coord_transform ternary
 #' @S3method coord_transform ternary
-coord_transform.ternary <- function(coord, data, details, verbose=FALSE,revertToCart=TRUE,adjustCart=TRUE,discard=getOption("tern.discard.external")){
-  bup    <- data #Original Data Backup.
-  tryCatch({
-    check_required_aesthetics(coord$required_aes, names(data),"coord_tern")
-    data   <- .rename_data_ternary(coord, data)
-    ix.tern <- c("T","L","R"); 
-    ix.cart <- c("x","y")
+coord_transform.ternary <- function(coord, data, details, 
+                                    verbose        = FALSE,
+                                    revertToCart   = FALSE,
+                                    passToCartesian= TRUE,
+                                    discard        = getOption("tern.discard.external"),
+                                    dont_transform = getOption("tern.dont_transform")){
+  #If transformation is enabled
+  if(!dont_transform){
     
-    ix.T <- "T"
-    ix.L <- "L"
-    ix.R <- "R"
+    #Original Data Backup.
+    bup    <- data 
     
-    lim <- list(Tlim=coord$limits[[ix.T]],Llim=coord$limits[[ix.L]],Rlim=coord$limits[[ix.R]])
-    
-    ##Execute the transformation to cartesian
-    data[,c("x","y")] <- transform_tern_to_cart(data = data[,ix.tern],Tlim = lim$Tlim,Llim = lim$Llim,Rlim = lim$Rlim)[,c("x","y")]
-    #only keep records in poly
-    if(discard){
-      #EXPAND THE MAX LIMITS
-      TOLLERANCE <- max(.is.numericor(getOption("tern.pip.tollerance"),0.01))*max(as.numeric(sapply(lim,function(x)diff(x))))
+    tryCatch({
+      check_required_aesthetics(coord$required_aes, names(data),"coord_tern")
+      data   <- .rename_data_ternary(coord, data)
+      ix.tern <- c("T","L","R"); 
+      ix.cart <- c("x","y")
+      lim <- list(Tlim=coord$limits[["T"]],
+                  Llim=coord$limits[["L"]],
+                  Rlim=coord$limits[["R"]])
       
-      #Get the extremes (PLUS TOLLERANCE) to determine if points are outside the plot area.
-      xtrm <- get_tern_extremes(coord,expand=TOLLERANCE)[,ix.tern]
+      #HACK
+      for(ix in ix.tern)
+        if(is.null(coord$limits[[ix]]))
+          revertToCart = TRUE
       
-      #Transform extremes to cartesian space
-      data.extremes <-transform_tern_to_cart(data = xtrm,Tlim = lim$Tlim,Llim = lim$Llim,Rlim = lim$Rlim)[,c("x","y")]
+      ##Execute the transformation to cartesian
+      data[,ix.cart] <- transform_tern_to_cart(data = data[,ix.tern],Tlim = lim$Tlim,Llim = lim$Llim,Rlim = lim$Rlim)[,ix.cart]
       
-      #In polygon or not.
-      in.poly <- point.in.polygon(data$x,data$y,as.numeric(data.extremes$x),as.numeric(data.extremes$y))
-      data <- data[which(in.poly > 0),]
-    }
-  },error=function(e){
-    if(!revertToCart){
-      stop(as.character(e))
-    }
-    if(verbose){
-      writeLines(as.character(e))
-    }
-    data <- bup
-  })
+      #Discard records outside the polygon region that defines the plot area.
+      if(discard){
+        #EXPAND THE MAX LIMITS
+        TOLLERANCE <- max(is.numericor(getOption("tern.pip.tollerance"),0.01))*max(as.numeric(sapply(lim,function(x)diff(x))))
+        
+        #Get the extremes (PLUS TOLLERANCE) to determine if points are outside the plot area.
+        xtrm <- get_tern_extremes(coord,expand=TOLLERANCE)[,ix.tern]
+        
+        #Transform extremes to cartesian space
+        data.extremes <-transform_tern_to_cart(data = xtrm,Tlim = lim$Tlim,Llim = lim$Llim,Rlim = lim$Rlim)[,c("x","y")]
+        
+        #In polygon or not.
+        in.poly <- sp::point.in.polygon(data$x,data$y,as.numeric(data.extremes$x),as.numeric(data.extremes$y))
+        data <- data[which(in.poly > 0),]
+      }
+      
+    #Error Handling - Terminate or Revert to 'cartesian'
+    },error=function(e){
+      msg <- as.character(e)
+      if(!revertToCart)
+        stop(gsub("Error: ","",msg)) #Terminate
+      if(verbose)
+        message(msg) #Report Error if verbose
+      data <- bup    #Revert
+    })
+  }
   
   ##Default is to execute the cartesian transformation (DEFAULT)
-  if(adjustCart & !missing(details)){
+  if(passToCartesian & !missing(details)){
     ggint$coord_transform.cartesian(coord,data,details)
   }else{ ##however sometimes (say in an intermediate step), we may wish to suppress.
     data
@@ -132,12 +174,13 @@ coord_transform.ternary <- function(coord, data, details, verbose=FALSE,revertTo
 
 #' S3 Method Expand Deraults
 #'
+#' @param scales plot scales 
+#' @param aesthetic mappings
 #' @rdname coord
 #' @method coord_expand_defaults ternary
 #' @S3method coord_expand_defaults ternary
-coord_expand_defaults.ternary <- function(coord, scale, aesthetic){
-  ret <- ggint$expand_default(scale)
-  ret
+coord_expand_defaults.ternary <- function(coord, scales, aesthetic){
+  ggint$expand_default(scales)
 }
 
 #' S3 Method Coordinate Train
@@ -146,22 +189,38 @@ coord_expand_defaults.ternary <- function(coord, scale, aesthetic){
 #' @method coord_train ternary
 #' @S3method coord_train ternary
 coord_train.ternary <- function(coord, scales){
-
-  el <- calc_element_plot("ternary.options",theme=theme_update(),verbose=F,plot=last_plot())
-  p  <- convertUnit(calc_element_plot("axis.tern.padding",theme=theme_update(),verbose=F,plot=last_plot()),"npc",valueOnly=TRUE)
-  h  <- convertUnit(calc_element_plot("axis.tern.hshift", theme=theme_update(),verbose=F,plot=last_plot()),"npc",valueOnly=TRUE)
-  v  <- convertUnit(calc_element_plot("axis.tern.vshift", theme=theme_update(),verbose=F,plot=last_plot()),"npc",valueOnly=TRUE)
+  #Current theme and last plot.
+  theme <- theme_update()
+  plot  <- last_plot()
   
-  #trimmed down cartesian coords
-  ret <- c(ggint$train_cartesian(scales$x, coord$limits$x + c(-p,p) - h, "x"),
-           ggint$train_cartesian(scales$y, coord$limits$y + c(-p,p)*coord_aspect.ternary() - v, "y"))[c("x.range","y.range")]
+  #Mimic the way spacing is applied around the ggplot plot (usually done via adding rows and columns to the grid) 
+  #area by manually adding padding to the actual plot region.
+  padding  <- convertUnit(calc_element_plot("axis.tern.padding",theme=theme,verbose=FALSE,plot=plot),"npc",valueOnly=TRUE)
+  padding  <- c(-padding,padding)
+  
+  #Shift the plot up/down, left/right
+  hshift   <- convertUnit(calc_element_plot("axis.tern.hshift", theme=theme,verbose=FALSE,plot=plot),"npc",valueOnly=TRUE)
+  vshift   <- convertUnit(calc_element_plot("axis.tern.vshift", theme=theme,verbose=FALSE,plot=plot),"npc",valueOnly=TRUE)
+  
+  #build some trimmed down cartesian coords
+  ret <- c(ggint$train_cartesian(scales$x, coord$limits$x - hshift + padding, "x"),
+           ggint$train_cartesian(scales$y, coord$limits$y - vshift + padding*coord_aspect.ternary(), "y"))[c("x.range","y.range")]
+  
   #detailed ternary coords
   IX <- c("T","L","R")
-  for(ix in IX) #breaks, ticks etc...
-    ret <- c(ret,ggint$train_cartesian(scales[[ix]],coord$limits[ix],ix))
-  for(ix in IX) #labels
-    ret[paste0(ix,"label")] <- scales[[ix]]$name
+  for(ix in IX){
+    scale <- scales[[ix]]
+    if(!is.null(scale)){
+      tmp <- ggint$train_cartesian(scale,coord$limits[ix],ix)
+      ret <- c(ret,tmp) #breaks, ticks etc...
+      ret[paste0(ix,"label")] <- scale$name #labels
+    }
+  }
+  
+  #Add the 
   ret$Wlabel = scales$W
+  
+  
   ret
 }
 
@@ -177,14 +236,14 @@ coord_aspect.ternary <- function(coord, details){0.5*tan(60*pi/180)}
 #' @rdname coord
 #' @method coord_distance ternary
 #' @S3method coord_distance ternary
-coord_distance.ternary <- function(coord,x,y,details){
-  max_dist <- .dist_euclidean(details$x.range, details$y.range)
-  .dist_euclidean(x, y) / max_dist
+coord_distance.ternary <- function(coord,x,y,details) {
+  .dist_euclidean(x, y) / .dist_euclidean(details$x.range, details$y.range)
 }
 
 
 #' S3 Method Render Vertical Axis
 #'
+#' @param theme net theme
 #' @rdname coord
 #' @method coord_render_axis_v ternary
 #' @S3method coord_render_axis_v ternary
@@ -210,13 +269,17 @@ coord_render_axis_h.ternary <- function(coord, details, theme) {
 #' @S3method coord_render_fg ternary
 coord_render_fg.ternary <- function(coord,details,theme){
   #List to hold the grobs.
-  #items <- list()
+  items <- list()
   
   #The limits.
-  #data.extreme <- .get.data.extreme(coord,details)
+  data.extreme <- .get.data.extreme(coord,details)
   
   #render.
-  #ggint$ggname("background",gTree(children = do.call("gList", items)))
+  items <- .render.titles(data.extreme,items,theme,details) #MAIN TITLES
+  items <- .render.arrows(data.extreme,items,theme,details) #ARROWS
+  
+  #render.
+  ggint$ggname("foreground",gTree(children = do.call("gList", items)))
 }
 
 #' S3 Method Render Background
@@ -224,7 +287,7 @@ coord_render_fg.ternary <- function(coord,details,theme){
 #' @rdname coord
 #' @method coord_render_bg ternary
 #' @S3method coord_render_bg ternary
-coord_render_bg.ternary <- function(coord,details,theme){
+coord_render_bg.ternary <- function(coord,details,theme){  
   #List to hold the grobs.
   items <- list()
   
@@ -235,8 +298,6 @@ coord_render_bg.ternary <- function(coord,details,theme){
   items <- .render.background(data.extreme,items,theme)     #BACKGROUND...
   items <- .render.grids(data.extreme,items,theme,details)  #GRIDS
   items <- .render.border(data.extreme,items,theme)         #BORDER
-  items <- .render.arrows(data.extreme,items,theme,details) #ARROWS
-  items <- .render.titles(data.extreme,items,theme,details) #MAIN TITLES
   
   #render.
   ggint$ggname("background",gTree(children = do.call("gList", items)))
@@ -262,10 +323,12 @@ coord_render_bg.ternary <- function(coord,details,theme){
 
 #----------------------------------------------------------------------------------
 #Internals >>>> ANGLES
+#Functions to determine the rotation angles for the various components
 #----------------------------------------------------------------------------------
-.get.angles <- function(clockwise){ifthenelse(clockwise,c(-180,-60,60),c(0,120,240))}
+.get.angles             <- function(clockwise){ifthenelse(clockwise,c(-180,-60,60),c(0,120,240))}
+.get.angles.arrows      <- function(clockwise){.get.angles(clockwise) + ifthenelse(clockwise,-30,30)}
 .get.angles.arrowmarker <- function(clockwise){ifthenelse(clockwise,c(60,0,-60),c(-60,60,0) )}
-.get.angles.text <- function(clockwise){ifthenelse(clockwise,c(0,-60,60),c(0,-60,60))}
+.get.angles.ticklabels  <- function(clockwise){ifthenelse(clockwise,c(0,-60,60),c(0,-60,60))}
 
 #----------------------------------------------------------------------------------
 #Internals >>>> Theme flags.
@@ -274,6 +337,26 @@ coord_render_bg.ternary <- function(coord,details,theme){
   clockwise     <- theme$axis.tern.clockwise  
   clockwise     <- ifthenelse(is.logical(clockwise),clockwise[1],getOption("tern.clockwise"))
   clockwise
+}
+.theme.get.showtitles <- function(theme){
+  showtitles    <- calc_element_plot("axis.tern.showtitles",theme=theme)
+  showtitles    <- ifthenelse(is.logical(showtitles),showtitles[1],getOption("tern.showtitles"))
+  showtitles
+}
+.theme.get.showlabels <- function(theme){
+  showlabels    <- calc_element_plot("axis.tern.showlabels",theme=theme)
+  showlabels    <- ifthenelse(is.logical(showlabels),showlabels[1],getOption("tern.showlabels"))
+  showlabels
+}
+.theme.get.showgrid.major <- function(theme){
+  showgrid <- calc_element_plot("axis.tern.showgrid.major",theme=theme)
+  showgrid <- ifthenelse(is.logical(showgrid),showgrid[1],getOption("tern.showgrid.major"))
+  showgrid
+}
+.theme.get.showgrid.minor <- function(theme){
+  showgrid <- calc_element_plot("axis.tern.showgrid.minor",theme=theme)
+  showgrid <- ifthenelse(is.logical(showgrid),showgrid[1],getOption("tern.showgrid.minor"))
+  showgrid
 }
 .theme.get.outside    <- function(theme){
   outside       <- calc_element_plot("axis.tern.ticks.outside",theme=theme)
@@ -291,8 +374,25 @@ coord_render_bg.ternary <- function(coord,details,theme){
   showsecondary
 }
 
+#For relative arrow positioning, this function allows global 'width' metric to be determined
+.theme.get.maxlabwidth <- function(details,theme,ixseq){
+  maxlabwidth <- unit(0,"npc")
+  for(ix in ixseq){
+    name      <- paste0("axis.tern.text.",ix)
+    element   <- calc_element_plot(name,theme=theme,verbose=F,plot=NULL)
+    text      <- as.character(max(as.numeric(details[[paste0(ix,".labels")]])))
+    grobwidth <- grobWidth(textGrob(text,gp=gpar(fontsize  =element$size,
+                                                 fontfamily=element$family,
+                                                 fontface  =element$face,
+                                                 lineheight=element$lineheight)))
+    maxlabwidth <- convertUnit(max(maxlabwidth,grobwidth),"npc")
+  }
+  maxlabwidth
+}
+
 #----------------------------------------------------------------------------------
 #Internals >>>> Data Extremes.
+#Function to determine apex points of ternary plot area in cartesian coordinates
 #----------------------------------------------------------------------------------
 .get.data.extreme <- function(coord,details){
   data.extreme <- transform_tern_to_cart(data = get_tern_extremes(coordinates=coord),
@@ -306,6 +406,11 @@ coord_render_bg.ternary <- function(coord,details,theme){
 
 #----------------------------------------------------------------------------------
 #Internals >>>> Render Components
+# -Backgrounds
+# -Grid lines
+# -Ternary Border
+# -Precession Arrows
+# -Apex Titles
 #----------------------------------------------------------------------------------
 .render.background <- function(data.extreme,items,theme){
   data.background <- data.extreme
@@ -333,7 +438,9 @@ coord_render_bg.ternary <- function(coord,details,theme){
       
       ##Add to the items.
       items[[length(items) + 1]] <- grob
-    },error = function(e){print(e)})
+    },error = function(e){
+      
+    })
     return(items)
   }
   
@@ -347,6 +454,9 @@ coord_render_bg.ternary <- function(coord,details,theme){
   outside       <- .theme.get.outside(theme)
   showprimary   <- .theme.get.showprimary(theme)
   showsecondary <- .theme.get.showsecondary(theme)
+  showgrid.major<- .theme.get.showgrid.major(theme)
+  showgrid.minor<- .theme.get.showgrid.minor(theme)
+  showlabels    <- .theme.get.showlabels(theme)
   shift         <- ifthenelse(!outside,180,0)
   
   #major & minor ticklength
@@ -365,10 +475,16 @@ coord_render_bg.ternary <- function(coord,details,theme){
   .getData <- function(X,ix,existing=NULL,major=TRUE,angle=0,angle.text=0){
     breaks.major <- details[[paste0(X,".major_source")]]
     breaks.minor <- details[[paste0(X,".minor_source")]]
-    breaks <- if(major){breaks.major}else{breaks.minor[which(!breaks.minor %in% breaks.major)]}
+    breaks <- if(major){
+      breaks.major
+    }else{
+      breaks.minor
+      #breaks.minor[which(!breaks.minor %in% breaks.major | !showgrid.major)]
+    }
     
     #BYPASS IF NECESSARY
-    if(length(breaks) == 0)return(existing)
+    if(length(breaks) == 0)
+      return(existing)
     
     labels <- if(major){details[[paste0(X,".labels")]]}else{""}
     labels <- ifthenelse(identical(labels,waiver()),100*breaks,labels)
@@ -381,7 +497,7 @@ coord_render_bg.ternary <- function(coord,details,theme){
     },error=function(e){
       #quietly
     })
-    limits <- .is.numericor(limits,c(0,1))
+    limits <- is.numericor(limits,c(0,1))
     b <- limits[length(limits)]; a <- limits[1] #The max/min limits.
     ix <- min(ix,ifthenelse(major,length(tl.major),length(tl.minor)))
     majmin        <- ifthenelse(major,"major","minor")  #Major or Minor Element Name part.
@@ -394,6 +510,7 @@ coord_render_bg.ternary <- function(coord,details,theme){
     new$NameText   <- paste0("axis.tern.text.",X)
     new$NameTicks  <- paste0("axis.tern.ticks.",majmin,".",X)
     new$NameGrid   <- paste0("panel.grid.tern.",majmin,".",X)
+    new$Major      <- major
     
     ##Start and finish positions of scale.
     ix.at     <- paste0("AT.",seq.tlr)
@@ -435,19 +552,26 @@ coord_render_bg.ternary <- function(coord,details,theme){
   }
   
   angles      <- .get.angles(clockwise) + shift
-  angles.text <- .get.angles.text(clockwise)
+  angles.text <- .get.angles.ticklabels(clockwise)
+  
+  #print(details) # for debug
   
   ##get the base data.
   d <- NULL
-  for(j in 1:2)
+  for(major in c(TRUE,FALSE))
     for(i in 1:length(seq.tlr))
-      d <- .getData(X=seq.tlr[i],ix=i,existing=d,major = (j==1),angle = angles[i],angle.text = angles.text[i]);
+      d <- .getData(X=seq.tlr[i],ix=i,existing=d, major = major,angle = angles[i],angle.text = angles.text[i]);
+  
+  if(empty(d))
+    return(items)
   if(nrow(d) > 1){d <- d[nrow(d):1,]}  #REVERSE (minor under major)
   
   #FUNCTION TO RENDER TICKS AND LABELS
   .render.ticks <- function(name,items,d,primary=TRUE){
     tryCatch({  
       e <- calc_element_plot(name,theme=theme,verbose=F,plot=NULL)
+      if(identical(e,element_blank()))
+        return(items)
       colour   <- e$colour
       size     <- e$size
       linetype <- e$linetype
@@ -468,9 +592,14 @@ coord_render_bg.ternary <- function(coord,details,theme){
     },error = function(e){ warning(e)})
     return(items)
   }
+  
+  loc.width = unit(0,"npc")
+  
   .render.labels <- function(name,items,d){    
     tryCatch({  
       e <- calc_element_plot(name,theme=theme,verbose=F,plot=NULL)
+      if(identical(e,element_blank()))
+        return(items)
       colour    <- e$colour
       fill      <- e$fill
       size      <- e$size
@@ -498,10 +627,12 @@ coord_render_bg.ternary <- function(coord,details,theme){
     },error = function(e){ warning(e)})
     return(items)
   }
-  .render.grid <- function(name,items,d){
-    tryCatch({  
-      e <- calc_element_plot(name,theme=theme,verbose=F,plot=NULL)
-      if(!identical(e,element_blank())){
+  .render.grid <- function(name,items,d,showgrid.major=TRUE,showgrid.minor=TRUE){
+    if((unique(d$Major) & showgrid.major) | (!unique(d$Major) & showgrid.minor)){
+      tryCatch({  
+        e <- calc_element_plot(name,theme=theme,verbose=F,plot=NULL)
+        if(identical(e,element_blank()))
+          return(items)
         colour   <- e$colour
         size     <- max(e$size,0)
         if(size > 0){
@@ -521,18 +652,20 @@ coord_render_bg.ternary <- function(coord,details,theme){
           ##Add to the items.
           items[[length(items) + 1]] <- grob
         }
-      }
-    },error = function(e){ warning(e)})
+      },error = function(e){ warning(e)})
+    }
     return(items)
   }
   
   #PROCESS TICKS AND LABELS
-  for(n in unique(d$NameGrid)){ items <- .render.grid(  name=n,items=items,d=d[which(d$NameGrid  == n),])}
+  if(showgrid.major | showgrid.minor)
+    for(n in unique(d$NameGrid)){ items <- .render.grid(  name=n,items=items,d=d[which(d$NameGrid  == n),], showgrid.major=showgrid.major,showgrid.minor=showgrid.minor)}  
   if(showprimary)
     for(n in unique(d$NameTicks)){items <- .render.ticks(name=n,items=items,d=d[which(d$NameTicks == n),],primary=TRUE)}
   if(showsecondary)
     for(n in unique(d$NameTicks)){items <- .render.ticks(name=n,items=items,d=d[which(d$NameTicks == n),],primary=FALSE)}
-  for(n in unique(d$NameText)){ items <- .render.labels(name=n,items=items,d=d[which(d$NameText  == n),])}
+  if(showlabels)
+    for(n in unique(d$NameText)){ items <- .render.labels(name=n,items=items,d=d[which(d$NameText  == n),])}
   items
 }
 .render.border <- function(data.extreme,items,theme){
@@ -579,11 +712,13 @@ coord_render_bg.ternary <- function(coord,details,theme){
   }
   items
 }
-.render.arrows <- function(data.extreme,items,theme,details){
+.render.arrows <- function(data.extreme,items,theme,details,maxgrob){
   axis.tern.showarrows <- theme$axis.tern.showarrows
   if(is.logical(axis.tern.showarrows) && (axis.tern.showarrows)){
     tryCatch({
+      #clockwise or anticlockwise precession
       clockwise <- .theme.get.clockwise(theme)
+      
       #The basic data.
       d.s <- data.extreme[ifthenelse(clockwise,c(2,3,1),c(3,1,2)),]
       d.f <- data.extreme[c(1,2,3),]
@@ -609,21 +744,41 @@ coord_render_bg.ternary <- function(coord,details,theme){
       
       #The arrow seperation in npc units.
       arrowsep <- calc_element_plot("axis.tern.arrowsep",theme=theme,verbose=F,plot=NULL)
-      if(length(arrowsep) != 3 && length(arrowsep) > 1)
-        arrowsep <- arrowsep[1]
-      arrowsep <- convertUnit(arrowsep,"npc",valueOnly=TRUE)
+      arrowbaseline <- calc_element_plot("axis.tern.arrowbaseline",theme=theme)
+      ticksoutside <- .theme.get.outside(theme)
+      ticklength <- max(calc_element_plot("axis.tern.ticklength.major",theme=theme,verbose=F,plot=NULL),
+                        calc_element_plot("axis.tern.ticklength.minor",theme=theme,verbose=F,plot=NULL))
+      
+      #Ensure there are EXACTLY 3 values for each metric
+      if(length(arrowsep) != 3 && length(arrowsep) >= 1)
+        arrowsep <- rep(arrowsep[1],3)
+      if(length(arrowbaseline) != 3 && length(arrowbaseline) >= 1)
+        arrowbaseline <- rep(arrowbaseline[1],3)
+      ticklength = rep(ticklength,3)
+      
+      #get set of 3 arrowsep positions
+      arrowsep <- sapply(c(1:3),function(x){
+        newunit <- arrowsep[x] + 
+          ifthenelse(arrowbaseline[x] >= 1 & ticksoutside,ticklength[x], unit(0,"npc")) + 
+          ifthenelse(arrowbaseline[x] >= 2,.theme.get.maxlabwidth(details,theme,ixseq),unit(0,"npc"))
+        
+        convertWidth(newunit,"npc",valueOnly=TRUE)
+      })
       
       #MOVE the Arrows Off the Axes.
-      d[ixrow,"angle"]    <- .get.angles(clockwise)
+      d[ixrow,"angle"]    <- .get.angles.arrows(clockwise)
       d[ixrow,"arrowsep"] <- arrowsep
+      #xcoordinates
       d[,ixcol[c(1,3)]]   <- d[,ixcol[c(1,3)]] + cos(pi*d$angle/180)*arrowsep
-      d[,ixcol[c(2,4)]]   <- d[,ixcol[c(2,4)]] + sin(pi*d$angle/180)*arrowsep
+      #ycoorinates
+      d[,ixcol[c(2,4)]]   <- d[,ixcol[c(2,4)]] + sin(pi*d$angle/180)*arrowsep/coord_aspect.ternary()
       
       #Centerpoints, labels, arrowsuffix
       d$xmn   <- rowMeans(d[,ixcol[c(1,3)]])
       d$ymn   <- rowMeans(d[,ixcol[c(2,4)]])
-      d$L     <- as.character(c(details$Tlabel,details$Llabel,details$Rlabel))
-      d$W     <- as.character(c(details$Wlabel))
+      
+      d$L     <- c(details$Tlabel,details$Llabel,details$Rlabel)
+      d$W     <- c(details$Wlabel)
       d$A     <- .get.angles.arrowmarker(clockwise)
       
       ##Function to create new axis & label grob
@@ -648,7 +803,10 @@ coord_render_bg.ternary <- function(coord,details,theme){
           )
           ##Add to the items.
           items[[length(items) + 1]] <- grob
-        },error = function(e){ warning(e)})
+        },error = function(error){ 
+          print(error)
+          warning(error)
+        })
         return(items)
       }
       .render.label <- function(name,ix,items){
@@ -694,14 +852,17 @@ coord_render_bg.ternary <- function(coord,details,theme){
   items
 }
 .render.titles <- function(data.extreme,items,theme,details){
-  clockwise <- .theme.get.clockwise(theme) 
+  showtitles <- .theme.get.showtitles(theme)
+  if(!showtitles)
+    return(items)
+  clockwise  <- .theme.get.clockwise(theme)
   
   d    <- data.extreme
-  d$L  <- as.character(c(details$Tlabel,details$Llabel,details$Rlabel))
+  d$L  <- as.expression(c(details$Tlabel,details$Llabel,details$Rlabel))
   
   ##Function to create new axis grob
   .render <- function(name,ix,items,hshift=0,vshift=0){
-    tryCatch({  
+    tryCatch({
       e <- calc_element_plot(name,theme=theme,verbose=F,plot=NULL)
       colour    <- e$colour
       size      <- e$size;
@@ -711,20 +872,21 @@ coord_render_bg.ternary <- function(coord,details,theme){
       hjust     <- e$hjust
       vjust     <- e$vjust
       angle     <- e$angle
-      grob      <- textGrob( label = d$L[ix], 
-                             x = unit(d$x[ix] + hshift,"npc"), 
-                             y = unit(d$y[ix] + vshift,"npc"),
-                             hjust=hjust, 
-                             vjust=vjust, 
-                             rot  =angle,
-                             gp   = gpar(col        = colour, 
-                                         fontsize   = size,
-                                         fontfamily = family, 
-                                         fontface   = face, 
-                                         lineheight = lineheight))
-      #print(convertWidth(widthDetails(grob), 'npc', TRUE))
-      ##Add to the items.
-      items[[length(items) + 1]] <- grob
+      
+      if(!identical(e,element_blank())){
+        grob      <- textGrob( label = d$L[ix], 
+                               x = unit(d$x[ix] + hshift,"npc"), 
+                               y = unit(d$y[ix] + vshift,"npc"),
+                               hjust=hjust, 
+                               vjust=vjust, 
+                               rot  =angle,
+                               gp   = gpar(col        = colour, 
+                                           fontsize   = size,
+                                           fontfamily = family, 
+                                           fontface   = face, 
+                                           lineheight = lineheight))
+        items[[length(items) + 1]] <- grob
+      }
     },error = function(e){ warning(e)})
     return(items)
   }
