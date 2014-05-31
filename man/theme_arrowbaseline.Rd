@@ -2,7 +2,7 @@
 \alias{theme_arrowbaseline}
 \title{Set The Ternary Arrow Baseline}
 \usage{
-  theme_arrowbaseline(x = "labels")
+theme_arrowbaseline(x = "labels")
 }
 \arguments{
   \item{x}{a character ('axis','ticks' or 'labels') or
@@ -12,16 +12,16 @@
   be thrown.}
 }
 \description{
-  The ternary arrows can have an offset unit value (see
-  \code{\link{axis.tern.arrowsep}}), however, it is
-  convenient to set this relative to either the axis, ticks
-  or axis ticklabels (since the latter two can be hidden /
-  removed.). This function permits this to be set
+The ternary arrows can have an offset unit value (see
+\code{\link{axis.tern.arrowsep}}), however, it is
+convenient to set this relative to either the axis, ticks
+or axis ticklabels (since the latter two can be hidden /
+removed.). This function permits this to be set
 }
 \examples{
 \donttest{
 #Create plot object
-plot <- ggtern(data=DATA.RANDOM,mapping=aes(x,y,z)) +
+plot <- ggtern(data=data.frame(x=1,y=1,z=1),mapping=aes(x,y,z)) +
 geom_point() + theme_rgbw() +
  tern_limits(labels=c(10,20,"","","","","",80,90,100),
              breaks=seq(0.1,1,by=0.1)) +

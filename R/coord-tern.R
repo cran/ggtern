@@ -726,12 +726,40 @@ coord_render_bg.ternary <- function(coord,details,theme){
       d.diff        <- d.f - d.s
       
       #arrow start and finish proportions
-      arrowstart = theme$axis.tern.arrowstart[1]
-      arrowfinish= theme$axis.tern.arrowfinish[1]
+      arrowstart = theme$axis.tern.arrowstart
+      arrowfinish= theme$axis.tern.arrowfinish
+      
+      #Ensure arrow start and finish length is 3.
+      if(length(arrowstart) != 3 && length(arrowstart) >= 1)
+        arrowstart <- rep(arrowstart[1],3)
+      if(length(arrowfinish) != 3 && length(arrowfinish) >= 1)
+        arrowfinish <- rep(arrowfinish[1],3)
+      
+      #Itterate over indexes 1:3
+      for(i in c(1:3)){
+        #Put in correct order.
+        if(arrowfinish[i] < arrowstart[i]){
+          warning(paste("Arrow size theme 'element axis.tern.arrowfinish[",i,"]' (",arrowfinish[i],") is < 'axis.tern.arrowstart[",i,"]' (",arrowstart[i],"), values will be swapped.",sep=""),call.=FALSE)
+          tmp  = arrowstart[i] #hold in memory
+          #Swap values
+          arrowstart[i]  = arrowfinish[i]
+          arrowfinish[i] = tmp
+        }
+        #Check finish
+        if(arrowfinish[i] > 1.0){
+          warning(paste("Arrow size theme 'element axis.tern.arrowfinish[",i,"]' (",arrowfinish[i],") is > 1.0 and will be truncated",sep=""),call.=FALSE)
+          arrowfinish[i] = 1.0
+        }
+        #Check start
+        if(arrowstart[i] < 0.0){
+          warning(paste("Arrow size theme 'element axis.tern.arrowstart[",i,"]' (",arrowstart[i],") is < 0.0 and will be truncated",sep=""),call.=FALSE)
+          arrowstart[i] = 0.0
+        }
+      }
       
       #Cut down to relative proportion.
-      d.f <- d.f -   (1-max(min(arrowfinish,1.0),0.0))*d.diff
-      d.s <- d.s +   (min(max(arrowstart, 0.0),1.0)  )*d.diff
+      d.f <- d.f -   (1-arrowfinish)*d.diff
+      d.s <- d.s +   arrowstart*d.diff
       d <- rbind(d.s,d.f)
       
       ixseq <- c("T","L","R")
