@@ -7,17 +7,17 @@
 #' the value of \code{fullrange} has no meaning, since the full-range becomes essentially becomes limited by the ternary plot area. 
 #' When set to \code{FALSE}, \code{fullarea} behaves as per normal.
 #' @param fullrange extend the range to the edge of the plotting panel.
-#' @aliases GeomSmoothtern
+#' @aliases GeomSmoothTern geom_smooth
 #' @inheritParams ggplot2::geom_smooth
 #' @export
-geom_smooth <- function (mapping = NULL, data = NULL, stat = "smoothtern", position = "identity",limitarea=TRUE,fullrange=FALSE,...) { 
+geom_smooth_tern <- function (mapping = NULL, data = NULL, stat = "SmoothTern", position = "identity",limitarea=TRUE,fullrange=FALSE,...) { 
   limitarea <- ifthenelse(!is.logical(limitarea),TRUE,limitarea[1])
   fullrange <- ifthenelse(limitarea,TRUE,fullrange) #FORCE FULL RANGE IN ORDER TO BE ABLE TO TRUNCATE
-  GeomSmoothtern$new(mapping = mapping, data = data, stat = stat, position = position,limitarea=limitarea,fullrange=fullrange,...)
+  GeomSmoothTern$new(mapping = mapping, data = data, stat = stat, position = position,limitarea=limitarea,fullrange=fullrange,...)
 }
 
-GeomSmoothtern <- proto(Geom, {
-  objname <- "smoothtern"
+GeomSmoothTern <- proto(Geom, {
+  objname <- "smooth_tern"
   draw <- function(., data, scales, coordinates,limitarea=F,...) { 
     #HACK 4 GGTERN
     if(limitarea & inherits(get_last_coord(),"ternary")){data <- remove_outside(data)}

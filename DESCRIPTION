@@ -1,19 +1,20 @@
 Package: ggtern
 Type: Package
 Title: An Extension to 'ggplot2', for the Creation of Ternary Diagrams
-Version: 1.0.5.0
+Version: 1.0.6.0
 Date: 2015-04-15
 Author: Nicholas Hamilton <nick@ggtern.com>
 Maintainer: Nicholas Hamilton <nick@ggtern.com>
-Description: Extends the functionality of ggplot2, providing the capability to plot ternary diagrams for (subset of) the ggplot2 geometries. Additionally, ggtern has implemented several NEW geometries which are unavailable to the standard ggplot2 release. For further examples and documentation, please proceed to the ggtern website. 
+Description: Extends the functionality of 'ggplot2', providing the capability to plot ternary diagrams for (subset of) the 'ggplot2' geometries. Additionally, 'ggtern' has implemented several NEW geometries which are unavailable to the standard 'ggplot2' release. For further examples and documentation, please proceed to the 'ggtern' website. 
 License: GPL-2
 Depends: ggplot2(>= 1.0.0.0)
-Imports: plyr, gtable, scales, reshape2, proto, MASS, sp, grid
+Imports: plyr, gtable, scales, reshape2, proto, MASS, sp, grid,
+        polyclip
 URL: http://www.ggtern.com
 Collate: 'onLoad.R' 'ggtern-package.R' 'aaa.R' 'utilities-help.R'
         'gg-internal.R' 'statnew.R' 'geom.R' 'data.R'
-        'element_ternary.R' 'utilities.R' 'tern-stop.R'
-        'strip-unapproved.R' 'coord-tern.R' 'global.R'
+        'element_ternary.R' 'clip-polygons.R' 'utilities.R'
+        'tern-stop.R' 'strip-unapproved.R' 'coord-tern.R' 'global.R'
         'theme-defaults.R' 'theme-elements.R' 'theme.R'
         'theme-noarrows.R' 'theme-arrowlength.R'
         'theme-showsecondary.R' 'theme-showtitles.R'
@@ -23,13 +24,15 @@ Collate: 'onLoad.R' 'ggtern-package.R' 'aaa.R' 'utilities-help.R'
         'tern-clockwise.R' 'aes.R' 'scales.R' 'panel.R' 'ggtern.R'
         'kde2d-weighted.R' 'ggtern-build.R' 'plot-construction.R'
         'tern-render.R' 'tern-limits.R' 'geom-smooth.R'
-        'geom-segment.R' 'geom-Tline.R' 'geom-Lline.R' 'geom-Rline.R'
-        'geom-confidence.R' 'geom-density2d.R' 'geom-errorbarT.R'
-        'geom-errorbarL.R' 'geom-errorbarR.R' 'stat-smooth.R'
-        'stat-density-2d.R' 'stat-Tline.R' 'stat-Lline.R'
-        'stat-Rline.R' 'TRL-line.R' 'multiplot.R' 'ggsave.R'
-        'point-in-sequence.R'
-Packaged: 2015-04-15 12:02:22 UTC; nick
+        'geom-segment.R' 'geom-polygon-tern.R' 'geom-Tline.R'
+        'geom-Lline.R' 'geom-Rline.R' 'geom-confidence.R'
+        'geom-density-tern.R' 'geom-errorbarT.R' 'geom-errorbarL.R'
+        'geom-errorbarR.R' 'stat-smooth.R' 'stat-density-tern.R'
+        'stat-Tline.R' 'stat-Lline.R' 'stat-Rline.R' 'TRL-line.R'
+        'multiplot.R' 'ggsave.R' 'point-in-sequence.R'
+        'theme-novar-tern.R' 'stat-interpolate-tern.R'
+        'geom-interpolate-tern.R'
+Packaged: 2015-08-03 06:13:08 UTC; nick
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2015-04-15 20:54:01
+Date/Publication: 2015-08-03 09:29:47

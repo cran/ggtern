@@ -25,11 +25,11 @@ is.numericor <- function(A,B){
 #' @param expand numeric do define the max and min acceptable limits above and below the intended range.
 #' @rdname undocumented
 get_tern_extremes <- function(coordinates,verbose=F,expand=0){
-  expand = max(0,is.numericor(expand[1],0)); 
+  expand = is.numericor(expand[1],0); 
   expand <- c(-expand/2,expand)
   
   if(!inherits(coordinates,"ternary") & !inherits(coordinates,"coord"))stop("coordinates must be ternary coordinates")
-  
+ 
   Tlim <- coordinates$limits$T; if(!is.numeric(Tlim)){Tlim <- c(0,1)};Tlim <- Tlim + expand 
   Llim <- coordinates$limits$L; if(!is.numeric(Llim)){Llim <- c(0,1)};Llim <- Llim + expand
   Rlim <- coordinates$limits$R; if(!is.numeric(Rlim)){Rlim <- c(0,1)};Rlim <- Rlim + expand 
@@ -130,8 +130,7 @@ transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c
   
   #Adjust for the Limits.
   .adj <- function(input,lim){
-    if(is.null(lim))
-      lim=c(0,1)
+    if(is.null(lim)) lim=c(0,1)
     (input-min(lim))/(abs(diff(lim)))
   }
   d$T <- .adj(d$T,Tlim)
@@ -141,7 +140,6 @@ transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c
   #Calculate
   out.Y <- d$T*tan(pi/3)*0.5
   out.X <- d$R + out.Y*tan(pi/6)
-    
   return(data.frame(x=out.X,y=out.Y))
 }
 transform_cart_to_tern <- function(x,y,data=data.frame(x=x,y=y),...,Tlim=c(0,1),Llim=c(0,1),Rlim=c(0,1)){
@@ -253,18 +251,15 @@ find_global_tern <- function (name, env=environment()){
 trytransform <- function(data,coord){
   if(missing(coord)){stop("coord are required")}
   bup <- data
-  Tlim <- coord$limits$T; Llim <- coord$limits$L; Rlim <- coord$limits$R
   tryCatch({
-    if(inherits(coord,"ternary")){  
+    if(inherits(coord,"ternary")){ 
+      Tlim <- coord$limits$T; Llim <- coord$limits$L; Rlim <- coord$limits$R
       res <- transform_tern_to_cart(T=data[,coord$T],L=data[,coord$L],R=data[,coord$R],Tlim=Tlim,Llim=Llim,Rlim=Rlim)[,c("x","y")]
-      data <- cbind(res,data[,which(!colnames(data) %in% c(coord$T,coord$L,coord$R))])
+      return(cbind(res,data[,which(!colnames(data) %in% c(coord$T,coord$L,coord$R))]))
     }
   },error=function(e){
-    #warning(e)
-    #message(e)
-    data <- bup
   })
-  data
+  bup
 }
 
 #' \code{notransform} is an internal function that permits the input argument (evaluate) to be executed with temporary disabling of
@@ -307,12 +302,11 @@ remove_outside <- function(data){
     if(inherits(lp,"ggtern")){ #ONLY FOR ggtern object
       if(class(data) != "data.frame"){return(data)}
       if(length(which(c("x","y") %in% names(data))) != 2){warning("x and y are required"); return(data)}
-      
       coord <- get_last_coord()
       lim <- list(Tlim=coord$limits[["T"]],Llim=coord$limits[["L"]],Rlim=coord$limits[["R"]])
       tri <- transform_tern_to_cart(data=get_tern_extremes(coord),Tlim = lim$Tlim,Llim = lim$Llim,Rlim = lim$Rlim)
       ix  <- sp::point.in.polygon(data$x,data$y,tri$x,tri$y)
-      return(data[which(ix > 0),])
+      return(subset(data,ix > 0))
     }
   },error=function(e){
     #do nothing
@@ -321,7 +315,7 @@ remove_outside <- function(data){
 }
 
 .hjust.flip    <- function(x,clockwise){if(clockwise){0.5 - (x - 0.5)}else{x}}
-.zeroGrob <- grob(cl = "zeroGrob", name = "NULL")
+.zeroGrob      <- grob(cl = "zeroGrob", name = "NULL")
 
 # Euclidean distance between points.
 # NA indicates a break / terminal points
@@ -406,12 +400,109 @@ tern_dep <- function(version, msg) {
 iflasttern <- function(yes=stop("yes value required"),no=stop("no value required"))
   ifthenelse(inherits(get_last_coord(),"ternary"),yes,no)
 
+#' Undo a Ternary Transformation
+#' 
+#' Using the provided ternary coordinates, and a data-frame containing x, y, z values, convert back
+#' to the cartesian coordinates
+#' @param df data frame containing x, y, z
+#' @param coord ternary coordinate system
+undoCartesian <- function(df,coord){
+  if(inherits(coord,"ternary")){
+    ix = as.character(unlist(coord[c("T","L","R")])) 
+    df[,ix] <- transform_cart_to_tern(data=df,Tlim=coord$limits$T,Llim=coord$limits$L,Rlim=coord$limits$R)
+  }
+  df
+}
+
+#' Expand a Range of Values
+#' 
+#' Expands a range of values about its midpoint, by an amount equal to the multiplyer
+#' @param x range of values, required to be numeric and of length 2
+#' @param m multiplyer
+expandRange <- function(x,m=1){
+  if(!is.numeric(x) | length(x) != 2) x = c(0,1)
+  if(diff(x)   == 0)return(x)
+  med = mean(range(x))
+  c(med + (x[1] - med)*m[1],
+    med + (x[2] - med)*m[1])
+}
 
 
+#' Ternary Limits
+#' 
+#' Determine the Ternary Limits for Coordinate System
+#' @param coord ternary coordinates
+ternLimitsForCoord = function(coord){
+  lapply(list(Tlim="T",Llim="L",Rlim="R"),function(x){coord$limits[[x]]} )
+}
 
 
+#' Determine Ternary Expansion
+#' 
+#' Determines the Expansion Buffer on the Ternary Sufrace, 
+#' Similar to the 'expand' term in ggplot2 on a rectangular grid
+#' @param coord ternary coordinates
+#' @param by fraction to expand by
+#' @return numeric scalar, of the amount to expand ternary grid
+expandTern <- function(coord,by=getOption('tern.expand')){
+  tryCatch({
+    if(inherits(coord,'ternary')){
+      lim = ternLimitsForCoord(coord)
+      if(is.numeric(by)) return(max(by)*max(sapply(lim,function(x){
+        if(is.null(x) | !is.numeric(x)){ x = c(0,1) }
+        diff(x)
+      })))
+    }
+  },error=function(e){
+    #pass
+  })
+  return(by)
+}
 
+#' Suppress Colours
+#'
+#' Function to Suppress Colours
+#' @param data ggplot dataframe
+#' @param coord ternary coordinates
+#' @param toColor the colour to suppress to
+#' @param remove should suppressed points be removed entirely
+suppressColours <- function(data,coord,toColor="transparent",remove=FALSE){
+  if(!inherits(coord,"ternary")) return(data)
+  if(!getOption('tern.discard.external')) return(data)
+  if(class(data)  != 'data.frame') return(data)
+  ix.tern       <- c("T","L","R"); 
+  ix.cart       <- c("x","y")
+  ix.tern.n     <- c(coord$T,coord$L,coord$R)
+  lim           <- ternLimitsForCoord(coord)
+  expand        <- expandTern(coord,by=getOption('tern.expand.contour.inner'))
+  xtrm          <- get_tern_extremes(coord,expand=expand)[,ix.tern]
+  data.extremes <- transform_tern_to_cart(data = xtrm,Tlim = lim$Tlim,Llim = lim$Llim,Rlim = lim$Rlim)[,ix.cart]
+  if(all(ix.tern.n %in% names(data))){
+    rnm         = function(x){x=x[,ix.tern.n];names(x)=ix.tern;x}
+    data.cart   = transform_tern_to_cart(data=rnm(data), Tlim = lim$Tlim,Llim = lim$Llim,Rlim = lim$Rlim)[,ix.cart]
+    in.poly     = sp::point.in.polygon(data.cart$x,data.cart$y,as.numeric(data.extremes$x),as.numeric(data.extremes$y))
+    outside.ix  = intersect(1:nrow(data),which(in.poly %in% c(0,2,3)))
+    if(length(outside.ix) > 0){ 
+      if(remove){
+        data = data[-outside.ix,]
+      } else{
+        for(x in c('colour')){
+          if(x %in% names(data)){
+            data[outside.ix,x] = toColor
+          }
+        }  
+      }
+    }
+  }
+  data
+}
 
-
-
+#' Enforce Coordinates
+#' 
+#' Function to Enforce Coordinates
+enforceTernaryCoordinates <- function(){
+  coordinates  <- get_last_coord()
+  if(!inherits(coordinates,"ternary")) stop("Coordinates Must be Ternary.")
+  return(coordinates)
+}
 

@@ -14,18 +14,16 @@
 ggplot_build <- function(plot) {
   if (length(plot$layers) == 0) stop("No layers in plot", call.=FALSE)
   plot <- ggint$plot_clone(plot)
+
   
   #if we have ternary coordinate system but not ternary plot class, make it ternary.
   if(inherits(plot$coordinates,"ternary")){
-    if(!inherits(plot,"ggtern") & inherits(plot,"ggplot"))
-      class(plot) <- c("ggtern",class(plot))
+    if(inherits(plot,"ggplot")) class(plot) <- c("ggtern",class(plot)) 
     plot <- plot + .theme_nocart() #destroy any cartesian theme elements
   }
   
-  # Initialise panels, add extra data for margins & missing facetting
-  # variables, and add on a PANEL variable to data
+  # Initialise panels, add extra data for margins
   panel <- ggint$new_panel()
-  #... CONTINUED BELOW...
   
   ##-------------------------------------------------------------------------------
   #IF WE HAVE TERNARY OPTIONS SOMEWHERE...  
@@ -55,7 +53,10 @@ ggplot_build <- function(plot) {
     set_last_coord(plot$coordinates) 
     
     #Normally this info is handled in the by grid, however, this is one way of passing it through
-    panel <- .train_position_ternary(panel,plot$scales$get_scales("T"),plot$scales$get_scales("L"),plot$scales$get_scales("R"))
+    panel <- .train_position_ternary(panel,
+                                     plot$scales$get_scales("T"),
+                                     plot$scales$get_scales("L"),
+                                     plot$scales$get_scales("R"))
     
     #get snapshot of panel so updates to panel dont interfere through the next loop.
     panel.bup <- panel 
@@ -73,7 +74,7 @@ ggplot_build <- function(plot) {
     panel$Wlabel = .Wlabel(panel,labels = plot$labels)
     
     #DONE
-  }else set_last_coord(NULL)
+  }else{ set_last_coord(NULL) }
   
   layers     <- plot$layers
   layer_data <- lapply(layers, function(y) y$data)
@@ -127,7 +128,7 @@ ggplot_build <- function(plot) {
   # displayed, or does it include the range of underlying data
   ggint$reset_scales(panel)
   panel <- ggint$train_position(panel, data, scale_x(), scale_y())
-  data  <- ggint$map_position(panel, data, scale_x(), scale_y())
+  data  <- ggint$map_position(panel,   data, scale_x(), scale_y())
   
   # Train and map non-position scales
   npscales <- scales$non_position_scales()  
@@ -137,9 +138,12 @@ ggplot_build <- function(plot) {
   }
   
   # Train coordinate system
-  panel <- train_ranges(panel, plot$coordinates)
+  panel <- train_ranges(panel,plot$coordinates)
+  
+  #Remove colors if they are in proximity to the perimeter
+  #data  <- suppressColours(data,plot$layers,plot$coordinates)
+  
+  #return
   list(data = data, panel = panel, plot = plot)
 }
-
-
 

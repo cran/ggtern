@@ -7,7 +7,7 @@
 #' @param n the numer of points in the approximation for each confidence interval.
 #' @rdname geomconfidence
 #' @section Aesthetics:
-#' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "confidence")}
+#' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "Confidence")}
 #' @aliases GeomConfidence StatConfidence
 #' @examples
 #'   data(Feldspar)
@@ -18,41 +18,29 @@ geom_confidence <- function (mapping = NULL, data = NULL,breaks=c(0.50,0.90,0.95
 }
 
 GeomConfidence <- proto(Geom, {
-  objname <- "confidence"
-  draw <- function(.,data,scales,coordinates,arrow = NULL,lineend = "butt",na.rm = FALSE,...){    
+  objname      <- "confidence"
+  required_aes <- c("x", "y")
+  default_stat <- function(.) StatConfidence
+  default_aes  <- function(.) aes(colour="#3366FF", size=0.5,linetype=1,alpha = NA,fill=NA)
+  guide_geom   <- function(.) "path"
+  draw         <- function(.,
+                   data,
+                   scales,
+                   coordinates,
+                   arrow     = NULL,
+                   lineend   = "butt",
+                   linejoin  = "round",
+                   linemitre = 1,
+                   na.rm     = FALSE,...){    
     ##DO THE VARIABLE AESTHETIC CHECK x and y for cartesian, and x,y,z for ternary...
     required_aes <- sort(unique(c(.$required_aes,coordinates$required_aes)))
     check_required_aesthetics(required_aes, names(data),"geom_confidence")
     
-    ##REMOVE MISSING DATA.
-    data <- remove_missing(data, na.rm = na.rm,c(required_aes),name = "geom_confidence")
-    if(empty(data)) 
-      return(.zeroGrob)
-    
-    ##Create two grobsets, one for the polygon and the other for the paths.
-    polygrob <- .zeroGrob
-    pathgrob <- .zeroGrob
-    
-    #The polygons
-    fills   <- unique(data$fill)
-    if(length(fills) >0 & length(fills) > length(which(is.na(fills)))){
-      #Polygon will be handled slightly different (no colour, only fill), but it is based off the same data.
-      data.poly <- data; data.poly$colour <- NA
-      polygrob <- GeomPolygon$draw(data=data.poly, scales=scales, coordinates=coordinates, ...)
-    }
-    
-    #The paths
-    colours <- unique(data$colour)
-    if(length(colours) > 0 & length(colours) > length(which(is.na(colours))))
-      pathgrob <- GeomPath$draw(data=data, scales=scales, coordinates=coordinates, ...)
-    
-    #return the complete grobs, paths on top of polygons.
-    gTree(children = gList(polygrob,pathgrob))
+    return(GeomPolygonTern$draw(.,data   = data,scales=scales,coordinates=coordinates,
+                                arrow    = arrow,
+                                lineend  = lineend,
+                                linejoin = linejoin,linemitre=linemitre,na.rm=na.rm,...))
   }
-  default_stat <- function(.) StatConfidence
-  required_aes <- c("x", "y")
-  default_aes <- function(.) aes(colour="black", size=0.5,linetype=2,alpha = NA,fill=NA)
-  guide_geom <- function(.) "path"
 })
 
 StatConfidence <- proto(ggint$Stat, {
@@ -120,7 +108,7 @@ StatConfidence <- proto(ggint$Stat, {
         }
         
         #Create the data including panel and break, append it to existing set.
-        tmp <- rbind(tmp,data.frame(x=xp1,y=yp1,group=group_i,level=level_i,PANEL=panel))
+        tmp <- rbind(tmp,data.frame(x=xp1,y=yp1,group=group_i,level=level_i,piece=i,PANEL=panel))
       }
       
       #Append
