@@ -4,6 +4,7 @@
 \alias{theme_gray}
 \alias{theme_grey}
 \alias{theme_tern_gray}
+\alias{theme_tern_grey}
 \title{A theme with grey background and white gridlines (ggtern version)}
 \usage{
 theme_gray(base_size = 12, base_family = "")

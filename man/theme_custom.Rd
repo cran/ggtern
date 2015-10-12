@@ -4,8 +4,9 @@
 \alias{theme_custom}
 \title{Theme with custom basic colours}
 \usage{
-theme_custom(base_size = 12, base_family = "", col.T = "darkred",
-  col.L = "darkblue", col.R = "darkgreen", col.BG = "white")
+theme_custom(base_size = 12, base_family = "", col.T = "gray95",
+  col.L = "gray95", col.R = "gray95", col.BG = "transparent",
+  col.grid.minor = "gray90")
 }
 \arguments{
 \item{base_size}{base font size}
@@ -18,7 +19,9 @@ theme_custom(base_size = 12, base_family = "", col.T = "darkred",
 
 \item{col.R}{colour of right axis, ticks, labels and major gridlines}
 
-\item{col.BG}{colour of background colour to plot area
+\item{col.BG}{colour of background colour to plot area}
+
+\item{col.grid.minor}{the colour of the minor grid
 \code{theme_custom} is a convenience function to allow the user to control the basic theme colours very easily.}
 }
 \description{

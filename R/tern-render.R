@@ -81,22 +81,37 @@ ggplot_gtable <- function(data) {
   }
   
   #Function to Add Padding / Margins
-  addMargin <- function(t,m,...,et=unit(0,"pt"),er=unit(0,"pt"),eb=unit(0,"pt"),el=unit(0,"pt")){
+  addMargin <- function(table,margin,...,et=unit(0,"pt"),er=unit(0,"pt"),eb=unit(0,"pt"),el=unit(0,"pt")){
     for(x in c(1:4)){
-      args = list(x=t, pos = if(x == 1 | x == 4){0}else{-1})
-      args[[if(x %% 2){"heights"}else{"widths"}]] = m[if(length(m) < 4){1}else{x}] #+ list(et,er,eb,el)[[x]]
-      t <- do.call(paste0("gtable_add_",if(x %% 2){"rows"}else{"cols"}),args=args, quote=FALSE)
-    }; t
+      args = list(x=table, pos = if(x == 1 | x == 4){0}else{-1})
+      args[[if(x %% 2){"heights"}else{"widths"}]] = margin[ if(length(margin) < 4){1}else{x} ]
+      table <- do.call(paste0("gtable_add_",if(x %% 2){"rows"}else{"cols"}),args=args, quote=FALSE)
+    }
+    table
   }
   
   # List by layer, list by panel
-  geom_grobs <- Map(build_grob, plot$layer, data)
+  geom_grobs <- Map(build_grob, plot$layer, data) 
   
   #Add the Faceting
   plot_table <- ggint$facet_render(plot$facet, panel, plot$coordinates ,theme,geom_grobs)
   
+  #Inject Margin inside the facets.
+  if(inherits(plot$coordinates,"ternary")){
+    panelIndexes = which(plot_table$layout$name == 'panel')
+    for(pix in panelIndexes){
+      subtable = gtable_add_grob(gtable(unit(1,"null"),unit(1,"null")),
+                                 plot_table$grobs[[pix]],
+                                 1,1,clip='off')
+      margin = max(theme$panel.margin.tern[1])
+      aspect = coord_aspect.ternary()
+      margin = unit.c(margin*aspect,margin,margin*aspect,margin)
+      plot_table$grobs[[pix]] = addMargin(subtable,margin)
+    }
+  }
+  
   #Add the Padding
-  margin.y = theme$panel.margin.y %||% theme$panel.margin.y
+  margin.y   <- theme$panel.margin.y %||% theme$panel.margin.y
   plot_table <- gtable_add_rows(plot_table,margin.y, pos =  0)
   plot_table <- gtable_add_rows(plot_table,margin.y, pos = -1)
   
@@ -115,18 +130,19 @@ ggplot_gtable <- function(data) {
   xlabel <- ggint$element_render(theme, "axis.title.x", labels$x)
   ylabel <- ggint$element_render(theme, "axis.title.y", labels$y)
   
+  #Get the Panel
   panel_dim <-  .find_panel(plot_table)
   
-  #ggtern suppress existing x and y axes
+  #ggtern suppress existing x and y axes, the following are only relevent for ggplot2
   if(!inherits(plot$coordinates,"ternary")){
     xlab_height <- grobHeight(xlabel) + 
-      if (is.null(labels$x) | labels$x == "") unit(0, "lines") else unit(0.5, "lines")
+      if (is.null(labels$x) | (is.character(labels$x) && labels$x == "")) unit(0, "lines") else unit(0.5, "lines")
     plot_table <- gtable_add_rows(plot_table, xlab_height)
     plot_table <- gtable_add_grob(plot_table, xlabel, name = "xlab",
                                   l = panel_dim$l, r = panel_dim$r, t = -1, clip = "off")
     
     ylab_width <- grobWidth(ylabel) + 
-      if (is.null(labels$y) | labels$x == "") unit(0, "lines") else unit(0.5, "lines")
+      if (is.null(labels$y) | (is.character(labels$y) && labels$y == "")) unit(0, "lines") else unit(0.5, "lines")
     plot_table <- gtable_add_cols(plot_table, ylab_width, pos = 0)
     plot_table <- gtable_add_grob(plot_table, ylabel, name = "ylab",
                                   l = 1, b = panel_dim$b, t = panel_dim$t, clip = "off")
@@ -154,9 +170,7 @@ ggplot_gtable <- function(data) {
     
     # Set the justification of the legend box
     # First value is xjust, second value is yjust
-    just <- valid.just(theme$legend.justification)
-    xjust <- just[1]
-    yjust <- just[2]
+    just <- valid.just(theme$legend.justification); xjust <- just[1]; yjust <- just[2]
     
     if (position == "manual") {
       xpos <- theme$legend.position[1]
@@ -202,25 +216,22 @@ ggplot_gtable <- function(data) {
   #The Grid Positions for Main Panel
   pans <- subset(plot_table$layout, grepl("^panel", get("name")))
   
-  # Title  
-  title      <- ggint$element_render(theme,"plot.title",plot$labels$title) 
-  plot_table <- gtable_add_rows(plot_table, grobHeight(title), pos = 0)
-  plot_table <- gtable_add_grob(plot_table, title, name = "title", 
-                                t = 2, b = 1, l = min(pans$l), r = max(pans$r), clip = "off")
+  # Title
+  title       <- ggint$element_render(theme,"plot.title",plot$labels$title) 
+  plot_table  <- gtable_add_rows(plot_table, grobHeight(title), pos = 0)
+  plot_table  <- gtable_add_grob(plot_table, title, name = "title", t = 2, b = 1, l = min(pans$l), r = max(pans$r), clip = "off")
   
   #Add the Margin
   plot_table = addMargin(plot_table,theme$plot.margin)
   
   ##Add the background and render the grobs.
   if (inherits(theme$plot.background, "element")) {
-    background <- ggint$element_render(theme, "plot.background")
-    plot_table <- gtable_add_grob(plot_table,background,t = 2, l = 1, b = -1, r = -1, name = "background", z = -Inf)
+    background        <- ggint$element_render(theme, "plot.background")
+    plot_table        <- gtable_add_grob(plot_table,background,t = 2, l = 1, b = -1, r = -1, name = "background", z = -Inf)
     plot_table$layout <- plot_table$layout[c(nrow(plot_table$layout), 1:(nrow(plot_table$layout) - 1)),]
-    plot_table$grobs <-  plot_table$grobs[c(nrow(plot_table$layout),  1:(nrow(plot_table$layout) - 1))]
+    plot_table$grobs  <- plot_table$grobs[c(nrow(plot_table$layout),  1:(nrow(plot_table$layout) - 1))]
   }
-  
-  #print(plot_table)
 
-  plot_table$layout$clip <- "off"
+  #plot_table$layout$clip <- "off"
   plot_table
 }

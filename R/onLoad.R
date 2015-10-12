@@ -23,7 +23,9 @@
   options("tern.arrowbaseline"         = 2)
   options("tern.mesh.buffer"           = 1.50)
   options("tern.mesh.size"             = 200)
-  options("tern.panel.buffer"          = 1.25)
+  options('tern.vshift'                = unit(0.0,"npc"))
+  options('tern.hshift'                = unit(0.0,"npc"))
+  options('tern.arrowsep'              = unit(1.0,"lines"))
   
   #Set the theme and the last coordinates.
   theme_set(theme_gray())

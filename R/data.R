@@ -13,12 +13,14 @@ NULL
 #' @name data_Feldspar
 #' @aliases Feldspar
 #' @title Elkin and Groves Feldspar Data
-#' @description This dataset is some data on Feldspar and its phases, as a function of temperature and pressure.
+#' @description This dataset represents the experiments conducted by Elkins and Groves
+#' @references 
+#' Elkins, L. T. & Grove, T. L. 
+#' Ternary Feldspar Experiments and Thermodynamic Models 
+#' American Mineralogist, Mineral Soc America, 1990, 75, 544-559
 #' @docType data
 #' @usage data(Feldspar)
 #' @format One (1) row per Feldspar composition
-#' @source American Mineralogist, June 1990, v. 75, p. 544-559
-#' @author Linda T. Elkins and Timothy L. Grove
 #' @examples
 #'  data(Feldspar)
 #'  summary(Feldspar)

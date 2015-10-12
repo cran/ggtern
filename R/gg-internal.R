@@ -20,6 +20,7 @@
                 "Stat",
                 "GeomPath",
                 "GeomPolygon",
+                "GeomText",
                 "add_group",
                 "scales_transform_df",
                 "reset_scales",

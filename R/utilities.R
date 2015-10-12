@@ -112,7 +112,9 @@ transform_tern_to_cart <- function(T,L,R,data=data.frame(T=T,L=L,R=R),...,Tlim=c
   if(class(data) != "data.frame")stop("data must be of type 'data.frame'")
   if(length(which(c("T","L","R") %in% colnames(data))) < 3) stop("data must contain columns T, L and R")
   
-  Tlim <- sort(Tlim); Rlim <- sort(Rlim); Llim <- sort(Llim)
+  Tlim <- if(is.null(Tlim)){c(0,1)}else{sort(Tlim)}; ## TRYING TO FIND ERROR WITH grid.arrange(...)
+  Rlim <- if(is.null(Rlim)){c(0,1)}else{sort(Rlim)}; ## TRYING TO FIND ERROR WITH grid.arrange(...)
+  Llim <- if(is.null(Llim)){c(0,1)}else{sort(Llim)}; ## TRYING TO FIND ERROR WITH grid.arrange(...)
   
   d <- data; 
   s <- rowSums(d);
@@ -505,4 +507,37 @@ enforceTernaryCoordinates <- function(){
   if(!inherits(coordinates,"ternary")) stop("Coordinates Must be Ternary.")
   return(coordinates)
 }
+
+#' Get Number of Breaks
+#' 
+#' Calculates the Breaks for Major or Minor Gridlines
+#' based on the input limits.
+#' @param limits the scale limits
+#' @param isMajor major or minor grids
+#' @param nMajor number of major breaks
+#' @param nMinor number of minor breaks
+getBreaks <- function(limits,isMajor,nMajor=5,nMinor=2*nMajor){
+  if(is.null(limits)){ limits = c(0,1) }
+  if(!all(is.numeric(limits))){ limits=c(0,1) }
+  if(diff(range(limits)) == 0){
+    return(if(isMajor){getOption("tern.breaks.default")}else{getOption("tern.breaks.default.minor")})
+  }else{
+    ret   = pretty(limits,n=nMajor)
+    if(!isMajor){
+      r = range(ret)
+      d = diff(r)/(length(ret)-1)
+      minor = seq(min(ret)-d,max(ret)+d,by=d/2)
+      minor = minor[which(minor >= min(limits) & minor <= max(limits))]
+      ret   = minor[which(!minor %in% ret)]
+    }
+    ret = ret[which(!ret %in% min(limits))]
+    ret
+  }
+}
+
+
+
+
+
+
 

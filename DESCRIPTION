@@ -1,15 +1,15 @@
 Package: ggtern
 Type: Package
 Title: An Extension to 'ggplot2', for the Creation of Ternary Diagrams
-Version: 1.0.6.0
-Date: 2015-04-15
+Version: 1.0.6.1
+Date: 2015-10-13
 Author: Nicholas Hamilton <nick@ggtern.com>
 Maintainer: Nicholas Hamilton <nick@ggtern.com>
 Description: Extends the functionality of 'ggplot2', providing the capability to plot ternary diagrams for (subset of) the 'ggplot2' geometries. Additionally, 'ggtern' has implemented several NEW geometries which are unavailable to the standard 'ggplot2' release. For further examples and documentation, please proceed to the 'ggtern' website. 
-License: GPL-2
 Depends: ggplot2(>= 1.0.0.0)
 Imports: plyr, gtable, scales, reshape2, proto, MASS, sp, grid,
         polyclip
+License: GPL-2
 URL: http://www.ggtern.com
 Collate: 'onLoad.R' 'ggtern-package.R' 'aaa.R' 'utilities-help.R'
         'gg-internal.R' 'statnew.R' 'geom.R' 'data.R'
@@ -32,7 +32,7 @@ Collate: 'onLoad.R' 'ggtern-package.R' 'aaa.R' 'utilities-help.R'
         'multiplot.R' 'ggsave.R' 'point-in-sequence.R'
         'theme-novar-tern.R' 'stat-interpolate-tern.R'
         'geom-interpolate-tern.R'
-Packaged: 2015-08-03 06:13:08 UTC; nick
 NeedsCompilation: no
+Packaged: 2015-10-12 18:27:29 UTC; nick
 Repository: CRAN
-Date/Publication: 2015-08-03 09:29:47
+Date/Publication: 2015-10-12 20:55:31

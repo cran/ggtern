@@ -26,7 +26,6 @@
 #' @param Tlim the range of T in the ternary space
 #' @param Llim the range of L in the ternary space
 #' @param Rlim the range of R in the ternary space
-#' @param buffer fraction to buffer the limits by, 1.0 means no change
 #' @param clockwise DEPRECIATED, replaced by individual theme element, see \code{\link{axis.tern.clockwise}}.
 #' @return \code{coord_tern} returns a ternary coordinate system object.
 #' @export
@@ -38,16 +37,7 @@ coord_tern <- function(T      = getOption("tern.default.T"),
                        Tlim   = NULL,
                        Llim   = NULL,
                        Rlim   = NULL,
-                       buffer = getOption('tern.panel.buffer'),
                        clockwise) {
-  
-  #Expand the x and y ranges
-  tryCatch({
-    xlim = mean(xlim) + abs(buffer[1])*c(-1,1)*diff(xlim)/2
-    ylim = mean(ylim) + abs(buffer[1])*c(-1,1)*diff(ylim)/2
-  },error=function(e){
-    
-  })
   
   ##Validate x and y lims...
   validateLims <- function(p,s){
@@ -282,7 +272,7 @@ coord_render_fg.ternary <- function(coord,details,theme){
   items <- .render.titles(data.extreme,items,theme,details) #MAIN TITLES
   items <- .render.arrows(data.extreme,items,theme,details) #ARROWS
   
-  #render.
+  #render
   ggint$ggname("foreground",gTree(children = do.call("gList", items)))
 }
 
@@ -300,8 +290,8 @@ coord_render_bg.ternary <- function(coord,details,theme){
   
   #Build the plot region.
   items <- .render.background(data.extreme,items,theme)     #BACKGROUND...
-  items <- .render.grids(data.extreme,items,theme,details)  #GRIDS
-  items <- .render.border(data.extreme,items,theme)         #BORDER
+  items <- .render.grids(data.extreme,     items,theme,details)  #GRIDS
+  items <- .render.border(data.extreme,    items,theme)         #BORDER
   
   #render.
   ggint$ggname("background",gTree(children = do.call("gList", items)))
@@ -479,12 +469,7 @@ coord_render_bg.ternary <- function(coord,details,theme){
   .getData <- function(X,ix,existing=NULL,major=TRUE,angle=0,angle.text=0){
     breaks.major <- details[[paste0(X,".major_source")]]
     breaks.minor <- details[[paste0(X,".minor_source")]]
-    breaks <- if(major){
-      breaks.major
-    }else{
-      breaks.minor
-      #breaks.minor[which(!breaks.minor %in% breaks.major | !showgrid.major)]
-    }
+    breaks <- if(major){ breaks.major }else{ breaks.minor }
     
     #BYPASS IF NECESSARY
     if(length(breaks) == 0){ return(existing) }
@@ -501,14 +486,13 @@ coord_render_bg.ternary <- function(coord,details,theme){
       #quietly
     })
     limits <- is.numericor(limits,c(0,1))
-    b <- limits[length(limits)]; a <- limits[1] #The max/min limits.
-    ix <- min(ix,ifthenelse(major,length(tl.major),length(tl.minor)))
-    majmin        <- ifthenelse(major,"major","minor")  #Major or Minor Element Name part.
+    ix     <- min(ix,ifthenelse(major,length(tl.major),length(tl.minor)))
+    majmin <- ifthenelse(major,"major","minor")  #Major or Minor Element Name part.
     
     #The new dataframe
-    new            <- data.frame(ID = id,Scale=X,Breaks=breaks,Labels=labels,Major=major)
-    new            <- new[which(new$Breaks >= min(b,a) & new$Breaks <= max(b,a)),]
-    new$Prop       <- (new$Breaks - a) / (b - a) #The relative position
+    new            <- data.frame(ID = id,Scale=X,breaks,Labels=labels,Major=major)
+    new            <- subset(new,breaks >= min(limits) & breaks <= max(limits))
+    new$Prop       <- (new$breaks - min(limits)) / abs(diff(limits))
     new$TickLength <- ifthenelse(major,tl.major[ix],tl.minor[ix])
     new$NameText   <- paste0("axis.tern.text.",X)
     new$NameTicks  <- paste0("axis.tern.ticks.",majmin,".",X)
@@ -659,7 +643,9 @@ coord_render_bg.ternary <- function(coord,details,theme){
 
   #PROCESS TICKS AND LABELS
   if(showgrid.major | showgrid.minor)
-    for(n in unique(d$NameGrid)){ items <- .render.grid(  name=n,items=items,d=d[which(d$NameGrid  == n),], showgrid.major=showgrid.major,showgrid.minor=showgrid.minor)}  
+    for(n in unique(d$NameGrid)){ 
+      items <- .render.grid(  name=n,items=items,d=d[which(d$NameGrid  == n),], showgrid.major=showgrid.major,showgrid.minor=showgrid.minor)
+    } 
   if(showprimary)
     for(n in unique(d$NameTicks)){items <- .render.ticks(name=n,items=items,d=d[which(d$NameTicks == n),],primary=TRUE)}
   if(showsecondary)
@@ -789,7 +775,6 @@ coord_render_bg.ternary <- function(coord,details,theme){
         newunit <- arrowsep[x] + 
           ifthenelse(arrowbaseline[x] >= 1 & ticksoutside,ticklength[x], unit(0,"npc")) + 
           ifthenelse(arrowbaseline[x] >= 2,.theme.get.maxlabwidth(details,theme,ixseq),unit(0,"npc"))
-        
         convertWidth(newunit,"npc",valueOnly=TRUE)
       })
       
