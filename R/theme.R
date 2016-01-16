@@ -1,3 +1,14 @@
+#' Overloaded ggplot2 functions
+#' 
+#' @description INTERNAL FUNCTIONS (Overloaded from ggplot2): The source of the following functions originate 
+#' from ggplot2, however, minor patches were required in order for them to function under the ggtern framework. 
+#' Patches were mainly to do with handling the new theme elements and heirarchies. 
+#' @format functions and objects
+#' @keywords internal
+#' @rdname overloaded
+#' @name zzz-overloaded
+NULL
+
 #' @description \code{validate_element} is a local copy of the ggplot2 function which checks the validity of a given theme element 
 #' against the elements table. Since the \code{.elements_tree} is an internal function, which is not exported, and modifications could not be made, 
 #' a new (and equivalent) \code{.element_tree} is created within ggtern to handle the new theme elements created within this package.
@@ -44,34 +55,6 @@ theme <- function(..., complete = FALSE) {
   structure(elements, class = c("theme", "gg"), complete = complete)
 }
 
-#' Build a theme (or partial theme) from theme elements (ggtern version)
-#'
-#' \code{opts} is deprecated. See the \code{\link{theme}} function.
-#' @param ... Arguments to be passed on to the \code{theme} function.
-#' @rdname overloaded
-#' @seealso \code{\link[ggplot2]{opts}}
-#' @export
-opts <- function(...) {
-  gg_dep("0.9.1", "'opts' is deprecated. Use 'theme' instead.")
-  
-  # Add check for deprecated elements
-  extra <- NULL
-  elements <- list(...)
-  if (!is.null(elements[["title"]])) {
-    # This is kind of a hack, but fortunately it will be removed in future versions
-    gg_dep("0.9.1", paste(sep = "\n",
-                          'Setting the plot title with opts(title="...") is deprecated.',
-                          ' Use labs(title="...") or ggtitle("...") instead.'))
-    
-    title <- elements$title
-    elements$title <- NULL
-    
-    return(list(ggtitle(title), do.call(theme, elements)))
-  }
-  
-  do.call(theme, elements)
-}
-
 
 #' \code{plot_theme} is a local copy of the method that determines the net theme between a plot and the current global theme.
 #' @param x gg object
@@ -84,7 +67,8 @@ plot_theme <- function(x) {defaults(x$theme, ggtern::theme_get())}
   list(
     get = function(){theme},
     set = function(new){
-      thm <- ifthenelse(inherits(get_last_coord(),"ternary"),theme_gray(),ggplot2::theme_gray())
+      ggplot2::theme_set(new) ##HACK
+      thm <- theme_gray()
       missing <- setdiff(names(thm),names(new))
       if (length(missing) > 0)
         warning("New theme missing the following elements: ",paste(missing, collapse = ", "), call. = FALSE)
@@ -126,7 +110,7 @@ add_theme <- function(t1, t2, t2name) {
       # If x is NULL or element_blank, then just assign it y
       x <- y
     } else if (is.null(y) || is.character(y) || is.numeric(y) || is.logical(y) ||
-                 inherits(y, "element_blank")) {
+               inherits(y, "element_blank")) {
       # If y is NULL, or a string or numeric vector, or is element_blank, just replace x
       x <- y
     } else {
@@ -187,49 +171,6 @@ update_theme <- function(oldtheme, newtheme) {
   oldtheme + newtheme
 }
 
-#' \code{calc_element} is a local copy of the ggplot2 function which determines the net element based on inheritances, given input theme.
-#' @inheritParams ggplot2::calc_element
-#' @rdname overloaded
-calc_element <- function(element, theme, verbose = FALSE) {
-  if (verbose) message(element, " --> ", appendLF = FALSE)
-  
-  # If this is element_blank, don't inherit anything from parents
-  if (inherits(theme[[element]], "element_blank")) {
-    if (verbose) message("element_blank (no inheritance)")
-    return(theme[[element]])
-  }
-  
-  # If the element is defined (and not just inherited), check that
-  # it is of the class specified in .element_tree
-  if (!is.null(theme[[element]]) &&
-        !inherits(theme[[element]], ggint$.element_tree[[element]]$class)) {
-    stop(element, " should have class ", ggint$.element_tree[[element]]$class)
-  }
-  
-  # Get the names of parents from the inheritance tree
-  pnames <- ggint$.element_tree[[element]]$inherit
-  
-  # If no parents, this is a "root" node. Just return this element.
-  if (is.null(pnames)) {
-    # Check that all the properties of this element are non-NULL
-    nullprops <- vapply(theme[[element]], is.null, logical(1))
-    if (any(nullprops)) {
-      stop("Theme element '", element, "' has NULL property: ",
-           paste(names(nullprops)[nullprops], collapse = ", "))
-    }
-    
-    if (verbose) message("nothing (top level)")
-    return(theme[[element]])
-  }
-  
-  # Calculate the parent objects' inheritance
-  if (verbose) message(paste(pnames, collapse = ", "))
-  parents <- lapply(pnames, calc_element, theme, verbose)
-  
-  # Combine the properties of this element with all parents
-  Reduce(combine_elements, parents, theme[[element]])
-}
-
 #' \code{combine_elements} is a local copy of the ggplot2 function that combines two theme elements
 #' @rdname overloaded
 #' @param e1 first element
@@ -255,5 +196,36 @@ combine_elements <- function(e1, e2) {
 }
 
 
-
-
+#' \code{calc_element} is a local copy of the ggplot2 function which determines the net element based on inheritances, given input theme.
+#' @inheritParams ggplot2::calc_element
+#' @rdname overloaded
+#' @export
+calc_element <- function (element, theme, verbose = FALSE) {
+  if (verbose) 
+    message(element, " --> ", appendLF = FALSE)
+  if (inherits(theme[[element]], "element_blank")) {
+    if (verbose) 
+      message("element_blank (no inheritance)")
+    return(theme[[element]])
+  }
+  #.element_tree = ggint$.element_tree ##NH
+  if (!is.null(theme[[element]]) && !inherits(theme[[element]], 
+                                              ggint$.element_tree[[element]]$class)) {
+    stop(element, " should have class ", ggint$.element_tree[[element]]$class)
+  }
+  pnames <- ggint$.element_tree[[element]]$inherit ##NH
+  if (is.null(pnames)) {
+    nullprops <- vapply(theme[[element]], is.null, logical(1))
+    if (any(nullprops)) {
+      stop("Theme element '", element, "' has NULL property: ", 
+           paste(names(nullprops)[nullprops], collapse = ", "))
+    }
+    if (verbose) 
+      message("nothing (top level)")
+    return(theme[[element]])
+  }
+  if (verbose) 
+    message(paste(pnames, collapse = ", "))
+  parents <- lapply(pnames, calc_element, theme, verbose)
+  Reduce(ggint$combine_elements, parents, theme[[element]])
+}

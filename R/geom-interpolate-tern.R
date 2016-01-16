@@ -5,32 +5,54 @@
 #' 
 #' @section Aesthetics: 
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "InterpolateTern")}
-#' @inheritParams geom_polygon_tern
-#' @inheritParams ggplot2::geom_density2d
+#' @inheritParams geom_confidence_tern
+#' @inheritParams ggplot2::geom_smooth
 #' @inheritParams ggplot2::geom_point
 #' @inheritParams ggplot2::geom_path
-#' @inheritParams ggtern::stat_density_tern
-#' @seealso \code{\link{stat_interpolate_tern}}
-#' @aliases GeomInterpolateTern InterpolateTern geom_interpolation
-#' @examples
+#' @examples 
 #' data(Feldspar)
-#' ggtern(Feldspar,aes(x=Or,y=An,z=Ab)) + 
-#' geom_interpolate_tern(aes(value=P.Gpa,color=..level..),binwidth=20) +
-#' geom_point()
+#' ggtern(Feldspar,aes(Ab,An,Or,value=T.C)) + 
+#' stat_interpolate_tern(geom="polygon",
+#'                      formula=value~x+y,
+#'                      method=lm,n=100,
+#'                      breaks=seq(0,1000,by=100),
+#'                      aes(fill=..level..),expand=1) +
+#'                      geom_point()
+#' @name geom_interpolate_tern
+#' @rdname geom_interpolate_tern
 #' @export
-geom_interpolate_tern <- function(mapping = NULL, data = NULL, stat = "InterpolateTern", position = "identity",
-                              lineend  = "butt", linejoin = "round", linemitre = 1, na.rm = FALSE,
-                              n        = getOption('tern.mesh.size'),
-                              buffer   = getOption('tern.mesh.buffer'),
-                              ...){
-  GeomInterpolateTern$new(mapping = mapping, data = data, stat = stat, position = position,
-                      lineend = lineend, linejoin = linejoin, 
-                      linemitre = linemitre, na.rm = na.rm,buffer=buffer,n=n, ...)
+geom_interpolate_tern <- function(mapping = NULL, data = NULL, stat = "InterpolateTern",
+                         position = "identity", method='auto', lineend = "butt",
+                         linejoin = "round", linemitre = 1,
+                         na.rm = FALSE, show.legend = NA,
+                         inherit.aes = TRUE, formula=value~poly(x,y,degree=1),...) {
+  layer(
+    data        = data,
+    mapping     = mapping,
+    stat        = stat,
+    geom        = GeomInterpolateTern,
+    position    = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params      = list(
+      lineend     = lineend,
+      linejoin    = linejoin,
+      linemitre   = linemitre,
+      na.rm       = na.rm,
+      formula     = formula,
+      method      = method,
+      ...
+    )
+  )
 }
 
-GeomInterpolateTern <- proto(GeomPolygonTern,{
-  objname        <- "interpolate_tern"
-  required_aes   <- c("x","y","z","value")
-  default_aes    <- function(.) aes(colour="#3366FF", fill='transparent', size = 0.5, linetype = 1, alpha = NA,value=1)
-  default_stat   <- function(.) StatInterpolateTern
-})
+#' @name geom_interpolate_tern
+#' @rdname geom_interpolate_tern
+#' @format NULL
+#' @usage NULL
+#' @export
+GeomInterpolateTern <- ggproto(
+  "GeomInterpolateTern", 
+  GeomPath,
+  default_aes = aes(colour = "#3366FF", size = 0.5, linetype = 1, alpha = NA)
+)

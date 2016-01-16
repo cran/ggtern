@@ -1,6 +1,3 @@
-.theme_showsecondary <- function(show){theme(axis.tern.ticks.showsecondary = show)}
-.theme_showprimary   <- function(show){theme(axis.tern.ticks.showprimary   = show)}
-
 #' Show or Hide the Primary/Secondary Ticks
 #' 
 #' Convenience functions to enable or disable the axis primary or secondary ticks.
@@ -14,7 +11,14 @@
 #' 
 #' For example, considering the TOP apex species, in a plot with 'clockwise' axis precession, the primary ticks would run along the 
 #' LHS, whilst, the secondary ticks, woudl run along the RHS. By default, the primary ticks are switched ON, whilst the secondary ticks are switched OFF and are
-#' controlled by the \code{\link{axis.tern.ticks.showprimary}} and \code{\link{axis.tern.ticks.showsecondary}} theme elements respectively.
+#' controlled by the \code{\link{tern.axis.ticks.primary.show}} and \code{\link{tern.axis.ticks.secondary.show}} theme elements respectively.
+#' 
+#' \code{theme_showsecondary} is a function that apends to the current theme a flag to switch ON the secondary ticks
+#' \code{theme_showticks(), themehideticks(), theme_noticks()} are functions that switch ON or OFF BOTH the primary or secondary ticks.
+#' \code{theme_nosecondary} or \code{theme_hidesecondary} (Alias) are functions that apends to the current theme a flag to switch OFF the secondary ticks
+#' \code{theme_showprimary} is a function that apends to the current theme a flag to switch ON the primary ticks
+#' \code{theme_noprimary} or \code{theme_hideprimary} (Alias) are functions that apends to the current theme a flag to switch OFF the primary ticks
+#' 
 #' @examples
 #' data(Feldspar)
 #' plot <- ggtern(data=Feldspar,aes(Ab,An,Or)) + geom_point() + 
@@ -23,22 +27,18 @@
 #' @name theme_showprimary
 NULL
 
-#' \code{theme_noprimary} or \code{theme_hideprimary} (Alias) are functions that apends to the current theme a flag to switch OFF the primary ticks
 #' @rdname theme_showprimary
 #' @export
 theme_noprimary   <- function(){.theme_showprimary(FALSE)}
 
-#'
 #' @rdname theme_showprimary
 #' @export
 theme_hideprimary <- theme_noprimary
 
-#' \code{theme_showprimary} is a function that apends to the current theme a flag to switch ON the primary ticks
 #' @rdname theme_showprimary
 #' @export
 theme_showprimary <- function(){.theme_showprimary(TRUE)}
 
-#' \code{theme_nosecondary} or \code{theme_hidesecondary} (Alias) are functions that apends to the current theme a flag to switch OFF the secondary ticks
 #' @rdname theme_showprimary
 #' @export
 theme_nosecondary   <- function(){.theme_showsecondary(FALSE)}
@@ -47,12 +47,10 @@ theme_nosecondary   <- function(){.theme_showsecondary(FALSE)}
 #' @export
 theme_hidesecondary <- theme_nosecondary
 
-#' \code{theme_showsecondary} is a function that apends to the current theme a flag to switch ON the secondary ticks
 #' @rdname theme_showprimary
 #' @export
 theme_showsecondary <- function(){.theme_showsecondary(TRUE)}
 
-#' \code{theme_showticks(), themehideticks(), theme_noticks()} are functions that switch ON or OFF BOTH the primary or secondary ticks.
 #' @rdname theme_showprimary
 #' @export
 theme_showticks <- function(){theme_showprimary() + theme_showsecondary()}
@@ -65,4 +63,6 @@ theme_hideticks <- function(){theme_hideprimary() + theme_hidesecondary()}
 #' @export
 theme_noticks   <- theme_hideticks
 
-
+#internals
+.theme_showsecondary <- function(show){theme(tern.axis.ticks.secondary.show = show)}
+.theme_showprimary   <- function(show){theme(tern.axis.ticks.primary.show   = show)}

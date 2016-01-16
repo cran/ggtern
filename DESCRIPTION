@@ -1,38 +1,44 @@
 Package: ggtern
 Type: Package
 Title: An Extension to 'ggplot2', for the Creation of Ternary Diagrams
-Version: 1.0.6.1
-Date: 2015-10-13
-Author: Nicholas Hamilton <nick@ggtern.com>
-Maintainer: Nicholas Hamilton <nick@ggtern.com>
-Description: Extends the functionality of 'ggplot2', providing the capability to plot ternary diagrams for (subset of) the 'ggplot2' geometries. Additionally, 'ggtern' has implemented several NEW geometries which are unavailable to the standard 'ggplot2' release. For further examples and documentation, please proceed to the 'ggtern' website. 
-Depends: ggplot2(>= 1.0.0.0)
-Imports: plyr, gtable, scales, reshape2, proto, MASS, sp, grid,
-        polyclip
+Version: 2.0.1
+Date: 2016-1-1
+Description: Extends the functionality of 'ggplot2', providing the capability
+    to plot ternary diagrams for (subset of) the 'ggplot2' geometries. Additionally,
+    'ggtern' has implemented several NEW geometries which are unavailable to the
+    standard 'ggplot2' release. For further examples and documentation, please
+    proceed to the 'ggtern' website.
+Depends: ggplot2 (>= 2.0.0)
+Imports: compositions, grid, gridExtra, gtable (>= 0.1.1), latex2exp
+        (>= 0.3.3), MASS, plyr (>= 1.7.1), scales (>= 0.3.0), stats,
+        proto, utils, lattice
+Enhances: sp
 License: GPL-2
 URL: http://www.ggtern.com
-Collate: 'onLoad.R' 'ggtern-package.R' 'aaa.R' 'utilities-help.R'
-        'gg-internal.R' 'statnew.R' 'geom.R' 'data.R'
-        'element_ternary.R' 'clip-polygons.R' 'utilities.R'
-        'tern-stop.R' 'strip-unapproved.R' 'coord-tern.R' 'global.R'
-        'theme-defaults.R' 'theme-elements.R' 'theme.R'
-        'theme-noarrows.R' 'theme-arrowlength.R'
-        'theme-showsecondary.R' 'theme-showtitles.R'
-        'theme-showlabels.R' 'theme-showgrid.R' 'theme-convenience.R'
-        'theme-ticksoutside.R' 'theme-arrowbaseline.R' 'labs-pcnt.R'
-        'labs-new.R' 'log-ratio-trans.R' 'mahalanobis.R'
-        'tern-clockwise.R' 'aes.R' 'scales.R' 'panel.R' 'ggtern.R'
-        'kde2d-weighted.R' 'ggtern-build.R' 'plot-construction.R'
-        'tern-render.R' 'tern-limits.R' 'geom-smooth.R'
-        'geom-segment.R' 'geom-polygon-tern.R' 'geom-Tline.R'
-        'geom-Lline.R' 'geom-Rline.R' 'geom-confidence.R'
-        'geom-density-tern.R' 'geom-errorbarT.R' 'geom-errorbarL.R'
-        'geom-errorbarR.R' 'stat-smooth.R' 'stat-density-tern.R'
-        'stat-Tline.R' 'stat-Lline.R' 'stat-Rline.R' 'TRL-line.R'
-        'multiplot.R' 'ggsave.R' 'point-in-sequence.R'
-        'theme-novar-tern.R' 'stat-interpolate-tern.R'
-        'geom-interpolate-tern.R'
+LazyData: true
+Collate: 'ggtern-package.R' 'aes.R' 'coord-tern.R' 'calc-tern-tlr2xy.R'
+        'calc-mahalanobis-distance.R' 'calc-kde2d-weighted.R'
+        'doc-data.R' 'doc-theme-convenience.R' 'depreciated.R'
+        'labels-new.R' 'labels-percent.R' 'ggtern-constructor.R'
+        'gg-internal.R' 'modifications-gridExtra.R' 'onLoad.R' 'plot.R'
+        'plot-build.R' 'plot-construction.R' 'position-.R'
+        'position-nudge-tern.R' 'position-jitter-tern.R' 'save.R'
+        'scales-.R' 'scales-tern.R' 'strip-unapproved.R'
+        'tern-limits.R' 'theme.R' 'theme-arrowlength.R'
+        'theme-clockwise.R' 'theme-defaults.R' 'theme-elements.R'
+        'theme-gridsontop.R' 'theme-legend-position.R'
+        'theme-noarrows.R' 'theme-novar-tern.R' 'theme-rotate.R'
+        'theme-showgrid.R' 'theme-showlabels.R' 'theme-showsecondary.R'
+        'theme-showtitles.R' 'theme-ticksoutside.R' 'utilities.R'
+        'utilities-help.R' 'geom-density-tern.R' 'stat-density-tern.R'
+        'geom-mask.R' 'geom-Xline.R' 'geom-Xisoprop.R'
+        'geom-confidence-tern.R' 'stat-confidence-tern.R'
+        'geom-errorbarX.R' 'geom-smooth-tern.R' 'stat-smooth-tern.R'
+        'geom-interpolate-tern.R' 'stat-interpolate-tern.R'
 NeedsCompilation: no
-Packaged: 2015-10-12 18:27:29 UTC; nick
+Author: Nicholas Hamilton [aut, cre]
+Maintainer: Nicholas Hamilton <nick@ggtern.com>
 Repository: CRAN
-Date/Publication: 2015-10-12 20:55:31
+RoxygenNote: 5.0.1
+Packaged: 2016-01-16 16:14:01 UTC; nick
+Date/Publication: 2016-01-16 18:53:29

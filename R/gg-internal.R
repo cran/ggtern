@@ -1,57 +1,22 @@
+#Expose some required functions from the parent ggplot2 namespace
+.getFunctions <- function(){
 
-#Create a list of the ggplot2 internal functions that we seek to get access to.
-.internals <- unique(
-              c(".all_aesthetics",
-                "set_last_plot",
-                "coord_transform.cartesian",
-                "scale_clone",
-                "coord_train",
-                "expand_default",
-                "plot_clone",
-                "train_cartesian",
-                "scales_add_missing",
-                "ggname",
-                "new_panel",
-                "train_layout",
-                "map_layout",
-                "map_position",
-                "new_panel",
-                "train_position",
-                "Stat",
-                "GeomPath",
-                "GeomPolygon",
-                "GeomText",
-                "add_group",
-                "scales_transform_df",
-                "reset_scales",
-                "scales_train_df",
-                "scales_map_df",
-                "order_groups",
-                "TopLevel",
-                "compute_intercept",
-                "combine_elements",
-                "is.rel",
-                "facet_render",
-                "coord_labels",
-                "xlabel",
-                "ylabel",
-                "element_render",
-                "build_guides",
-                "is.zero",
-                "plot_clone",
-                "set_last_plot",
-                "make_labels",
-                "update_guides",
-                "zeroGrob",
-                "el_def",
-                "digest.ggplot",
-                "layer"
-))
+.functions.ggplot2   = c('new_panel','train_layout','train_position','train_ranges','expand_default',
+                         'map_position','map_layout','map_position','reset_scales','plot_theme',
+                         'facet_render','xlabel','ylabel','element_render','message_wrap',
+                         'set_last_plot','make_labels','build_guides','is.zero','add_ggplot','labelGrob',
+                         'is.layer','is.facet','is.Coord','GeomSegment',
+                         '.element_tree','el_def','combine_elements','aes_to_scale',
+                         'is.Coord','is.facet','is.layer','make_labels',
+                         'predictdf','contour_lines','check_required_aesthetics','snake_class',
+                         'ggname','camelize')
+.functions.gridExtra  = c('latticeGrob')
+  .functions          = rbind(data.frame(p='ggplot2',  f=unique(.functions.ggplot2)),
+                              data.frame(p='gridExtra',f=unique(.functions.gridExtra)))
 
-#' \code{ggint} is a structure which holds all the required internal functions from the ggplot2 namespace, 
-#' which can then be used conveniently via \code{ggint$ABC}.
-#' @rdname undocumented
-ggint <- structure(
-  mapply(function(.internals, i) getFromNamespace(i,"ggplot2"),.internals, .internals),
-  class=c("internal")
-)
+  structure(
+    mapply(function(f,p){ getFromNamespace(f,p) },as.character(.functions$f), as.character(.functions$p)),
+    class=c("internal")
+  )
+}
+ggint <- .getFunctions()
