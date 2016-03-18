@@ -57,7 +57,8 @@ StatDensityTern  = ggproto("StatDensityTern",
     data$weight = data$weight %||% params$weight %||% numeric(nrow(data)) + 1
     data
   },
-  compute_group  = function(self,data, scales, na.rm = FALSE, h = NULL, contour = TRUE, n = 100, base='ilr', expand = c(.5,.5), weight=NULL) {
+  compute_group  = function(self,data, scales, na.rm = FALSE, 
+                            h = NULL, contour = TRUE, n = 100, base='ilr', expand = c(.5,.5), weight=NULL) {
     
     if(!base %in% c('identity','ilr')) stop('base must be either identity or ilr',call.=FALSE)
     data   = remove_missing(data,vars=self$required_aes,na.rm=TRUE,name='StatConfidence',finite=TRUE)

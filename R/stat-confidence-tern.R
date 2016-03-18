@@ -71,11 +71,13 @@ StatConfidenceTern <- ggproto("StatConfidenceTern",
       
       #Split and process for each panel, group and break
       ret = ddply(data,c("PANEL","group","breaks"),function(df){
+        #if(nrow(df) <= 1) return(data.frame)
         ix    = c('x','y','z')
-        z     = ilr(as.matrix( df[,ix]) )
-        z     = z[is.finite(z[,1]) & is.finite(z[,2]),]
+        z     = ilr(as.matrix(df[,ix]) )
+        z     = z[is.finite(z[,1]) & is.finite(z[,2]),,drop=FALSE]
         if(!nrow(z) | !ncol(z)) return(data.frame())
         mu    = colMeans(z); cm = cov(z)
+        if( any(!is.finite(mu)) | any(!is.finite(cm)) ) return(data.frame())
         dat   = mahalanobis_distance(z, mu, cm, whichlines=unique(df$breaks),m=n)
         xp1   = dat$mdX[,1]; yp1   = dat$mdY[,1] #1 index for 1 break
         inv   = ilrInv(cbind(xp1,yp1))

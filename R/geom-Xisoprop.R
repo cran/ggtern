@@ -61,7 +61,7 @@ GeomTisoprop <- ggproto("GeomTisoprop",Geom,
                     },
                     default_aes     = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
                     required_aes    = c("value"),
-                    draw_key        = draw_key_vline
+                    draw_key        = draw_key_Tiso
 )
 
 #' @name geom_Xisoprop
@@ -106,7 +106,7 @@ GeomLisoprop <- ggproto("GeomLisoprop",Geom,
                       },
                       default_aes  = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA, arrow=NULL),
                       required_aes = c("value"),
-                      draw_key     = draw_key_vline
+                      draw_key     = draw_key_Liso
 )
 
 #' @name geom_Xisoprop
@@ -151,7 +151,7 @@ GeomRisoprop <- ggproto("GeomRisoprop",Geom,
                      },
                      default_aes     = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA, arrow=NULL),
                      required_aes    = c("value"),
-                     draw_key        = draw_key_vline
+                     draw_key        = draw_key_Riso
 )
 
 

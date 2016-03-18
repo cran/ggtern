@@ -9,8 +9,8 @@
 #' @seealso Parent \code{\link[ggplot2]{aes}} function.
 #' @export
 aes <- function(x,y,z,...) {
-  X  <- structure(as.list(match.call()[-1]), class="uneval")
-  do.call(.rename_aes,args=list(x=X))
+  aes <- structure(as.list(match.call()[-1]), class = "uneval")
+  .rename_aes(aes)
 }
 
 # Rename American or old-style aesthetics name
@@ -24,9 +24,13 @@ aes <- function(x,y,z,...) {
 
 # Look up the scale that should be used for a given aesthetic -- ternary version
 aes_to_scale_tern = function (var){
-  var[var %in% c("x", "xmin", "xmax", "xend", "xintercept")] <- "x"
-  var[var %in% c("y", "ymin", "ymax", "yend", "yintercept")] <- "y"
+  var = ggint$aes_to_scale(var)
   var[var %in% c("z", "zmin", "zmax", "zend", "zintercept")] <- "z"
   var
+}
+
+# Figure out if an aesthetic is a position aesthetic or not
+is_position_aes <- function(vars) {
+  ggint$aes_to_scale(vars) %in% c("x", "y", "z")
 }
 

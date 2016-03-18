@@ -53,6 +53,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     angle            = .theme.get.rotation(self)
     addOrigin        = function(d,ix,o){  d[,ix] = t(t(d[,ix,drop=FALSE]) + o); d }
     data             = tlr2xy(data,self)
+    coordShift       = sapply(c('tern.axis.hshift','tern.axis.vshift'),function(x){ calc_element(x,self$theme) %||% 0})
     
     #For each coordinate group, conduct the re-centering, translation / rotation process
     for(group in .get.sets(ix,names(data)) ){
@@ -83,7 +84,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       
       #Re-Center
       origin         = apply(xtrm[,ix],2,function(x){ mean(range(x))} ) ##ORIGIN TO BE MEDIAN
-      target         = c(mean(scale_details$x.range),mean(scale_details$y.range))
+      target         = c(mean(scale_details$x.range),mean(scale_details$y.range)) + coordShift
       data           = addOrigin(data,ix.comb,(target - origin))
     }
     
@@ -153,9 +154,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       train_cartesian(scale_details$y, self$limits$y - shift[2],"y",c(expand.amount,0) )
     )
     
-    #Apply the Vertical and Horizontal Shift
-    ret$x.range = ret$x.range -convertX(calc_element("tern.axis.hshift",theme=self$theme),'npc',valueOnly=T)
-    ret$y.range = ret$y.range -convertY(calc_element("tern.axis.vshift",theme=self$theme),'npc',valueOnly=T)
+    #Done
     ret
   }
 )
@@ -242,10 +241,12 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   ifthenelse(is.logical(showarrows),showarrows[1],getOption("tern.showarrows"))
 }
 .theme.get.label <- function(self,n,d=n,suffix=''){
-  x = function(n,s) sprintf("%s%s",n,s)
+  x      = function(n,s) sprintf("%s%s",n,s)
   if(!is.character(n)) return('')
-  theMaps = self$mapping[[n]]; theLabs = self$labels_coord
-  c(theLabs[[ x(n,suffix) ]], if(is.character(theMaps)){ c(theLabs[[ x(theMaps,suffix)  ]], theLabs[[ theMaps ]]) }else{NULL},d)[1]
+  labels = self$labels_coord
+  ix     = unique(c(x(n,suffix),x(self$mapping[[n]],suffix),n,self$mapping[[n]])) 
+  id     = which(ix %in% names(labels))
+  if(length(id) == 0) d else labels[[ix[id[1]]]]
 }
 .theme.get.rotation <- function(self){
   tryCatch({
@@ -467,6 +468,8 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     items[[length(items) + 1]] <- grob
     return(items)
   }
+  
+  #Axis labels, ie labels next to ticks
   .render.labels <- function(name,items,d){ 
     grob = zeroGrob()
     tryCatch({
@@ -560,6 +563,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
                        hjust  = e$hjust - 0.5*cos(angle), 
                        vjust  = e$vjust - 0.5*sin(angle),
                        rot    = e$angle,
+                       vp     = viewport(clip='inherit'),   #Change to off???
                        gp     = gpar(col        = e$colour, 
                                    fontsize   = e$size,
                                    fontfamily = ifthenelse(is.character(e$family),e$family,"sans"), 
@@ -661,7 +665,10 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     d$xmn = rowMeans(d[,ixcol[c(1,3)]])
     d$ymn = rowMeans(d[,ixcol[c(2,4)]])
     d$L   = unlist(lapply(ixseq,function(n){ .theme.get.label(self,n)  }))
-    d$LA  = unlist(lapply(ixseq,function(n){ c(self$labels_coord[[ sprintf('%sarrow',n) ]],.theme.get.label(self,n,suffix='arrow'))[1] }))
+    d$LA  = unlist(lapply(ixseq,function(n){ 
+      #c(self$labels_coord[[ sprintf('%sarrow',n) ]],)[1]
+      .theme.get.label(self,n,suffix='arrow')
+    }))
     d$W   = unlist(lapply('W',function(n){  .theme.get.label(self,n,'')  }))
     d$A   = .get.angles.arrowmarker(clockwise)
     d$AL  = .valid.angle(d$A + .theme.get.rotation(self))

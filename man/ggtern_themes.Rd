@@ -47,8 +47,9 @@ theme_darker(base_size = 12, base_family = "")
 theme_light(base_size = 12, base_family = "")
 
 theme_custom(base_size = 12, base_family = "",
-  tern.plot.background = "gray92", col.T = "gray95", col.L = "gray95",
-  col.R = "gray95", col.BG = "transparent", col.grid.minor = "gray90")
+  tern.plot.background = "grey92", tern.panel.background = "white",
+  col.T = "gray95", col.L = "gray95", col.R = "gray95",
+  col.BG = "transparent", col.grid.minor = "gray90")
 }
 \arguments{
 \item{base_size}{base font size}
@@ -56,6 +57,8 @@ theme_custom(base_size = 12, base_family = "",
 \item{base_family}{base font family}
 
 \item{tern.plot.background}{colour of background colour to plot area}
+
+\item{tern.panel.background}{colour of panel background of plot area}
 
 \item{col.T}{colour of top axis, ticks labels and major gridlines}
 

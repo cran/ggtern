@@ -28,19 +28,19 @@ geom_Tline <- function(mapping = NULL, data = NULL,
   if (!missing(Tintercept)) {
     data <- data.frame(Tintercept = Tintercept)
     mapping <- aes(Tintercept = Tintercept)
-    show.legend <- FALSE
+    show.legend=FALSE
   }
   
   layer(
-    data = data,
-    mapping = mapping,
-    stat = StatIdentity,
-    geom = GeomTline,
-    position = PositionIdentity,
+    data        = data,
+    mapping     = mapping,
+    stat        = StatIdentity,
+    geom        = GeomTline,
+    position    = PositionIdentity,
     show.legend = show.legend,
     inherit.aes = FALSE,
-    params = list(
-      na.rm = na.rm,
+    params      = list(
+      na.rm     = na.rm,
       ...
     )
   )
@@ -51,12 +51,12 @@ geom_Tline <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomTline <- ggproto("GeomTline",Geom,
-                     draw_group = function(self,data, panel_scales,coord){
+                     draw_panel = function(self,data, panel_scales,coord){
                        .drawTRLLinesX(self,data,panel_scales,coord,'T')
                      },
                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
                      required_aes = c("Tintercept"),
-                     draw_key = draw_key_vline
+                     draw_key = draw_key_Tline
 )
 
 #' @export
@@ -78,19 +78,19 @@ geom_Lline <- function(mapping = NULL, data = NULL,
   if (!missing(Lintercept)) {
     data <- data.frame(Lintercept = Lintercept)
     mapping <- aes(Lintercept = Lintercept)
-    show.legend <- FALSE
+    show.legend=FALSE
   }
   
   layer(
-    data = data,
-    mapping = mapping,
-    stat = StatIdentity,
-    geom = GeomLline,
-    position = PositionIdentity,
+    data        = data,
+    mapping     = mapping,
+    stat        = StatIdentity,
+    geom        = GeomLline,
+    position    = PositionIdentity,
     show.legend = show.legend,
     inherit.aes = FALSE,
-    params = list(
-      na.rm = na.rm,
+    params      = list(
+      na.rm     = na.rm,
       ...
     )
   )
@@ -101,12 +101,12 @@ geom_Lline <- function(mapping = NULL, data = NULL,
 #' @format NULL
 #' @usage NULL
 GeomLline <- ggproto("GeomLline",Geom,
-                     draw_group = function(self,data, panel_scales,coord){
+                     draw_panel = function(self,data, panel_scales,coord){
                        .drawTRLLinesX(self,data,panel_scales,coord,'L')
                      },
                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
                      required_aes = c("Lintercept"),
-                     draw_key = draw_key_vline
+                     draw_key = draw_key_Lline
 )
 
 #' @export
@@ -128,19 +128,19 @@ geom_Rline <- function(mapping = NULL, data = NULL,
   if (!missing(Rintercept)) {
     data <- data.frame(Rintercept = Rintercept)
     mapping <- aes(Rintercept = Rintercept)
-    show.legend <- FALSE
+    show.legend=FALSE
   }
   
   layer(
-    data = data,
-    mapping = mapping,
-    stat = StatIdentity,
-    geom = GeomRline,
-    position = PositionIdentity,
+    data        = data,
+    mapping     = mapping,
+    stat        = StatIdentity,
+    geom        = GeomRline,
+    position    = PositionIdentity,
     show.legend = show.legend,
     inherit.aes = FALSE,
-    params = list(
-      na.rm = na.rm,
+    params      = list(
+      na.rm     = na.rm,
       ...
     )
   )
@@ -151,12 +151,12 @@ geom_Rline <- function(mapping = NULL, data = NULL,
 #' @format NULL
 #' @usage NULL
 GeomRline <- ggproto("GeomRline",Geom,
-                     draw_group = function(self,data, panel_scales,coord){
+                     draw_panel = function(self,data, panel_scales,coord){
                        .drawTRLLinesX(self,data,panel_scales,coord,'R')
                      },
                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
                      required_aes = c("Rintercept"),
-                     draw_key = draw_key_vline
+                     draw_key = draw_key_Rline
 )
 
 #' @export

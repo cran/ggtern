@@ -1,9 +1,9 @@
 #' @name geom_interpolate_tern
 #' @rdname geom_interpolate_tern
 #' @export
-stat_interpolate_tern <- function(mapping = NULL, data = NULL, geom = "InterpolateTern",
+stat_interpolate_tern <- function(mapping = NULL, data = NULL, geom = "interpolate_tern",
                          position = "identity", method='auto', na.rm = FALSE, show.legend = NA,
-                         inherit.aes = TRUE,n=80, formula=value~poly(x,y,degree=1), ...) {
+                         inherit.aes = TRUE, n=80, formula=value~poly(x,y,degree=1), ...) {
   layer(
     data        = data,
     mapping     = mapping,
@@ -36,45 +36,46 @@ StatInterpolateTern <- ggproto("StatInterpolateTern",
       if (max_group < 1000) {
         params$method <- "loess"
       } else {
-        params$method <- "gam"
-        params$formula <- y ~ s(x, bs = "cs")
+        params$method <- "glm" ##NH
       }
     }
-    if (identical(params$method, "gam")) { params$method <- mgcv::gam }
+    #if (identical(params$method, "gam")) { params$method <- mgcv::gam } ##NH
     params
   },
-  compute_group = function(self,data, scales, method='auto', bins = NULL, binwidth = NULL, breaks = NULL, 
-                           complete = FALSE, na.rm = FALSE,formula=value~poly(x,y,degree=1), 
-                           n = 80, expand=0.5, method.args=list()) {
+  compute_group = function(self, data, scales, method='auto', bins = NULL, binwidth = NULL, breaks = NULL, 
+                           complete  = FALSE, na.rm = FALSE, formula=value~poly(x,y,degree=1), 
+                           fullrange = FALSE, n = 80, expand=0.5, method.args=list()) {
     
     #Check required aesthetics
     ggint$check_required_aesthetics(self$required_aes, names(data), ggint$snake_class(self))
     
+    #Ensure it is a composition
+    data[,self$required_aes[1:3]] = as.data.frame(acomp(data[,self$required_aes[1:3]]))
+    
+    #Build the ternary grid
+    theGrid = .getGrid(data,n,fullrange,expand=0)
+    
     #Transform the data into the orthonormal space
     data[,self$required_aes[1:2]] = as.data.frame(ilr(data[,self$required_aes[1:3]]))
-    data[,self$required_aes[3]]   = NULL
     
     #Build the model
-    base.args <- list(quote(formula), data = quote(data))
-    model     <- do.call(method, c(base.args, method.args))
+    base.args = list(quote(formula), data = quote(data))
+    model     = do.call(method, c(base.args, method.args))
+    
+    ##Check expand is vector of 2
+    expand   = if(length(expand) != 2) rep(expand[1],2) else expand
     
     #New Data to Predict
-    rng      = expand_range(c(-6,6),expand)
-    newdata  = expand.grid(x = seq(rng[1],rng[2],length.out = n), 
-                           y = seq(rng[1],rng[2],length.out = n))
+    xrng    = expand_range(range(theGrid$x),expand[1])
+    yrng    = expand_range(range(theGrid$y),expand[2])
     
     #Predict the data
-    data = data.frame(newdata,z=as.numeric(predict(model,newdata=newdata)))
-    data = remove_missing(data,vars=self$required_aes,na.rm=TRUE,name=class(self)[1],finite=TRUE)
-    if( empty(data)) return(data.frame())
+    data = predictdf2d(model, 
+                       xseq = seq(xrng[1],xrng[2],length.out=n), 
+                       yseq = seq(yrng[1],yrng[2],length.out=n))
     
-    #Determine the bins / breaks
-    if ( is.null(bins) && is.null(binwidth) && is.null(breaks)) { breaks <- pretty(range(data$z), 10) }
-    if (!is.null(bins))   { binwidth <- diff(range(data$z)) / bins }
-    if ( is.null(breaks)) { breaks   <- fullseq(range(data$z), binwidth) }
-    
-    #Process the data
-    result = ggint$contour_lines(data, breaks, complete = complete)
+    #Draw the contours
+    result    = StatContour$compute_group(data,scales,bins=bins,binwidth=binwidth,breaks=breaks,complete=complete,na.rm=na.rm)
     
     #Do the prediction
     result[,self$required_aes[1:3]] = as.data.frame(ilrInv(result[,self$required_aes[1:2]]))
@@ -83,3 +84,34 @@ StatInterpolateTern <- ggproto("StatInterpolateTern",
     result
   }
 )
+
+.getGrid <- function(data,n,fullrange,expand){
+
+  #Determine the limits
+  seqmax = .getSeq(c(0,1),n,expand); 
+  seqx = ifthenelse(fullrange,seqmax,.getSeq(range(data$x),n,expand)) 
+  seqy = ifthenelse(fullrange,seqmax,.getSeq(range(data$y),n,expand))
+  
+  #Build the grid
+  theGrid   = expand.grid(x=seqx,y=seqy)
+  theGrid$z = 1 - theGrid$x - theGrid$y
+  
+  invalid   = apply(theGrid,1,function(x) max(x) > (1 - 1/n) | min(x) < 1/n)
+  if(length(invalid) > 0) theGrid = theGrid[-which(invalid),]
+  
+  #Convert to ilr coordinates
+  theGrid = remove_missing(as.data.frame(acomp(theGrid)),na.rm=TRUE)
+  theGrid = data.frame(ilr(theGrid))
+  colnames(theGrid) = c('x','y')
+  
+  #Done
+  theGrid
+}
+
+.getSeq = function(x,n,expand){ 
+  x = expand_range(x,expand)
+  seq(x[1],x[2],length.out = n) 
+}
+
+
+

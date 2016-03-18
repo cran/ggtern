@@ -57,7 +57,7 @@ ggplot.data.frame <- function(data, mapping = aes(), ...,
   p <- structure(list(
     data = data,
     layers = list(),
-    scales = scales_list(),
+    scales = ggint$scales_list(),
     mapping = mapping,
     theme = list(),
     coordinates = coord_cartesian(),

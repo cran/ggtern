@@ -106,6 +106,8 @@ geom_errorbarR <- function(mapping = NULL, data = NULL, stat = "identity",
 
 #' @rdname geom_errorbarX
 #' @aliases GeomErrorbart
+#' @usage NULL
+#' @format NULL
 #' @export
 GeomErrorbart <- ggproto("GeomErrorbart",
                          GeomSegment,
@@ -117,6 +119,8 @@ GeomErrorbart <- ggproto("GeomErrorbart",
 
 #' @rdname geom_errorbarX
 #' @aliases GeomErrorbarl
+#' @usage NULL
+#' @format NULL
 #' @export
 GeomErrorbarl <- ggproto("GeomErrorbarl",
                          GeomSegment,
@@ -127,6 +131,8 @@ GeomErrorbarl <- ggproto("GeomErrorbarl",
 )
 #' @rdname geom_errorbarX
 #' @aliases GeomErrorbarr
+#' @usage NULL
+#' @format NULL
 #' @export
 GeomErrorbarr <- ggproto("GeomErrorbarr",
                          GeomSegment,

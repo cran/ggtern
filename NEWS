@@ -1,3 +1,26 @@
+ggtern 2.1.0
+----------------------------------------------------------------
+* Fixed compatibility issues with ggplot2 v 2.1.0, several modification to this version of ggplot2, broke existing ggtern code
+* Introdcution of geom_isopropX (X = T,L,R)
+
+ggtern 2.0.2
+----------------------------------------------------------------
+* Fixed the stat_interpolation_tern to handle the different modelling methods
+* Better haldling of the 'fullrange' case within the stat_interpolation_tern method
+* Added GeomDl for direct.label
+* Applied label formatter to all labels (title, legend etc...), not just ternary specific labels
+* Fixed bug in theme_custom(...)
+* Fixed bug in how the order of axis label preferences ie, Tarrow << yarrow << T << y << default etc...
+* Created geom_ternary_crosshar new geometry
+* Added some custom legend keys for new geometries
+* Fixed bug with the hshift and vshift theme elements, reduced them to numeric candidates
+* Added Tmark, Lmark and Rmark, new geometries being the components of the geom_crosshair_tern.
+
+ggtern 2.0.1
+----------------------------------------------------------------
+* Fixed minor bugs in interpolation and countouring stats
+* Fixed missing imports
+
 ggtern 2.0.0
 ----------------------------------------------------------------
 * Almost entirely re-written package, providing compatability with ggplot2 (>= 2.0.0)

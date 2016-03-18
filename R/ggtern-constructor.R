@@ -7,4 +7,6 @@
 #' @return \code{ggtern(...)} returns an object of class \code{ggplot}.
 #' @seealso For an introduction to the \code{ggtern} package, (including many examples), click \link[=ggtern-package]{HERE}.
 #' @export
-ggtern <- function(...){ggplot(...) + coord_tern()}
+ggtern <- function(...){
+  ggplot(...) + coord_tern()
+}

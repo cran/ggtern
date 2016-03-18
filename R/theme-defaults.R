@@ -241,6 +241,7 @@ theme_rgb <- theme_rgbg
 theme_rgbw  <- function(base_size = 12, base_family = ""){
   .theme_tern(base_size=base_size, base_family=base_family,
               tern.plot.background ="white",
+              tern.panel.background = 'white',
               col.T          ="darkred",
               col.L          ="darkblue",
               col.R          ="darkgreen",
@@ -442,20 +443,23 @@ theme_light <- function(base_size = 12, base_family = "") {
 #' @param col.R colour of right axis, ticks, labels and major gridlines
 #' @param col.BG colour of the plot background area
 #' @param tern.plot.background colour of background colour to plot area
+#' @param tern.panel.background colour of panel background of plot area
 #' @param col.grid.minor the colour of the minor grid
 #' \code{theme_custom} is a convenience function to allow the user to control the basic theme colours very easily.
 #' @rdname ggtern_themes
 #' @export
 theme_custom  <- function(base_size = 12,
                           base_family = "",
-                          tern.plot.background = 'gray92',
+                          tern.plot.background  = 'grey92',
+                          tern.panel.background = 'white',
                           col.T='gray95',
                           col.L='gray95',
                           col.R='gray95',
                           col.BG="transparent",
                           col.grid.minor="gray90"){
   .theme_tern(base_size=base_size, base_family=base_family, 
-              tern.plot.background = tern.plot.background,
+              tern.plot.background  = tern.plot.background,
+              tern.panel.background = tern.panel.background,
               col.T      = col.T,
               col.L      = col.L,
               col.R      = col.R,

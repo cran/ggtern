@@ -47,8 +47,8 @@ ggint$.element_tree$tern.plot.background           = .el_def("element_rect", "pl
 
 ##AXIS ARROWS
 ggint$.element_tree$tern.axis                      = .el_def("element_line", "line",                 description="Base line for ggtern object") #
-ggint$.element_tree$tern.axis.hshift               = .el_def("unit",                                 description="Amount to nudge the plot horizontally") #
-ggint$.element_tree$tern.axis.vshift               = .el_def("unit",                                 description="Amount to nudge the plot vertically") #
+ggint$.element_tree$tern.axis.hshift               = .el_def("numeric",                              description="Amount to nudge the plot horizontally") #
+ggint$.element_tree$tern.axis.vshift               = .el_def("numeric",                              description="Amount to nudge the plot vertically") #
 ggint$.element_tree$tern.axis.clockwise            = .el_def("logical",                              description="Clockwise or Anticlockwise Precession")
 
 ggint$.element_tree$tern.axis.line                 = .el_def("element_line", "tern.axis",            description="Base Line") #

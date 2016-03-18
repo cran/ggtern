@@ -198,15 +198,16 @@ scales_add_missing_tern <- function(plot){
   
   #Ensure required scales have been added
   rs = plot$coordinates$required_scales
-  scales_add_missing(plot,rs,plot$plot_env) ##NH
-  
+  ggint$scales_add_missing(plot,rs,plot$plot_env) ##NH
+  plot$scales$scales = plot$scales$scales[!sapply(plot$scales$scales,is.null)] 
+ 
   #Push some details to the coordinates
   plot$coordinates$scales        = sapply(rs,plot$scales$get_scales) ##NH
   for(r in rs) 
     plot$coordinates$limits[[r]] = plot$scales$get_scales(r)$limits
   plot$coordinates$labels_coord  = plot$labels
   plot$coordinates$theme         = ggint$plot_theme(plot) #NH
-  plot$coordinates$manual_mask   = ("GeomMask" %in% unlist(lapply(plot$layers,function(x){ class(x$geom) })))
+  #plot$coordinates$manual_mask   = ("GeomMask" %in% unlist(lapply(plot$layers,function(x){ class(x$geom) })))
   
   #done
   plot
