@@ -51,6 +51,7 @@
 \alias{tern.axis.title.show}
 \alias{tern.axis.vshift}
 \alias{tern.panel.background}
+\alias{tern.panel.border.ontop}
 \alias{tern.panel.expand}
 \alias{tern.panel.grid}
 \alias{tern.panel.grid.major}
@@ -63,7 +64,7 @@
 \alias{tern.panel.grid.minor.R}
 \alias{tern.panel.grid.minor.T}
 \alias{tern.panel.grid.minor.show}
-\alias{tern.panel.grids.ontop}
+\alias{tern.panel.grid.ontop}
 \alias{tern.panel.rotate}
 \alias{tern.plot.background}
 \alias{ternary.options}

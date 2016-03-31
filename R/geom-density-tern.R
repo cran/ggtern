@@ -17,9 +17,9 @@
 #' geom_density_tern(aes(colour=..level..),expand=0.5,base='identity')
 #'@export
 geom_density_tern <- function(mapping = NULL, data = NULL, stat='DensityTern', position='identity',
+                              ...,
                               lineend = "butt", linejoin = "round", linemitre = 1,
-                              na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                              ...) {
+                              na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
   layer(
     data        = data,
     mapping     = mapping,

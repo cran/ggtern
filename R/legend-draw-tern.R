@@ -167,4 +167,18 @@ draw_key_Riso <- function(data,params,size){
   )
 }
 
+#' @export
+#' @rdname draw_key_tern
+draw_key_point_swap <- function(data, params, size) {
+  pointsGrob(0.5, 0.5,
+             pch = data$shape,
+             gp = gpar(
+               col = alpha(data$fill, data$alpha),
+               fill = alpha(data$colour, data$alpha),
+               fontsize = data$size * .pt + data$stroke * .stroke / 2,
+               lwd = data$stroke * .stroke / 2
+             )
+  )
+}
+
 .ratio = function(){ 0.5*tan(60*pi/180) }

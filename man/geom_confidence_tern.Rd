@@ -11,14 +11,13 @@
 \title{Confidence Interval}
 \usage{
 geom_confidence_tern(mapping = NULL, data = NULL, stat = "ConfidenceTern",
-  position = "identity", lineend = "butt", linejoin = "round",
-  linemitre = 1, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-  ...)
+  position = "identity", ..., lineend = "butt", linejoin = "round",
+  linemitre = 1, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
 
 stat_confidence_tern(mapping = NULL, data = NULL, geom = "ConfidenceTern",
-  position = "identity", contour = TRUE, n = 100, h = NULL,
+  position = "identity", ..., contour = TRUE, n = 100, h = NULL,
   na.rm = FALSE, breaks = c(0.5, 0.9, 0.95), show.legend = NA,
-  inherit.aes = TRUE, ...)
+  inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
@@ -46,6 +45,11 @@ layer, as a string.}
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
 
+\item{...}{other arguments passed on to \code{\link{layer}}. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+\code{color = "red"} or \code{size = 3}. They may also be parameters
+to the paired geom/stat.}
+
 \item{lineend}{Line end style (round, butt, square)}
 
 \item{linejoin}{Line join style (round, mitre, bevel)}
@@ -63,11 +67,6 @@ a warning.  If \code{TRUE} silently removes missing values.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
-
-\item{...}{other arguments passed on to \code{\link{layer}}. These are
-often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
-to the paired geom/stat.}
 
 \item{geom}{Use to override the default connection between
 \code{geom_smooth} and \code{stat_smooth}.}

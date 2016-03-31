@@ -33,10 +33,10 @@ NULL
 #' @rdname geom_errorbarX
 #' @aliases GeomErrorbart
 #' @export
-geom_errorbarT <- function(mapping = NULL, data = NULL, stat = "identity",
-                         position = "identity", arrow = NULL, lineend = "butt",
-                         na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                         ...) {
+geom_errorbarT <- function(mapping = NULL, data = NULL, stat = "identity",position = "identity", 
+                           ...,
+                           arrow = NULL, lineend = "butt",
+                           na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
   layer(
     data        = data,
     mapping     = mapping,

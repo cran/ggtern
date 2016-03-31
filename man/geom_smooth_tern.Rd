@@ -9,14 +9,14 @@
 \alias{stat_smooth_tern}
 \title{Add a Smoothed Conditional Mean.}
 \usage{
-geom_smooth_tern(mapping = NULL, data = NULL, method = "auto",
-  formula = y ~ x, se = TRUE, position = "identity", na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, expand = c(0.5, 0.5), ...)
+geom_smooth_tern(mapping = NULL, data = NULL, position = "identity", ...,
+  method = "auto", formula = y ~ x, se = TRUE, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE, expand = c(0.5, 0.5))
 
-stat_smooth_tern(mapping = NULL, data = NULL, position = "identity",
+stat_smooth_tern(mapping = NULL, data = NULL, position = "identity", ...,
   method = "auto", formula = y ~ x, se = TRUE, n = 80, span = 0.75,
   fullrange = FALSE, level = 0.95, method.args = list(), na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, expand = c(0.5, 0.5), ...)
+  show.legend = NA, inherit.aes = TRUE, expand = c(0.5, 0.5))
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
@@ -38,6 +38,14 @@ plot. You must supply \code{mapping} if there is no plot mapping.}
    the plot data. The return value must be a \code{data.frame.}, and
    will be used as the layer data.}
 
+\item{position}{Position adjustment, either as a string, or the result of
+a call to a position adjustment function.}
+
+\item{...}{other arguments passed on to \code{\link{layer}}. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+\code{color = "red"} or \code{size = 3}. They may also be parameters
+to the paired geom/stat.}
+
 \item{method}{smoothing method (function) to use, eg. lm, glm, gam, loess,
 rlm. For datasets with n < 1000 default is \code{\link{loess}}. For datasets
 with 1000 or more observations defaults to gam, see \code{\link[mgcv]{gam}}
@@ -48,9 +56,6 @@ for more details.}
 
 \item{se}{display confidence interval around smooth? (TRUE by default, see
 level to control}
-
-\item{position}{Position adjustment, either as a string, or the result of
-a call to a position adjustment function.}
 
 \item{na.rm}{If \code{FALSE} (the default), removes missing values with
 a warning.  If \code{TRUE} silently removes missing values.}
@@ -65,11 +70,6 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
 
 \item{expand}{expand the range of values by this much (vector of length 2) when fullrange is set to TRUE}
-
-\item{...}{other arguments passed on to \code{\link{layer}}. These are
-often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
-to the paired geom/stat.}
 
 \item{n}{number of points to evaluate smoother at}
 

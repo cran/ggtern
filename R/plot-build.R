@@ -27,12 +27,18 @@ ggplot_build <- function(plot) {
     plot <- plot + geom_blank()
   }
   
+  #Add the Missing Clipping Mask if necessary
+  if(isTernary){
+    
+    plot <- layers_add_missing_mask(plot)
+  }
+  
   #Check the Layers
   layers <- plot$layers
+  
   layer_data <- lapply(layers, function(y) y$layer_data(plot$data))
   
   scales <- plot$scales
-  #scales$scales = scales$scales[!sapply(scales$scales,is.null)]
   
   # Apply function to layer and matching data
   by_layer <- function(f) {
@@ -91,9 +97,6 @@ ggplot_build <- function(plot) {
   
   # Train and map non-position scales
   npscales <- scales$non_position_scales()
-  
-  #Remove Null scales, z is being called
-  #if(isTernary) npscales$scales = npscales$scales[!sapply(npscales$scales,is.null)]
   
   if (npscales$n() > 0) {
     lapply(data, ggint$scales_train_df, scales = npscales)       ##NH

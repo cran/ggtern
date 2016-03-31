@@ -5,10 +5,10 @@
 #' @param h Bandwidth (vector of length two). If \code{NULL}, estimated using \code{\link[MASS]{bandwidth.nrd}}.
 #' @section Computed variables: 
 #' Same as \code{\link{stat_contour}}
-stat_confidence_tern <- function(mapping  = NULL, data = NULL, geom = "ConfidenceTern",
-                            position = "identity", contour = TRUE,
-                            n = 100, h = NULL, na.rm = FALSE, breaks = c(0.50,0.90,0.95), 
-                            show.legend = NA, inherit.aes = TRUE, ...) {
+stat_confidence_tern <- function( mapping  = NULL, data = NULL, geom = "ConfidenceTern", position = "identity", 
+                                  ...,
+                                  contour = TRUE, n = 100, h = NULL, na.rm = FALSE, breaks = c(0.50,0.90,0.95), 
+                                  show.legend = NA, inherit.aes = TRUE) {
   layer(
     data        = data,
     mapping     = mapping,

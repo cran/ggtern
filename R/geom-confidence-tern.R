@@ -16,11 +16,10 @@
 #' @rdname geom_confidence_tern
 #' @author Nicholas Hamilton
 #' @export
-geom_confidence_tern <- function(mapping = NULL, data = NULL, stat = "ConfidenceTern",
-                            position = "identity", lineend = "butt",
-                            linejoin = "round", linemitre = 1,
-                            na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                            ...) {
+geom_confidence_tern <- function(mapping = NULL, data = NULL, stat = "ConfidenceTern",position = "identity", 
+                                  ...,
+                                  lineend = "butt", linejoin = "round", linemitre = 1,
+                                  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
   layer(
     data        = data,
     mapping     = mapping,

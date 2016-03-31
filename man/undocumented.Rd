@@ -9,6 +9,7 @@
 \alias{ifthenelse}
 \alias{is.numericor}
 \alias{joinCharacterSeries}
+\alias{layers_add_missing_mask}
 \alias{scales_add_missing_tern}
 \alias{tern_dep}
 \alias{zzz-internal}
@@ -33,6 +34,8 @@ identityInv(z)
 getFormulaVars(x, dependent = TRUE)
 
 scales_add_missing_tern(plot)
+
+layers_add_missing_mask(plot)
 }
 \arguments{
 \item{x}{logical input to check}
@@ -70,13 +73,15 @@ scales_add_missing_tern(plot)
 
 \item{dependent}{whether to return the dependent variables (TRUE) or the indpenedent variables (FALSE)}
 
-\item{plot}{object}
+\item{plot}{ggplot object}
 
 \item{x}{character vector}
 
 \item{x}{input object}
 
 \item{x}{formula object}
+
+\item{ggplot}{object}
 }
 \description{
 INTERNAL FUNCTIONS: \code{ggtern} makes use of several non-exported internal functions, list are as follows:
@@ -111,8 +116,12 @@ it can be used within transformation logic via \code{do.call(...)} in the same w
 in an input formula
 
 Function to add missing scales and other items to the plot and its coordinates sytem
+
+Function to add clipping mask if it isn't already present
 }
 \author{
+Nicholas Hamilton
+
 Nicholas Hamilton
 
 Nicholas Hamilton

@@ -22,10 +22,10 @@
 #' @rdname geom_interpolate_tern
 #' @export
 geom_interpolate_tern <- function( mapping = NULL, data = NULL, stat = "InterpolateTern", position = "identity", 
+                                   ...,
                                    lineend = "butt",linejoin = "round", linemitre = 1,
                                    na.rm = FALSE, show.legend = NA,inherit.aes = TRUE, 
-                                   method='auto', formula=value~poly(x,y,degree=1),
-                                   ...) {
+                                   method='auto', formula=value~poly(x,y,degree=1)) {
   layer(
     data        = data,
     mapping     = mapping,

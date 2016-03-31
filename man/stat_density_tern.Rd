@@ -7,9 +7,9 @@
 \title{Density Estimate}
 \usage{
 stat_density_tern(mapping = NULL, data = NULL, geom = "density_tern",
-  position = "identity", contour = TRUE, n = 100, h = NULL,
+  position = "identity", ..., contour = TRUE, n = 100, h = NULL,
   na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, weight = 1,
-  base = "ilr", expand = c(0.5, 0.5), ...)
+  base = "ilr", expand = c(0.5, 0.5))
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
@@ -37,6 +37,11 @@ plot. You must supply \code{mapping} if there is no plot mapping.}
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
 
+\item{...}{other arguments passed on to \code{\link{layer}}. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+\code{color = "red"} or \code{size = 3}. They may also be parameters
+to the paired geom/stat.}
+
 \item{contour}{If \code{TRUE}, contour the results of the 2d density
 estimation}
 
@@ -63,11 +68,6 @@ which means to use the isometric log ratio transformation.}
 
 \item{expand}{Calculate on a mesh which extends beyond the grid of the plot region by this amount
 If \code{NULL}, estimated using \code{\link[MASS]{bandwidth.nrd}}.}
-
-\item{...}{other arguments passed on to \code{\link{layer}}. These are
-often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
-to the paired geom/stat.}
 }
 \description{
 Perform a 2D kernel density estimatation using kde2d and display the results with contours. This can be 

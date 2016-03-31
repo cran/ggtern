@@ -11,6 +11,7 @@
 \alias{draw_key_Tline}
 \alias{draw_key_Tmark}
 \alias{draw_key_crosshair_tern}
+\alias{draw_key_point_swap}
 \alias{draw_key_tern}
 \title{Key drawing functions}
 \usage{
@@ -33,6 +34,8 @@ draw_key_Tiso(data, params, size)
 draw_key_Liso(data, params, size)
 
 draw_key_Riso(data, params, size)
+
+draw_key_point_swap(data, params, size)
 }
 \arguments{
 \item{data}{A single row data frame containing the scaled aesthetics to

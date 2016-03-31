@@ -1,3 +1,10 @@
+ggtern 2.1.1
+----------------------------------------------------------------
+* Fixed bug introduced in previous update, where the manual mask addition was being ignored.
+* Fixed is.logical(na.rm) bug to do with bad ellipsis placement in stats and geoms
+* Added new point geometry, which swaps the colour and fill aesthetics
+* Added new annotation ternary raster, for overlaying images. Included sample raster data (FeldsparRaster)
+
 ggtern 2.1.0
 ----------------------------------------------------------------
 * Fixed compatibility issues with ggplot2 v 2.1.0, several modification to this version of ggplot2, broke existing ggtern code

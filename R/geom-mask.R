@@ -42,23 +42,24 @@ GeomMask <- ggproto("GeomMask", Geom,
   draw_panel  = function(self, data, panel_scales, coord){
     items = gList()
     if(!inherits(coord,'CoordTern'))return(items)
-    extrm = .get.tern.extremes(coord,panel_scales,transform=T)
     tryCatch({
       themeElements = c('tern.plot.background','tern.panel.background')
       for(ixEl in c(1:2)){
         e  = calc_element(themeElements[ixEl],coord$theme %||% theme_get(),verbose=F)
         if(!identical(e,element_blank())){
           a  = c(0,1); b = 0.5; if(ixEl == 2){ a = expand_range(a,0.01) }; #EXPAND THE TOP MASK SLIGHTLY
-          ex = extrm
           if(ixEl == 1){
             ex  = data.frame(diag(1,3,3)); colnames(ex) = as.character(coord$mapping)
-            ex  = coord$transform(ex,scale_details = panel_scales)
+          }else{
+            ex  = .get.tern.extremes(coord,panel_scales,transform=FALSE)
           }
+          ex  = coord$transform(ex,scale_details = panel_scales)
           ex = rbind(ex,ex[1,,drop=F])
           for(ix in c(1:2)){
             xvals = c(a[1],a[1],b[1],if(ix==1){ ex$x }else{NULL},b[1],a[2],a[2],a[1])
             yvals = c(a[1],a[2],a[2],if(ix==1){ ex$y }else{NULL},a[2],a[2],a[1],a[1])
-            grob     <- polygonGrob(  x = xvals,y = yvals,
+            grob     <- polygonGrob(  x = xvals,
+                                      y = yvals,
                                       default.units = "npc",
                                       id   = rep(1,length(xvals)),
                                       gp   = gpar(  col  = if(ix==1       | is.null(e$colour)){NA}else{ e$colour },

@@ -3,19 +3,38 @@
 \docType{data}
 \name{data_sets_Feldspar}
 \alias{Feldspar}
+\alias{FeldsparRaster}
 \alias{data_sets_Feldspar}
 \title{Elkin and Groves Feldspar Data}
-\format{One (1) row per Feldspar composition}
+\format{\code{Feldsdpar} - One (1) row per Feldspar composition, \code{FeldsdparRaster} - Raster Matrix}
 \usage{
+#Experimental Data
 data(Feldspar)
+
+#Raster data
+data(FeldsparRaster)
 }
 \description{
-This dataset represents the experiments conducted by Elkins and Groves
+Data relating to Elkins and Groves Feldspar Data, the following datasets include 
+the experimental data and sample raster data from one of the images in the 
+referenced paper.
+\code{Feldspar} - Experimental Data
+\code{FeldsparRaster} - Raster Data for Fig. 6.
 }
 \examples{
- data(Feldspar)
- summary(Feldspar)
- ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + geom_point()
+#Plot Felspar Data
+data(Feldspar)
+summary(Feldspar)
+ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + geom_point()
+
+# Plot Feldspar data and Underlying Raster Image
+data(FeldsparRaster)
+ggtern(Feldspar,aes(Ab,An,Or)) + 
+theme_rgbw() + 
+annotation_raster_tern(FeldsparRaster,xmin=0,xmax=1,ymin=0,ymax=1) +
+geom_point(size=5,aes(shape=Feldspar,fill=Feldspar),color='black') +
+scale_shape_manual(values=c(21,24)) +
+labs(title="Demonstration of Raster Annotation")
 }
 \author{
 Nicholas Hamilton
@@ -26,6 +45,6 @@ Ternary Feldspar Experiments and Thermodynamic Models
 American Mineralogist, Mineral Soc America, 1990, 75, 544-559
 }
 \seealso{
-\link[=data]{ggtern datasets}
+\link[=data]{Data}
 }
 

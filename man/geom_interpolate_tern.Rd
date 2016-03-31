@@ -10,15 +10,15 @@
 \format{An object of class \code{StatInterpolateTern} (inherits from \code{Stat}, \code{ggproto}) of length 6.}
 \usage{
 geom_interpolate_tern(mapping = NULL, data = NULL,
-  stat = "InterpolateTern", position = "identity", lineend = "butt",
+  stat = "InterpolateTern", position = "identity", ..., lineend = "butt",
   linejoin = "round", linemitre = 1, na.rm = FALSE, show.legend = NA,
   inherit.aes = TRUE, method = "auto", formula = value ~ poly(x, y, degree
-  = 1), ...)
+  = 1))
 
 stat_interpolate_tern(mapping = NULL, data = NULL,
-  geom = "interpolate_tern", position = "identity", method = "auto",
+  geom = "interpolate_tern", position = "identity", ..., method = "auto",
   na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, n = 80,
-  formula = value ~ poly(x, y, degree = 1), ...)
+  formula = value ~ poly(x, y, degree = 1))
 
 StatInterpolateTern
 }
@@ -48,6 +48,11 @@ layer, as a string.}
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
 
+\item{...}{other arguments passed on to \code{\link{layer}}. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+\code{color = "red"} or \code{size = 3}. They may also be parameters
+to the paired geom/stat.}
+
 \item{lineend}{Line end style (round, butt, square)}
 
 \item{linejoin}{Line join style (round, mitre, bevel)}
@@ -73,11 +78,6 @@ for more details.}
 
 \item{formula}{formula to use in smoothing function, eg. \code{y ~ x},
 \code{y ~ poly(x, 2)}, \code{y ~ log(x)}}
-
-\item{...}{other arguments passed on to \code{\link{layer}}. These are
-often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
-to the paired geom/stat.}
 
 \item{geom}{Use to override the default connection between
 \code{geom_smooth} and \code{stat_smooth}.}

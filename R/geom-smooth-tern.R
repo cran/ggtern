@@ -16,10 +16,10 @@
 #'   geom_point() +
 #'   labs(title="Example Smoothing")
 #' @export
-geom_smooth_tern <- function(mapping = NULL, data = NULL,
-                        method = "auto", formula = y ~ x, se = TRUE,
-                        position = "identity", na.rm = FALSE,
-                        show.legend = NA, inherit.aes = TRUE,expand=c(0.5,0.5),...) {
+geom_smooth_tern <- function( mapping = NULL, data = NULL,position = "identity",
+                              ...,
+                              method = "auto", formula = y ~ x, se = TRUE,na.rm = FALSE,
+                              show.legend = NA, inherit.aes = TRUE,expand=c(0.5,0.5)) {
   layer(
     data        = data,
     mapping     = mapping,

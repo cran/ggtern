@@ -186,7 +186,7 @@ getFormulaVars = function(x,dependent=TRUE) {
 }
 
 #' Function to add missing scales and other items to the plot and its coordinates sytem
-#' @param plot object
+#' @param ggplot object
 #' @rdname undocumented
 #' @keywords internal
 #' @author Nicholas Hamilton
@@ -199,7 +199,7 @@ scales_add_missing_tern <- function(plot){
   #Ensure required scales have been added
   rs = plot$coordinates$required_scales
   ggint$scales_add_missing(plot,rs,plot$plot_env) ##NH
-  plot$scales$scales = plot$scales$scales[!sapply(plot$scales$scales,is.null)] 
+  #plot$scales$scales = plot$scales$scales[!sapply(plot$scales$scales,is.null)] 
  
   #Push some details to the coordinates
   plot$coordinates$scales        = sapply(rs,plot$scales$get_scales) ##NH
@@ -207,11 +207,21 @@ scales_add_missing_tern <- function(plot){
     plot$coordinates$limits[[r]] = plot$scales$get_scales(r)$limits
   plot$coordinates$labels_coord  = plot$labels
   plot$coordinates$theme         = ggint$plot_theme(plot) #NH
-  #plot$coordinates$manual_mask   = ("GeomMask" %in% unlist(lapply(plot$layers,function(x){ class(x$geom) })))
-  
+
   #done
   plot
 }
+
+#' Function to add clipping mask if it isn't already present
+#' @param plot ggplot object
+#' @rdname undocumented
+#' @keywords internal
+#' @author Nicholas Hamilton
+layers_add_missing_mask = function(plot){
+  if(!"GeomMask" %in% unlist(lapply(plot$layers,function(x){ class(x$geom) })))
+    plot = plot + geom_mask()
+  plot
+} 
 
 
 

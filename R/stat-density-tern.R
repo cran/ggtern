@@ -20,10 +20,11 @@
 #' ggtern(Feldspar,aes(Ab,An,Or)) + 
 #' stat_density_tern(aes(fill=..level..),geom='polygon',base='ilr')
 #' @export
-stat_density_tern <- function(mapping = NULL, data = NULL, geom = "density_tern",
-                            position = "identity",contour = TRUE,
-                            n = 100, h = NULL, na.rm = FALSE,
-                            show.legend = NA, inherit.aes = TRUE,weight=1,base='ilr',expand = c(.5,.5),...) {
+stat_density_tern <- function(mapping = NULL, data = NULL, geom = "density_tern",position = "identity",
+                              ...,
+                              contour = TRUE,
+                              n = 100, h = NULL, na.rm = FALSE,
+                              show.legend = NA, inherit.aes = TRUE,weight=1,base='ilr',expand = c(.5,.5)) {
   layer(
     data        = data,
     mapping     = mapping,

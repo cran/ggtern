@@ -1,10 +1,11 @@
 #' @rdname geom_smooth_tern
 #' @export
-stat_smooth_tern <- function(mapping = NULL, data = NULL,
-                        position = "identity", method = "auto",formula = y ~ x,
-                        se = TRUE, n = 80, span = 0.75, fullrange = FALSE,
-                        level = 0.95, method.args = list(),
-                        na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,expand=c(0.5,0.5),...) {
+stat_smooth_tern <- function( mapping = NULL, data = NULL,position = "identity", 
+                              ...,
+                              method = "auto",formula = y ~ x,
+                              se = TRUE, n = 80, span = 0.75, fullrange = FALSE,
+                              level = 0.95, method.args = list(),
+                              na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,expand=c(0.5,0.5)) {
   layer(
     data        = data,
     mapping     = mapping,

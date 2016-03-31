@@ -434,7 +434,8 @@ theme_light <- function(base_size = 12, base_family = "") {
       
       tern.panel.expand             = getOption('tern.expand'),
       tern.panel.rotate             = 0,
-      tern.panel.grid.ontop         = FALSE
+      tern.panel.grid.ontop         = FALSE,
+      tern.axis.line.ontop          = FALSE
     )
 }
 
