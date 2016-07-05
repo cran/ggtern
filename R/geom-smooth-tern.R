@@ -73,9 +73,7 @@ GeomSmoothTern <- ggproto("GeomSmoothTern", Geom,
   
   # Check that aesthetics are constant
   aes <- unique(data[c("colour", "fill", "size", "linetype", "alpha")])
-  if (nrow(aes) > 1) { 
-    stop("Aesthetics can not vary with a ribbon")
-  }
+  if (nrow(aes) > 1) stop("Aesthetics can not vary with a ribbon")
   aes <- as.list(aes)
   
   missing_pos <- !stats::complete.cases(data[c("x", "ymin", "ymax")])

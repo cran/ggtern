@@ -93,6 +93,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   render_axis_v = function(self,scale_details, theme) zeroGrob(), #not required
   render_fg     = function(self,scale_details, theme){
     items = list()
+    mask  = calc_element('tern.panel.mask.show',theme) %||% TRUE
     extrm = .get.tern.extremes(self,scale_details)
     if(.theme.get.gridsontop(theme))
       items = .render.grids(self,extrm,scale_details,theme,items,onBackground = TRUE)
@@ -100,12 +101,13 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       items = .render.grids(self,extrm,scale_details,theme,items,onBackground = FALSE)
     if(.theme.get.bordersontop(theme))
       items = .render.borders(self,extrm,theme,items)
-    items = .render.arrows(self,extrm,scale_details,theme,items)
-    items = .render.titles(self,extrm,scale_details,theme,items)
+    items   = .render.arrows(self,extrm,scale_details,theme,items)
+    items   = .render.titles(self,extrm,scale_details,theme,items)
     gTree(children = do.call("gList", items))
   },
   render_bg     = function(self,scale_details, theme){
     items = list()
+    mask  = calc_element('tern.panel.mask.show',theme) %||% TRUE
     extrm = .get.tern.extremes(self,scale_details)
     items = .render.background(self,extrm,theme,items)
     if(!.theme.get.gridsontop(theme))
@@ -501,6 +503,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     items[[length(items) + 1]] <- grob
     return(items)
   }
+  
   .render.grid   <- function(name,items,d,showgrid.major=TRUE,showgrid.minor=TRUE){
     if((unique(d$Major) & showgrid.major) | (!unique(d$Major) & showgrid.minor)){
       grob = zeroGrob()

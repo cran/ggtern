@@ -193,10 +193,13 @@ theme_linedraw <- function(base_size = 12, base_family = "") {
 theme_classic <- function(base_size = 12, base_family = ""){
   theme_bw(base_size = base_size, base_family = base_family) %+replace%
   theme(
-    panel.grid.major = element_line(),
-    panel.grid.minor = element_line(),
-    strip.background = element_rect(colour = "black", size = 0.5),
-    legend.key       = element_blank()
+    tern.panel.grid       = element_blank(),
+    tern.panel.grid.major = element_line(),
+    tern.panel.grid.minor = element_line(),
+    panel.grid.major      = element_line(),
+    panel.grid.minor      = element_line(),
+    strip.background      = element_rect(colour = "black", size = 0.5),
+    legend.key            = element_blank()
   )
 }
 
@@ -269,7 +272,11 @@ theme_minimal <- function(base_size = 12, base_family = "") {
       strip.background       = element_blank(),
       plot.background        = element_blank(),
       axis.ticks             = element_blank(),
-      axis.ticks.length      = unit(0, "lines")
+      axis.ticks.length      = unit(0, "lines"),
+      tern.axis.line         = element_line(color='grey90'),
+      tern.axis.line.T       = element_line(),
+      tern.axis.line.L       = element_line(),
+      tern.axis.line.R       = element_line()
     )
 }
 
@@ -311,7 +318,7 @@ theme_light <- function(base_size = 12, base_family = "") {
   base = ggplot2::theme_light(base_size=base_size,base_family=base_family) 
   base %+replace%
     theme(
-      tern.panel.background    = element_rect(fill   = "white", colour = NA),
+      tern.panel.background    = element_rect(fill = "white", colour = NA),
       tern.plot.background     = base$panel.background,
       tern.panel.grid.major    = base$panel.grid.major,
       tern.panel.grid.major.T  = element_line(),
@@ -435,6 +442,7 @@ theme_light <- function(base_size = 12, base_family = "") {
       tern.panel.expand             = getOption('tern.expand'),
       tern.panel.rotate             = 0,
       tern.panel.grid.ontop         = FALSE,
+      tern.panel.mask.show          = TRUE,
       tern.axis.line.ontop          = FALSE
     )
 }

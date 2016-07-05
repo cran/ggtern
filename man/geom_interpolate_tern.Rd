@@ -12,15 +12,12 @@
 geom_interpolate_tern(mapping = NULL, data = NULL,
   stat = "InterpolateTern", position = "identity", ..., lineend = "butt",
   linejoin = "round", linemitre = 1, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE, method = "auto", formula = value ~ poly(x, y, degree
-  = 1))
+  inherit.aes = TRUE)
 
 stat_interpolate_tern(mapping = NULL, data = NULL,
   geom = "interpolate_tern", position = "identity", ..., method = "auto",
   na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, n = 80,
-  formula = value ~ poly(x, y, degree = 1))
-
-StatInterpolateTern
+  formula = value ~ poly(x, y, degree = 1), base = "ilr")
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
@@ -71,18 +68,21 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
 
+\item{geom}{Use to override the default connection between
+\code{geom_smooth} and \code{stat_smooth}.}
+
 \item{method}{smoothing method (function) to use, eg. lm, glm, gam, loess,
 rlm. For datasets with n < 1000 default is \code{\link{loess}}. For datasets
 with 1000 or more observations defaults to gam, see \code{\link[mgcv]{gam}}
 for more details.}
 
+\item{n}{number of grid points in each direction}
+
 \item{formula}{formula to use in smoothing function, eg. \code{y ~ x},
 \code{y ~ poly(x, 2)}, \code{y ~ log(x)}}
 
-\item{geom}{Use to override the default connection between
-\code{geom_smooth} and \code{stat_smooth}.}
-
-\item{n}{number of grid points in each direction}
+\item{base}{the base transformation of the data, options include 'identity' (ie direct on the cartesian space), or 'ilr'
+which means to use the isometric log ratio transformation.}
 }
 \description{
 This is the heavily requested geometry for interpolating between ternary values, results being

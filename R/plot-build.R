@@ -29,8 +29,9 @@ ggplot_build <- function(plot) {
   
   #Add the Missing Clipping Mask if necessary
   if(isTernary){
-    
-    plot <- layers_add_missing_mask(plot)
+    theme <- ggint$plot_theme(plot) #NH
+    if(calc_element('tern.panel.mask.show',theme) %||% TRUE)
+      plot <- layers_add_missing_mask(plot)
   }
   
   #Check the Layers

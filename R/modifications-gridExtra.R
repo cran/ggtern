@@ -128,7 +128,7 @@ arrangeGrob = function (..., grobs = list(...), layout_matrix, vp = NULL, name =
 grid.arrange = function (..., newpage = TRUE) {
   if (newpage) 
     grid.newpage()
-  g <- arrangeGrob(...)
+  g <- ggtern::arrangeGrob(...)
   grid.draw(g)
   invisible(g)
 }

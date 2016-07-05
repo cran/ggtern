@@ -1,3 +1,10 @@
+ggtern 2.1.2
+----------------------------------------------------------------
+* Fixed bug in themes, some of the theme elements were being ignored
+* Added convenience function, and theme element, to turn on or off the clipping mask automatic addition
+* interpolate_tern, automatic bins / breaks now determined prior to transformation to inverse log ratio space. Also, bins / breaks argument defined (was previously not included in signature), and also introduced the ability
+to conduct interpolation on both ilr and cartesian coordinate system, similar to stat_density_tern etc...
+
 ggtern 2.1.1
 ----------------------------------------------------------------
 * Fixed bug introduced in previous update, where the manual mask addition was being ignored.
