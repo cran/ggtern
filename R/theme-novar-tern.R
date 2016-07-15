@@ -61,6 +61,7 @@ theme_novar_tern <- function(species, ...) {
   
   outfxn <- function() theme(    
     tern.axis.title       = element_blank(),
+    tern.axis.line        = element_blank(),
     tern.axis.text        = element_blank(),
     tern.axis.ticks.major = element_blank(),
     tern.axis.ticks.minor = element_blank(),

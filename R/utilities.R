@@ -70,7 +70,7 @@ getBreaks <- function(limits,isMajor,nMajor=5,nMinor=2*nMajor){
       minor = minor[which(minor >= min(limits) & minor <= max(limits))]
       ret   = minor[which(!minor %in% ret)]
     }
-    ret = ret[which(!ret %in% min(limits))]
+    #ret = ret[which(!ret %in% min(limits))]
     ret
   }
 }
@@ -217,9 +217,17 @@ scales_add_missing_tern <- function(plot){
 #' @rdname undocumented
 #' @keywords internal
 #' @author Nicholas Hamilton
-layers_add_missing_mask = function(plot){
-  if(!"GeomMask" %in% unlist(lapply(plot$layers,function(x){ class(x$geom) })))
-    plot = plot + geom_mask()
+layers_add_or_remove_mask = function(plot){
+  theme = ggint$plot_theme(plot) #NH
+  mask  = calc_element('tern.panel.mask.show',theme)[1] %||% TRUE
+  if(is.na(mask) || mask){
+    if(!"GeomMask" %in% unlist(lapply(plot$layers,function(x){ class(x$geom) })))
+      plot = plot + geom_mask()
+  }else{
+    plot$layers = plyr::compact(lapply(plot$layers,function(x){
+      if(inherits(x$geom,'GeomMask')) return(NULL) else x
+    }))
+  }
   plot
 } 
 

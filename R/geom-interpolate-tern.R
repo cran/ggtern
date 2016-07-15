@@ -22,8 +22,10 @@
 #' @name geom_interpolate_tern
 #' @rdname geom_interpolate_tern
 #' @export
-geom_interpolate_tern <- function( mapping = NULL, data = NULL, stat = "InterpolateTern", position = "identity", 
+geom_interpolate_tern <- function( mapping = NULL, data = NULL, 
+                                   stat = "InterpolateTern", position = "identity", 
                                    ...,
+                                   method  = 'auto', formula = value~poly(x,y,degree=1),
                                    lineend = "butt",linejoin = "round", linemitre = 1,
                                    na.rm = FALSE, show.legend = NA,inherit.aes = TRUE) {
   layer(
@@ -39,6 +41,8 @@ geom_interpolate_tern <- function( mapping = NULL, data = NULL, stat = "Interpol
       linejoin    = linejoin,
       linemitre   = linemitre,
       na.rm       = na.rm,
+      method      = method,
+      formula     = formula,
       ...
     )
   )
@@ -52,5 +56,4 @@ geom_interpolate_tern <- function( mapping = NULL, data = NULL, stat = "Interpol
 GeomInterpolateTern <- ggproto("GeomInterpolateTern", 
                                 GeomPath,
                                 default_aes = aes(colour = "#3366FF", size = 0.5, linetype = 1, alpha = NA)
-                                #draw_key = draw_key_path
 )

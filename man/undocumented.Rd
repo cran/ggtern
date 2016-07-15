@@ -9,7 +9,7 @@
 \alias{ifthenelse}
 \alias{is.numericor}
 \alias{joinCharacterSeries}
-\alias{layers_add_missing_mask}
+\alias{layers_add_or_remove_mask}
 \alias{scales_add_missing_tern}
 \alias{tern_dep}
 \alias{zzz-internal}
@@ -35,7 +35,7 @@ getFormulaVars(x, dependent = TRUE)
 
 scales_add_missing_tern(plot)
 
-layers_add_missing_mask(plot)
+layers_add_or_remove_mask(plot)
 }
 \arguments{
 \item{x}{logical input to check}

@@ -6,11 +6,15 @@
 #' @rdname theme_bordersontop
 #' @export
 theme_bordersontop = function(){
-  theme(tern.axis.line.ontop=TRUE)
+  tern_dep("2.1.2","theme_bordersontop() has been merged with theme_gridsontop()")
+  #theme(tern.axis.line.ontop=TRUE)
+  theme_gridsontop()
 }
 
 #' @rdname theme_bordersontop
 #' @export
 theme_bordersonbottom = function(){
-  theme(tern.axis.line.ontop=FALSE)
+  tern_dep("2.1.2","theme_bordersonbottom() has been merged with theme_gridsonbottom()")
+  #theme(tern.axis.line.ontop=FALSE)
+  theme_gridsonbottom()
 }

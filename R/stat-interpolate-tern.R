@@ -37,14 +37,19 @@ StatInterpolateTern <- ggproto("StatInterpolateTern",
   setup_params  = function(data, params) {
     if (identical(params$method, "auto")) {
       max_group <- max(table(data$group))
-      params$method <- if(max_group < 1000){'loess'}else{'glm'}
+      
+      if(max_group < 1000){
+         params$method = 'loess'
+      }else{
+        params$method  = 'glm'
+      }
     }
-    #if (identical(params$method, "gam")) { params$method <- mgcv::gam } ##NH
+    
     params
   },
   compute_group = function(self, data, scales, method='auto', bins = NULL, binwidth = NULL, breaks = NULL, 
                            complete  = FALSE, na.rm = FALSE, formula=value~poly(x,y,degree=1), 
-                           fullrange = FALSE, n = 80, expand=0.5, method.args=list(),base='ilr') {
+                           fullrange = FALSE, n = 80, h = 6, expand=0.5, method.args=list(),base='ilr') {
     
     if(!base %in% c('identity','ilr')) 
       stop('base must be either identity or ilr',call.=FALSE)
@@ -82,14 +87,24 @@ StatInterpolateTern <- ggproto("StatInterpolateTern",
     expand   = if(length(expand) != 2) rep(expand[1],2) else expand
     
     #New Data to Predict
-    #xrng    = expand_range(range(theGrid$x),expand[1])#yrng    = expand_range(range(theGrid$y),expand[2])
     xrng    = expand_range(range(data[self$required_aes[1]]),expand[1])
     yrng    = expand_range(range(data[self$required_aes[2]]),expand[2])
     
+    #Inverse-Log-Ratio Space
+    if(base == 'ilr'){
+      mirr = function(x) c(-rev(x),x) #Mirror Function
+      n    = max( ceiling(n/2) ,1)    #Half n, since going to mirror
+      xseq = mirr( exp(-seq(0,h,length.out = n)) * max(abs(xrng)) )
+      yseq = mirr( exp(-seq(0,h,length.out = n)) * max(abs(yrng)) )
+    
+    #Cartesian and Other
+    }else{
+      xseq = seq(xrng[1],xrng[2],length.out=n)
+      yseq = seq(yrng[1],yrng[2],length.out=n)
+    }
+    
     #Predict the data
-    data = predictdf2d(model, 
-                       xseq = seq(xrng[1],xrng[2],length.out=n), 
-                       yseq = seq(yrng[1],yrng[2],length.out=n))
+    data = predictdf2d(model, xseq = xseq, yseq = yseq)
     data = data[which(complete.cases(data)),]
     
     #Draw the contours
@@ -105,35 +120,5 @@ StatInterpolateTern <- ggproto("StatInterpolateTern",
     result
   }
 )
-
-.getGrid <- function(data,n,fullrange,expand){
-  ## REDUNDANT
-  
-  #Determine the limits
-  seqmax = .getSeq(c(0,1),n,expand); 
-  seqx   = ifthenelse(fullrange,seqmax,.getSeq(range(data$x),n,expand)) 
-  seqy   = ifthenelse(fullrange,seqmax,.getSeq(range(data$y),n,expand))
-  
-  #Build the grid
-  theGrid   = expand.grid(x=seqx,y=seqy)
-  theGrid$z = 1 - theGrid$x - theGrid$y
-  
-  invalid   = apply(theGrid,1,function(x) max(x) > (1 - 1/n) | min(x) < 1/n)
-  if(length(invalid) > 0) theGrid = theGrid[-which(invalid),]
-  
-  #Convert to ilr coordinates
-  theGrid = remove_missing(as.data.frame(acomp(theGrid)),na.rm=TRUE)
-  theGrid = data.frame(ilr(theGrid))
-  colnames(theGrid) = c('x','y')
-  
-  #Done
-  theGrid
-}
-
-.getSeq = function(x,n,expand){ 
-  x = expand_range(x,expand)
-  seq(x[1],x[2],length.out = n) 
-}
-
 
 

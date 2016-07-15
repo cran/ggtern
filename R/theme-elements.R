@@ -42,37 +42,37 @@ ggint$.element_tree.orig <- ggint$.element_tree #To determine the new set relati
 .el_def                  <- ggint$el_def
 
 ##TERNARY PANEL
-ggint$.element_tree$tern.panel.background          = .el_def("element_rect", "panel.background",     description="Background of Ternary Clipping Area**")
-ggint$.element_tree$tern.plot.background           = .el_def("element_rect", "plot.background",      description="Background of Ternary Plot Area**")
+ggint$.element_tree$tern.panel.background          = .el_def("element_rect", "panel.background",     description="Background of Ternary Plot Area**")
+ggint$.element_tree$tern.plot.background           = .el_def("element_rect", "plot.background",      description="Background of Ternary Clipping Area**")
 
 ##AXIS ARROWS
-ggint$.element_tree$tern.axis                      = .el_def("element_line", "line",                 description="Base line for ggtern object") #
 ggint$.element_tree$tern.axis.hshift               = .el_def("numeric",                              description="Amount to nudge the plot horizontally") #
 ggint$.element_tree$tern.axis.vshift               = .el_def("numeric",                              description="Amount to nudge the plot vertically") #
 ggint$.element_tree$tern.axis.clockwise            = .el_def("logical",                              description="Clockwise or Anticlockwise Precession")
 
-ggint$.element_tree$tern.axis.line                 = .el_def("element_line", "tern.axis",            description="Base Line") #
+ggint$.element_tree$tern.axis.line                 = .el_def("element_line", "axis.line",            description="Base Line") #
 ggint$.element_tree$tern.axis.line.T               = .el_def("element_line", "tern.axis.line",       description="Line for TOP Axis") #
 ggint$.element_tree$tern.axis.line.L               = .el_def("element_line", "tern.axis.line",       description="Line for LHS Axis") #
 ggint$.element_tree$tern.axis.line.R               = .el_def("element_line", "tern.axis.line",       description="Line for RHS Axis") #
-ggint$.element_tree$tern.axis.line.ontop           = .el_def("logical",                              description="Bring Axis Borders on Top of Everything")
-
-#Axis Titles
-ggint$.element_tree$tern.axis.title                = .el_def("element_text", "tern.axis.text",       description="Base Apex Title") #
-ggint$.element_tree$tern.axis.title.T              = .el_def("element_text", "tern.axis.title",      description="Apex Title for TOP Axis") #
-ggint$.element_tree$tern.axis.title.L              = .el_def("element_text", "tern.axis.title",      description="Apex Title for LHS Axis") #
-ggint$.element_tree$tern.axis.title.R              = .el_def("element_text", "tern.axis.title",      description="Apex Title for RHS Axis") #
-ggint$.element_tree$tern.axis.title.show           = .el_def("logical",                              description="Apex Titles Show or Hide")
+ggint$.element_tree$tern.axis.line.ontop           = .el_def("logical",                              description="Bring Axis Borders on Top of Everything (Depreciated)")
 
 #Axis Text
-ggint$.element_tree$tern.axis.text                 = .el_def("element_text", "text",                 description="Base Text") #
+ggint$.element_tree$tern.axis.text                 = .el_def("element_text", "axis.text",            description="Base Text") #
 ggint$.element_tree$tern.axis.text.T               = .el_def("element_text", "tern.axis.text",       description="Text for TOP Axis") #
 ggint$.element_tree$tern.axis.text.L               = .el_def("element_text", "tern.axis.text",       description="Text for LHS Axis") #
 ggint$.element_tree$tern.axis.text.R               = .el_def("element_text", "tern.axis.text",       description="Text for RHS Axis") #
 ggint$.element_tree$tern.axis.text.show            = .el_def("logical",                              description="Axis Labels Show or Hide")
 
+
+#Axis Titles
+ggint$.element_tree$tern.axis.title                = .el_def("element_text", "axis.title",           description="Base Apex Title") #
+ggint$.element_tree$tern.axis.title.T              = .el_def("element_text", "tern.axis.title",      description="Apex Title for TOP Axis") #
+ggint$.element_tree$tern.axis.title.L              = .el_def("element_text", "tern.axis.title",      description="Apex Title for LHS Axis") #
+ggint$.element_tree$tern.axis.title.R              = .el_def("element_text", "tern.axis.title",      description="Apex Title for RHS Axis") #
+ggint$.element_tree$tern.axis.title.show           = .el_def("logical",                              description="Apex Titles Show or Hide")
+
 #Arrow
-ggint$.element_tree$tern.axis.arrow                = .el_def("element_line", "tern.axis",            description="Base Arrow Line") #
+ggint$.element_tree$tern.axis.arrow                = .el_def("element_line", "axis.line",            description="Base Arrow Line") #
 ggint$.element_tree$tern.axis.arrow.T              = .el_def("element_line", "tern.axis.arrow",      description="Arrow Line for TOP Axis") #
 ggint$.element_tree$tern.axis.arrow.L              = .el_def("element_line", "tern.axis.arrow",      description="Arrow Line for LHS Axis") #
 ggint$.element_tree$tern.axis.arrow.R              = .el_def("element_line", "tern.axis.arrow",      description="Arrow Line for RHS Axis") #
@@ -86,7 +86,7 @@ ggint$.element_tree$tern.axis.arrow.start          = .el_def("numeric",         
 ggint$.element_tree$tern.axis.arrow.finish         = .el_def("numeric",                              description="Proportion of Axis when Arrow Finishes")
 
 #Ticks
-ggint$.element_tree$tern.axis.ticks                = .el_def("element_line", "tern.axis",            description="Base Ticks") #
+ggint$.element_tree$tern.axis.ticks                = .el_def("element_line", "axis.line",            description="Base Ticks") #
 ggint$.element_tree$tern.axis.ticks.major          = .el_def("element_line", "tern.axis.ticks",      description="Base Major Ticks") #
 ggint$.element_tree$tern.axis.ticks.major.T        = .el_def("element_line", "tern.axis.ticks.major",description="Base Major Ticks for TOP Axis") #
 ggint$.element_tree$tern.axis.ticks.major.L        = .el_def("element_line", "tern.axis.ticks.major",description="Base Major Ticks for LHS Axis") #
@@ -102,18 +102,18 @@ ggint$.element_tree$tern.axis.ticks.minor.L        = .el_def("element_line", "te
 ggint$.element_tree$tern.axis.ticks.minor.R        = .el_def("element_line", "tern.axis.ticks.minor",description="Base Minor Ticks for RHS Axis") #
 
 #Panel Grids
-ggint$.element_tree$tern.panel.grid                = .el_def("element_line", "tern.axis",            description="Base Gridline") #
-ggint$.element_tree$tern.panel.grid.major          = .el_def("element_line", "tern.panel.grid",      description="Base Major Gridline") #
+ggint$.element_tree$tern.panel.grid.major          = .el_def("element_line", "panel.grid.major",     description="Base Major Gridline") #
 ggint$.element_tree$tern.panel.grid.major.T        = .el_def("element_line", "tern.panel.grid.major",description="Major Gridline for TOP Axis") #
 ggint$.element_tree$tern.panel.grid.major.L        = .el_def("element_line", "tern.panel.grid.major",description="Major Gridline for LHS Axis") #
 ggint$.element_tree$tern.panel.grid.major.R        = .el_def("element_line", "tern.panel.grid.major",description="Major Gridline for RHS Axis") #
 ggint$.element_tree$tern.panel.grid.major.show     = .el_def("logical",                              description="Show or Hide Major Gridline")
-ggint$.element_tree$tern.panel.grid.minor          = .el_def("element_line", "tern.panel.grid",      description="Base Minor Gridline") #
+ggint$.element_tree$tern.panel.grid.minor          = .el_def("element_line", "panel.grid.minor",     description="Base Minor Gridline") #
 ggint$.element_tree$tern.panel.grid.minor.T        = .el_def("element_line", "tern.panel.grid.minor",description="Minor Gridline for TOP Axis") #
 ggint$.element_tree$tern.panel.grid.minor.L        = .el_def("element_line", "tern.panel.grid.minor",description="Minor Gridline for LHS Axis") #
 ggint$.element_tree$tern.panel.grid.minor.R        = .el_def("element_line", "tern.panel.grid.minor",description="Minor Gridline for RHS Axis") #
 ggint$.element_tree$tern.panel.grid.minor.show     = .el_def("logical",                              description="Show or Hide Minor Gridline")
-ggint$.element_tree$tern.panel.grid.ontop          = .el_def("logical",                              description="Bring grids on top of everything else")
+ggint$.element_tree$tern.panel.grid.ontop          = .el_def("logical",                              description="Bring grids, axis and axis labels on top of everything else")
+
 ggint$.element_tree$tern.panel.mask.show           = .el_def("logical",                              description="Bring grids on top of everything else")
 ggint$.element_tree$tern.panel.expand              = .el_def("numeric",                              description="The amount to expand the ternary plotting panel, in ratio to npc units")
 ggint$.element_tree$tern.panel.rotate              = .el_def("numeric",                              description="The amount to rotate the ternary diagram in degrees")

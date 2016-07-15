@@ -1,3 +1,17 @@
+ggtern 2.1.3
+----------------------------------------------------------------
+* Reverted Method arguments in geom_interpolate_tern, errors being raised when 'auto' set as
+* Completely reworked the theme inheritence tree, and theme construction methods, including a base 'dummy' theme (theme_ggtern, which appends and includes all the additional theme elements to the default ggplot2 theme.
+* Removed the root theme elements for ggtern, in favour of inheriting from ggplot2
+* Swapped the theme elements, tern.plot.background and tern.panel.background to be more in-line with the corresponding
+plot.background and panel.background in the parent package.
+* Provided ggtern version for the 'annotate' function
+* Major reworking of the coord_tern axis rendering routine, to work better with the geom_mask, insomuch as that when the mask is not used, all elements are rendered on the background. When the mask is used, the background rendering is suppressed, and the respective elements are rendered on the mask instead, and if they are brought to the front (via theme_gridsontop), then they are suppressed on the background, and the mask, and rendered in the foreground. Have also segregated the various components to clearly indicate when the ticks, borders, grids, background, labels and titles are rendered.
+* Merged theme_bordersontop with theme_gridsontop
+* Changed the default breaks to now include the minimum value, permitting the next item:
+* Modification of the theme_novar_tern to also discard the tern.axis.line.X (X=T,L,R) theme element.
+* Modified plot construction routine to remove the clipping mask (say if they have been manually added) if the 'tern.panel.mask.show' theme element is set to FALSE. This ensures the convenience function theme_nomask() strictly means "Don't Show Clipping Mask"
+
 ggtern 2.1.2
 ----------------------------------------------------------------
 * Fixed bug in themes, some of the theme elements were being ignored

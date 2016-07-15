@@ -7,6 +7,7 @@
 \alias{theme_custom}
 \alias{theme_dark}
 \alias{theme_darker}
+\alias{theme_ggtern}
 \alias{theme_gray}
 \alias{theme_grey}
 \alias{theme_light}
@@ -24,32 +25,34 @@
 \alias{theme_void}
 \title{ggtern themes}
 \usage{
-theme_gray(base_size = 12, base_family = "")
+theme_ggtern(base_size = 11, base_family = "")
+
+theme_gray(base_size = 11, base_family = "")
 
 theme_bw(base_size = 12, base_family = "")
 
 theme_linedraw(base_size = 12, base_family = "")
 
-theme_classic(base_size = 12, base_family = "")
-
-theme_void(base_size = 12, base_family = "")
-
-theme_rgbg(base_size = 12, base_family = "")
-
-theme_rgbw(base_size = 12, base_family = "")
+theme_light(base_size = 12, base_family = "")
 
 theme_minimal(base_size = 12, base_family = "")
 
+theme_classic(base_size = 12, base_family = "")
+
 theme_dark(base_size = 12, base_family = "")
+
+theme_void(base_size = 12, base_family = "")
 
 theme_darker(base_size = 12, base_family = "")
 
-theme_light(base_size = 12, base_family = "")
-
 theme_custom(base_size = 12, base_family = "",
-  tern.plot.background = "grey92", tern.panel.background = "white",
-  col.T = "gray95", col.L = "gray95", col.R = "gray95",
-  col.BG = "transparent", col.grid.minor = "gray90")
+  tern.plot.background = "white", tern.panel.background = "grey92",
+  col.T = "black", col.L = "black", col.R = "black",
+  col.grid.minor = "white")
+
+theme_rgbw(base_size = 12, base_family = "")
+
+theme_rgbg(base_size = 12, base_family = "")
 }
 \arguments{
 \item{base_size}{base font size}
@@ -66,16 +69,12 @@ theme_custom(base_size = 12, base_family = "",
 
 \item{col.R}{colour of right axis, ticks, labels and major gridlines}
 
-\item{col.BG}{colour of the plot background area}
-
 \item{col.grid.minor}{the colour of the minor grid
 \code{theme_custom} is a convenience function to allow the user to control the basic theme colours very easily.}
 }
 \description{
 Themes set the general aspect of the plot such as the colour of the
 background, gridlines, the size and colour of fonts.
-
-\code{theme_rgbg} is a theme with grey background, red, green and blue axes and gridlines
 }
 \details{
 \describe{

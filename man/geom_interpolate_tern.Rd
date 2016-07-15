@@ -10,7 +10,8 @@
 \format{An object of class \code{StatInterpolateTern} (inherits from \code{Stat}, \code{ggproto}) of length 6.}
 \usage{
 geom_interpolate_tern(mapping = NULL, data = NULL,
-  stat = "InterpolateTern", position = "identity", ..., lineend = "butt",
+  stat = "InterpolateTern", position = "identity", ..., method = "auto",
+  formula = value ~ poly(x, y, degree = 1), lineend = "butt",
   linejoin = "round", linemitre = 1, na.rm = FALSE, show.legend = NA,
   inherit.aes = TRUE)
 
@@ -50,6 +51,14 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{color = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
+\item{method}{smoothing method (function) to use, eg. lm, glm, gam, loess,
+rlm. For datasets with n < 1000 default is \code{\link{loess}}. For datasets
+with 1000 or more observations defaults to gam, see \code{\link[mgcv]{gam}}
+for more details.}
+
+\item{formula}{formula to use in smoothing function, eg. \code{y ~ x},
+\code{y ~ poly(x, 2)}, \code{y ~ log(x)}}
+
 \item{lineend}{Line end style (round, butt, square)}
 
 \item{linejoin}{Line join style (round, mitre, bevel)}
@@ -71,15 +80,7 @@ the default plot specification, e.g. \code{\link{borders}}.}
 \item{geom}{Use to override the default connection between
 \code{geom_smooth} and \code{stat_smooth}.}
 
-\item{method}{smoothing method (function) to use, eg. lm, glm, gam, loess,
-rlm. For datasets with n < 1000 default is \code{\link{loess}}. For datasets
-with 1000 or more observations defaults to gam, see \code{\link[mgcv]{gam}}
-for more details.}
-
 \item{n}{number of grid points in each direction}
-
-\item{formula}{formula to use in smoothing function, eg. \code{y ~ x},
-\code{y ~ poly(x, 2)}, \code{y ~ log(x)}}
 
 \item{base}{the base transformation of the data, options include 'identity' (ie direct on the cartesian space), or 'ilr'
 which means to use the isometric log ratio transformation.}
