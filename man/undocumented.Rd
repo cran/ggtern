@@ -3,7 +3,6 @@
 \name{zzz-internal}
 \alias{arrow_label_formatter}
 \alias{find_global_tern}
-\alias{getBreaks}
 \alias{getFormulaVars}
 \alias{identityInv}
 \alias{ifthenelse}
@@ -20,8 +19,6 @@ ifthenelse(x, a, b)
 is.numericor(A, B)
 
 find_global_tern(name, env = environment())
-
-getBreaks(limits, isMajor, nMajor = 5, nMinor = 2 * nMajor)
 
 tern_dep(version, msg)
 
@@ -51,14 +48,6 @@ layers_add_or_remove_mask(plot)
 \item{name}{character name of object to search for}
 
 \item{env}{environment to search within as first priority}
-
-\item{limits}{the scale limits}
-
-\item{isMajor}{major or minor grids}
-
-\item{nMajor}{number of major breaks}
-
-\item{nMinor}{number of minor breaks}
 
 \item{version}{The last version of ggplot2 where this function was good
 (in other words, the last version where it was not deprecated).}
@@ -94,9 +83,6 @@ INTERNAL FUNCTIONS: \code{ggtern} makes use of several non-exported internal fun
 If an instance doesn't exist within the \code{env} environment, a search is then conducted within the \code{ggtern} and \code{ggplot2} 
 namespaces \emph{(in that order)}. This is a modified version of the original source as provided in \code{ggplot2}, which has the same functionality, however, the modification is such that the function
 now additionally searches within the \code{ggtern} namespace prior to the \code{ggplot2} namespace.
-
-\code{getBreaks} is a function that calculates the Breaks for Major or Minor Gridlines based 
-on the input limits.
 
 \code{tern_dep} is a function that gives a deprecation error, warning, or messsage, 
 depending on version number, it is based of the \code{\link[ggplot2]{gg_dep}} function which is

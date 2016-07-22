@@ -4,17 +4,11 @@
 \alias{ggplot}
 \alias{ggplot.data.frame}
 \alias{ggplot.default}
-\alias{is.ggplot}
 \alias{plot.ggplot}
-\alias{plot_clone}
 \alias{print.ggplot}
 \title{Create a new ggplot plot.}
 \usage{
 ggplot(data = NULL, mapping = aes(), ..., environment = parent.frame())
-
-plot_clone(plot)
-
-is.ggplot(x)
 
 \method{print}{ggplot}(x, newpage = is.null(vp), vp = NULL, ...)
 
@@ -34,13 +28,11 @@ If not specified, must be suppled in each layer added to the plot.}
 found in the data, ggplot will look for it in this environment. It defaults
 to using the environment in which \code{ggplot()} is called.}
 
-\item{x}{An object to test}
+\item{x}{plot to display}
 
 \item{newpage}{draw new (empty) page first?}
 
 \item{vp}{viewport to draw plot in}
-
-\item{x}{plot to display}
 }
 \value{
 Invisibly returns the result of \code{\link{ggplot_build}}, which
@@ -52,8 +44,6 @@ Invisibly returns the result of \code{\link{ggplot_build}}, which
 declare the input data frame for a graphic and to specify the
 set of plot aesthetics intended to be common throughout all
 subsequent layers unless specifically overridden.
-
-Reports whether x is a ggplot object
 
 Draw plot on current graphics device.
 }
@@ -85,5 +75,4 @@ multiple data frames are used to produce different layers, as
 is often the case in complex graphics.
 }
 \keyword{hplot}
-\keyword{internal}
 

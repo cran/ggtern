@@ -22,15 +22,16 @@
 #' @rdname coord-tern
 #' @author Nicholas Hamilton
 #' @export
-coord_tern <- function(Tlim   = NULL, Llim   = NULL, Rlim   = NULL,expand=TRUE){
-  all.coords <- c("x","y","z")
-  all.scales <- c("T","L","R")
-  mapping    <- sapply(all.scales,function(x){ getOption(sprintf('tern.default.%s',x))}  )
-  if(length(intersect(all.coords,as.character(mapping))) != 3)
-    stop("Options for T, L and R are x,y and z, must be assigned and NOT duplicated, alter the 'tern.default.X' (X=T,L or R) global option",call.=FALSE)
+coord_tern <- function(Tlim = NULL, Llim = NULL, Rlim = NULL, expand = TRUE){
+  rs      = CoordTern$required_scales
+  ra      = CoordTern$required_aes
+  mapping = sapply(rs,function(x) getOption(sprintf('tern.default.%s',x)) )
+  if(!all(ra %in% as.character(mapping)))
+    stop(sprintf("Options for %s are %s, must be assigned and NOT duplicated, alter the 'tern.default.X' (X=%s) global option",
+                 joinCharacterSeries(rs,'and'),
+                 joinCharacterSeries(ra,'and'),
+                 joinCharacterSeries(rs,'or')),call.=FALSE)
   ggproto(NULL, CoordTern,
-          required_aes    = all.coords,
-          required_scales = all.scales,
           mapping         = as.list(mapping),
           limits          = list(x = c(0,1), y = c(0,1)*.ratio(), T=Tlim, L=Llim, R=Rlim),
           ratio           = 1,
@@ -44,8 +45,10 @@ coord_tern <- function(Tlim   = NULL, Llim   = NULL, Rlim   = NULL,expand=TRUE){
 #' @rdname coord-tern
 #' @export
 CoordTern <- ggproto("CoordTern", CoordCartesian,
-  aspect = function(self, ranges) { (diff(ranges$y.range) / diff(ranges$x.range)) * self$ratio },
-  transform = function(self, data, scale_details){
+  required_aes    = c("x","y","z"),
+  required_scales = c("T","L","R"),
+  aspect          = function(self, ranges) { (diff(ranges$y.range) / diff(ranges$x.range)) * self$ratio },
+  transform       = function(self, data, scale_details){
     
     #Variables and functions.
     ix               = c('x','y')
@@ -89,9 +92,9 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     
     self$super$super$transform(data,scale_details)
   },
-  render_axis_h = function(self,scale_details, theme) zeroGrob(), #not required
-  render_axis_v = function(self,scale_details, theme) zeroGrob(), #not required
-  render_bg     = function(self,scale_details, theme){
+  render_axis_h   = function(self,scale_details, theme) zeroGrob(), #not required
+  render_axis_v   = function(self,scale_details, theme) zeroGrob(), #not required
+  render_bg       = function(self,scale_details, theme){
     items = list() 
     extrm = .get.tern.extremes(self,scale_details)
     items = .render.background(self,extrm,theme,items)
@@ -272,7 +275,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
 #----------------------------------------------------------------------------------
 .get.grid.data <- function(self,theme,data.extreme,X,major=TRUE,angle=0,angle.text=0){
   clockwise   = .theme.get.clockwise(theme)
-  seq.tlr     = c("T","L","R")
+  seq.tlr     = self$required_scales
   ix          = which(X == seq.tlr)
   existing    = data.frame()
   
@@ -356,8 +359,6 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   return(existing)
 }
 
-.get.seqtlr    <- function(self) c('T','L','R')
-
 .render.fgset <- function(self,data.extreme,scale_details,theme,items){
   items = .render.ticks(      self,data.extreme,scale_details,theme,items)
   items = .render.border.main(self,data.extreme,              theme,items)
@@ -410,13 +411,13 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   items
 }
 
-.render.border.axis <- function(self,data.extreme,theme,items,X=.get.seqtlr()){
+.render.border.axis <- function(self,data.extreme,theme,items,X=self$required_scales){
   
   #Only Unique Entries
   X = unique(X)
   
   #Checks
-  seq.tlr = .get.seqtlr()
+  seq.tlr = self$required_scales
   if(any(!{X %in% seq.tlr})) stop('Invalid X')
   
   grobs = function(name,s,f,items){
@@ -450,13 +451,13 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   items
 }
 
-.render.ticks  <- function(self,data.extreme,scale_details,theme,items,X=.get.seqtlr()){
+.render.ticks  <- function(self,data.extreme,scale_details,theme,items,X=self$required_scales){
   
   #Only Unique Entries
   X = unique(X)
   
   #Checks
-  seq.tlr = .get.seqtlr()
+  seq.tlr = self$required_scales
   if(any(!{X %in% seq.tlr})) stop('Invalid X')
 
   outside     = .theme.get.outside(theme)
@@ -510,26 +511,25 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     })
     
     #If Primary Ticks
-    if(primary)
+    if(primary | secondary){
       for(name in unique(df$NameTicks)){
-        items = grobs(name = name, items = items, df = df[which(df$NameTicks == name),,drop = F], primary = T)}
-    
-    #If Secondary Ticks
-    if(secondary)
-      for(name in unique(df$NameTicks)){
-        items = grobs(name = name, items = items, df = df[which(df$NameTicks == name),,drop = F], primary = F)}
+        df.sub = df[which(df$NameTicks == name),,drop = F]
+        if(primary)   items = grobs(name = name, items = items, df = df.sub, primary = T)
+        if(secondary) items = grobs(name = name, items = items, df = df.sub, primary = F)
+      }
+    }
   }
   
   #Done
   items
 }
 
-.render.labels <- function(self,data.extreme,scale_details,theme,items,X=.get.seqtlr()){
+.render.labels <- function(self,data.extreme,scale_details,theme,items,X=self$required_scales){
   #Only Unique Entries
   X = unique(X)
   
   #Checks
-  seq.tlr = .get.seqtlr()
+  seq.tlr = self$required_scales
   if(any({!X %in% seq.tlr})) 
     stop('Invalid X')
 
@@ -550,6 +550,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       dA        = a - atan2(ytf-yts,xtf-xts)*180/pi                   #DEGREES, Angle Difference between Ticks and Labels
       hj        = +cos((dA-180)*pi/180)*0.5 + is.numericor(e$hjust,0) #BACK TO RADIANS
       vj        = -sin((dA-180)*pi/180)*0.5 + is.numericor(e$vjust,0) #BACK TO RADIANS
+      
       grob      = textGrob( label         = label_formatter(as.character(df$Labels)), 
                             x             = ifthenelse(showprimary || !outside,xtf,xts) + convertX(cos(pi*(df$Angle + (!outside)*180)/180)*unit(2,'pt'),'npc',valueOnly = T),
                             y             = ifthenelse(showprimary || !outside,ytf,yts) + convertY(sin(pi*(df$Angle + (!outside)*180)/180)*unit(2,'pt'),'npc',valueOnly = T),
@@ -563,19 +564,18 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
                                                  fontface   = e$face, 
                                                  lineheight = ifthenelse(is.numeric(e$lineheight),e$lineheight,1)))
       items[[length(items) + 1]] <- grob
-    },error = function(e){  
-      print(e)
+      
+    },error = function(e){
       warning(e)  
     })
     items
   }
   
-  showLabels = .theme.get.showlabels(theme)
-  if(showLabels){
+  if(.theme.get.showlabels(theme)){
     
     outside     = .theme.get.outside(theme)
-    clockwise   = .theme.get.clockwise(theme)
     showprimary = .theme.get.showprimary(theme)
+    clockwise   = .theme.get.clockwise(theme)
     angle       = .get.angles(clockwise) + (!outside)*180
     angle.text  = .get.angles.ticklabels(clockwise) + .theme.get.rotation(self)
 
@@ -589,16 +589,17 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       items <- grobs(name=name,items=items,df=df[which(df$NameText  == name),,drop=F],outside,showprimary)
     }
   }
+  
   items
 }
 
-.render.grid <- function(self,data.extreme,scale_details,theme,items,X=.get.seqtlr()){
+.render.grid <- function(self,data.extreme,scale_details,theme,items,X=self$required_scales){
   
   #Only Unique Entries
   X = unique(X)
   
   #Checks
-  seq.tlr = .get.seqtlr()
+  seq.tlr = self$required_scales
   if(any({!X %in% seq.tlr})) 
     stop('Invalid X')
   
@@ -663,20 +664,25 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
 
 
 .render.titles <- function(self,data.extreme,scale_details,theme,items){
-  
   if(!.theme.get.showtitles(theme)) 
     return(items)
   
+  #Determine the required scales
+  seq.tlr = self$required_scales
+  
+  #Determine the length of the side
   sidelength = sqrt( diff(data.extreme$x[1:2])^2 + diff(data.extreme$y[1:2])^2)
   
-  .render.title = function(name,ix,items){
+  #Build the local function for building the grobs
+  grobs = function(name,ix,items){
     tryCatch({
-      e     <- calc_element(name,theme=theme,verbose=F)
-      if(identical(e,element_blank()))return(items)
+      e = calc_element(name,theme=theme,verbose=F)
+      if(identical(e,element_blank()))
+        return(items)
       
       ixc   <- c('x','y')
       point <- as.numeric(data.extreme[ix,ixc])
-      base  <- as.numeric(apply(data.extreme[-ix,c('x','y')],2,mean))
+      base  <- as.numeric(apply(data.extreme[-ix,ixc],2,mean))
       angle <- atan2((point[2]-base[2])*.ratio(),point[1]-base[1])
       n     <- regmatches(name,regexpr(".$",name)) 
       l     <- c(self$scales[[n]]$name,self$labels_coord[[n]],self$labels_coord[[ self$mapping[[n]] ]],n)
@@ -701,9 +707,10 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   }
   
   #process the axes
-  items <- .render.title("tern.axis.title.T",1,items)
-  items <- .render.title("tern.axis.title.L",2,items)
-  items <- .render.title("tern.axis.title.R",3,items)
+  for(ix in seq_along(seq.tlr))
+    items = grobs(sprintf("tern.axis.title.%s",seq.tlr[ix]),ix,items)
+  
+  #Done, Return the list of items
   items
 }
 
@@ -758,9 +765,9 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     
     #Cut down to relative proportion.
     dx   = (d.f - d.s)
-    d.f <- d.f - (1-arrowfinish)*dx
-    d.s <- d.s +      arrowstart*dx
-    d   <- rbind(d.s,d.f)
+    d.f  = d.f - (1 - arrowfinish)*dx
+    d.s  = d.s +      arrowstart*dx
+    d    = rbind(d.s,d.f)
     
     #Determine the start and end positions
     ixseq <- names(self$mapping)

@@ -114,6 +114,6 @@ ggint$.element_tree$tern.panel.grid.minor.R        = .el_def("element_line", "te
 ggint$.element_tree$tern.panel.grid.minor.show     = .el_def("logical",                              description="Show or Hide Minor Gridline")
 ggint$.element_tree$tern.panel.grid.ontop          = .el_def("logical",                              description="Bring grids, axis and axis labels on top of everything else")
 
-ggint$.element_tree$tern.panel.mask.show           = .el_def("logical",                              description="Bring grids on top of everything else")
+ggint$.element_tree$tern.panel.mask.show           = .el_def("logical",                              description="Show or Hide the Clipping Mask")
 ggint$.element_tree$tern.panel.expand              = .el_def("numeric",                              description="The amount to expand the ternary plotting panel, in ratio to npc units")
 ggint$.element_tree$tern.panel.rotate              = .el_def("numeric",                              description="The amount to rotate the ternary diagram in degrees")

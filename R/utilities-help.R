@@ -58,8 +58,9 @@ stat_aesthetics <- function(x) {
 
 rd_aesthetics <- function(type, name) {
   obj <- switch(type,
-                geom = find_subclass("Geom", name),
-                stat = find_subclass("Stat", name)
+                geom  = find_subclass("Geom", name),
+                stat  = find_subclass("Stat", name),
+                coord = find_subclass('Coord',name)
   )
   aes <- aesthetics(obj)
   

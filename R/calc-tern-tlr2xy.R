@@ -153,12 +153,11 @@ xy2tlr <- function(data,coord,...,inverse=FALSE,scale=TRUE)
 
 #Check the aesthetics
 .check.aes = function(coord,ix,colNames,inverse=FALSE){
-  if(!all(ix %in% colNames)){
-    mis = unique(ix[-(which(ix %in% colNames))])
-    msg = sprintf("%s requires the following missing aesthetics %s : %s",
-                  class(coord)[1],
-                  if(!inverse){'(trl->xy)'}else{'(xy->trl)'},
-                  paste(mis,collapse="', '"))
+  missing = unique(setdiff(ix,colNames))
+  if(length(missing) > 0){
+    dir = c('tlr','xy'); if(inverse) dir = rev(dir)
+    msg = sprintf("%s requires the following missing aesthetics (%s) : %s", 
+                  class(coord)[1], paste(dir,collapse="->"), paste(missing,collapse="', '"))
     stop(msg,call.=FALSE)
   }
 }

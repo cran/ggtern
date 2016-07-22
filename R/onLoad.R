@@ -9,8 +9,11 @@
 }
 
 .onAttach <- function(libname, pkgname){
-  lines = c(sprintf("If '%s' has been of assistance, please donate at http://ggtern.com -- even small amounts (say $10-50) are very much appreciated!",pkgname),
-            sprintf("Please remember to cite if used within books, publications etc..., Run citation('%s') for further information.",pkgname))
+  lines = c("--",
+            "Consider donating at: http://ggtern.com",
+            "Even small amounts (say $10-50) are very much appreciated!",
+            sprintf("Remember to cite, run citation(package = '%s') for further info.",pkgname),
+            "--")
   msg = paste(lines,collapse="\n")
   packageStartupMessage(msg)
 }
@@ -44,6 +47,7 @@
   options("tern.grid.minor.show"       = TRUE)
   options("tern.grid.ontop"            = FALSE)
   options("tern.mask.show"             = TRUE)
+  options("tern.mask.debug"            = FALSE)
   options("tern.rotate"                = 0)
 }
 

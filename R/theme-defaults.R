@@ -323,10 +323,14 @@ theme_classic <- function(base_size = 12, base_family = ""){
 #' @rdname ggtern_themes
 #' @export
 theme_dark <- function(base_size = 12, base_family = "") {
-  ggplot2::theme_dark(base_size,base_family) %+replace%
-    theme(
-      tern.axis.ticks.minor = element_blank()
-    )
+  base = ggplot2::theme_dark(base_size,base_family)
+  theme_ggtern(base_size,base_family) %+replace% 
+  base %+replace%
+  theme(
+    tern.axis.line  = element_line( colour = "grey40", size = 0.25),
+    tern.axis.ticks = element_line( colour = "grey40", size = 0.25),
+    tern.axis.ticks.minor = element_blank()
+  )
 }
 
 #' @rdname ggtern_themes

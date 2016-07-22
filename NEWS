@@ -1,3 +1,14 @@
+ggtern 2.1.4
+----------------------------------------------------------------
+* Create grid_mesh convenience function
+* Created getLabels function to better handle the creation of the ternary labels, from the known breaks. Have set the earliest label to empty (ie ""), so it doesn't interfere with the axis titles, particularly if the axis titles and first label are wide (ie something like "Top Species" and "50.%" respectively). This is not generally a problem for the default plot where the axis titles and first label are trivial (ie something like "T" and "0")
+* Added Some Basic Demo's under /demo
+* Minor fixes to themes
+* Reviewed the geom_mask, removing two of the hidden layers, as they are now unnessessary
+* Moved seq.tlr to coord proto member
+* Included find_subclass to also now include coord
+* Added a debug option to highlight what is going on with clipping mask
+
 ggtern 2.1.3
 ----------------------------------------------------------------
 * Reverted Method arguments in geom_interpolate_tern, errors being raised when 'auto' set as

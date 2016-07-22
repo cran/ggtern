@@ -8,7 +8,7 @@ scale_T_continuous <- function(name         = waiver(),
                                limits       = c(0,1), 
                                breaks       = getBreaks(limits,TRUE),
                                minor_breaks = getBreaks(limits,FALSE),
-                               labels       = 100*breaks,
+                               labels       = getLabels(breaks=breaks),
                                expand       = waiver(),...) {
   sc <- continuous_scale(
     c("T"),
@@ -32,7 +32,7 @@ scale_L_continuous <- function(name         = waiver(),
                                limits       = c(0,1), 
                                breaks       = getBreaks(limits,TRUE),
                                minor_breaks = getBreaks(limits,FALSE),
-                               labels       = 100*breaks,
+                               labels       = getLabels(breaks=breaks),
                                expand       = waiver(),...) {
   sc <- continuous_scale(
     c("L"),
@@ -55,7 +55,7 @@ scale_R_continuous <- function(name         = waiver(),
                                limits       = c(0,1), 
                                breaks       = getBreaks(limits,TRUE),
                                minor_breaks = getBreaks(limits,FALSE),
-                               labels       = 100*breaks,
+                               labels       = getLabels(breaks=breaks),
                                expand       = waiver(),...) {
   sc <- continuous_scale(
     c("R"),

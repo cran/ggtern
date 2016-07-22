@@ -70,21 +70,6 @@ ggplot.data.frame <- function(data, mapping = aes(), ...,
   p
 }
 
-#' @rdname ggplot
-#' @export
-plot_clone <- function(plot) {
-  p <- plot
-  p$scales <- plot$scales$clone()
-  p
-}
-
-#' Reports whether x is a ggplot object
-#' @param x An object to test
-#' @keywords internal
-#' @rdname ggplot
-#' @export
-is.ggplot <- function(x){ inherits(x, "ggplot")}
-
 #' Draw plot on current graphics device.
 #'
 #' @param x plot to display

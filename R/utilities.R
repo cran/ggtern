@@ -40,7 +40,7 @@ is.numericor <- function(A,B){
 find_global_tern <- function (name, env=environment()){  
   if(!is.character(name)){stop("'name' must be provided as a character")}
   if(!inherits(environment(),"environment")){stop("'env' must inherit the environment class")}
-  if (exists(name, env)){return(get(name, env))}
+  if (exists(name, env)){ return(get(name, env))}
   nsenv <- asNamespace("ggtern")
   if(exists(name, nsenv)){return(get(name, nsenv))}
   nsenv <- asNamespace("ggplot2")
@@ -48,31 +48,65 @@ find_global_tern <- function (name, env=environment()){
   NULL
 }
 
-#' \code{getBreaks} is a function that calculates the Breaks for Major or Minor Gridlines based 
+#' Generate Axis Breaks and Labels
+#' 
+#' Calculates the Breaks for Major or Minor Gridlines based 
 #' on the input limits.
 #' @param limits the scale limits
 #' @param isMajor major or minor grids
-#' @param nMajor number of major breaks
-#' @param nMinor number of minor breaks
-#' @keywords internal
-#' @rdname undocumented
-getBreaks <- function(limits,isMajor,nMajor=5,nMinor=2*nMajor){
-  if(is.null(limits)){ limits = c(0,1) }
-  if(!all(is.numeric(limits))){ limits=c(0,1) }
+#' @param n number of breaks
+#' @param breaks numeric denoting the breaks
+#' @param format the formatting string to be passed through to the \code{\link{sprintf}} function
+#' @param factor the multiplicative factor
+#' @rdname getBreaks
+#' @name getBreaks
+
+#' @rdname getBreaks
+#' @export
+getBreaks <- function(limits = c(0,1), isMajor = TRUE, n = 5){
+  if(is.null(limits) || !all(is.numeric(limits)))
+    limits = c(0,1)
+  
   if(diff(range(limits)) == 0){
-    return(if(isMajor){getOption("tern.breaks.default")}else{getOption("tern.breaks.default.minor")})
-  }else{
-    ret   = pretty(limits,n=nMajor)
-    if(!isMajor){
-      r = range(ret)
-      d = diff(r)/(length(ret)-1)
-      minor = seq(min(ret)-d,max(ret)+d,by=d/2)
-      minor = minor[which(minor >= min(limits) & minor <= max(limits))]
-      ret   = minor[which(!minor %in% ret)]
-    }
-    #ret = ret[which(!ret %in% min(limits))]
-    ret
+    ret = if(isMajor) getOption("tern.breaks.default") else getOption("tern.breaks.default.minor")
+    return(ret)
   }
+    
+  ret = pretty(limits,n = n)
+  if(!isMajor){
+    r = range(ret)
+    d = diff(r)/(length(ret)-1)
+    minor = seq(min(ret)-d,max(ret)+d,by=d/2)
+    minor = minor[which(minor >= min(limits) & minor <= max(limits))]
+    ret   = minor[which(!minor %in% ret)]
+  }
+  ret
+}
+
+#' @rdname getBreaks
+#' @name getLabels
+#' @export
+getLabels = function(limits = c(0,1), breaks = getBreaks(limits), format = "%g", factor = 100){
+  if(!is.numeric(breaks)) 
+    stop("'breaks' must be numeric",call.=FALSE)
+  
+  #Default Result
+  result = 100*breaks
+  
+  #Try and process...
+  tryCatch({
+    if(!is.numeric(factor)) 
+      stop("'factor' must be numeric",call.=FALSE)
+    result = sprintf(format,factor[1]*breaks)
+    
+    #Stop First Label interfering with the main label
+    if(length(result) > 1) 
+      result[1] = ''
+    
+  },error=function(e){ })
+  
+  #Done
+  result
 }
 
 #' 

@@ -22,7 +22,7 @@ ggplot_build <- function(plot) {
   #Remove Unapproved Layers
   if(isTernary & length(plot$layers) > 0){ plot$layers <- strip_unapproved(plot$layers) } ##NH
   
-  plot <- plot_clone(plot)
+  plot <- ggint$plot_clone(plot)
   if (length(plot$layers) == 0) {
     plot <- plot + geom_blank()
   }

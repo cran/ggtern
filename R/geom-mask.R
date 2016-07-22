@@ -41,67 +41,59 @@ GeomMask <- ggproto("GeomMask", Geom,
   default_aes = aes("x","y","z"),
   draw_panel  = function(self, data, panel_scales, coord){
     
+    #Initially Empty Items
     items = list()
     
     #Only for coord tern
-    if(!inherits(coord,'CoordTern'))
-      return(items)
-    
-    tryCatch({
-      theme         = coord$theme %||% theme_get()
-      themeElements = c('tern.panel.background','tern.plot.background','tern.plot.background')
-      for(ixEl in seq_along(themeElements)){
-        
-        e  = calc_element(themeElements[ixEl],theme,verbose=F)
+    if(inherits(coord,'CoordTern')){
+      
+      tryCatch({
+        theme = coord$theme %||% theme_get()
+        e     = calc_element('tern.plot.background',theme,verbose=FALSE)
         
         if(!identical(e,element_blank())){
           
+          #Debug Mode
+          dbg   = getOption('tern.mask.debug',FALSE)
+          
           #1st pass is master triangle.
-          if(ixEl == 1){
-            ex  = data.frame(diag(1,3,3)); colnames(ex) = as.character(coord$mapping)
-          }else{
-            ex  = .get.tern.extremes(coord,panel_scales,transform=FALSE)
-          }
-          ex   = coord$transform(ex,scale_details = panel_scales)
-          ex   = rbind(ex,ex[1,,drop=F])
+          ex  = .get.tern.extremes(coord,panel_scales,transform=FALSE)
+          ex  = coord$transform(ex,scale_details = panel_scales)
+          ex  = rbind(ex,ex[1,,drop=F])
           
-          #Key Limits
-          a = c(0.0,1.0); b = 0.5
-          
-          #2nd pass is the global white mask, 
-          #which expands beyond the plot region
-          #this is to mask any 'edge' effects when using limiting region
-          if(ixEl == 2){ 
-            a    = expand_range(a,1) #EXPAND THE TOP MASK
-            fill = 'white'
-            clip = 'off'
-          }else{
-            fill = e$fill
-            clip = 'inherit'
-          }
-          
-          #Build a specific viewport for this ixEl value
+          #Build a specific viewport value
           vp <- viewport(x     = 0.5, 
                          y     = 0.5, 
                          width = 1, 
                          height= 1, 
                          just  = c("center","center"),
-                         clip  = clip
+                         clip  = 'inherit' #OFF
           )
+          
+          #Key Limits
+          a = c(0.0,1.0)
+          b = c(0.5,0.5)
           
           #1st pass traces the all borders includeing the inside triangle,
           #2nd pass renders the convex hull (outer border)
           for(ix in c(1:2)){
             
-            #Build the x values
-            xvals = c(a[1],a[1],b[1],if(ix==1){ ex$x }else{NULL},b[1],a[2],a[2],a[1])
-            
-            #Build the yvalues
-            yvals = c(a[1],a[2],a[2],if(ix==1){ ex$y }else{NULL},a[2],a[2],a[1],a[1])
+            #Build the xvalues and yvalues
+            #When ix == 1, include the center triangular cut-out
+            xvals = c(a[1],a[1],if(ix==1){c(b[1],ex$x,b[2])},a[2],a[2],a[1])
+            yvals = c(a[1],a[2],if(ix==1){c(a[2],ex$y,a[2])},a[2],a[1],a[1])
             
             #Local Fill Variable
-            fillLoc = if(ix == 2 | is.null(fill)) NA else fill
-            sizeLoc = if(ix == 1) 0 else is.numericor(e$size,0)
+            fillLoc = if(ix == 2 | is.null(e$fill)) NA else e$fill
+            
+            #Draw the full set of mask lines if in debug mode, for debugging.
+            if(dbg){
+              sizeLoc = if(ix == 2) 0.5 else 1
+              colLoc  = if(ix == 2) 'black' else 'red'
+            }else{
+              sizeLoc = if(ix == 2) is.numericor(e$size,0) else 0
+              colLoc  = if(ix == 2) e$colour else fillLoc
+            }
             
             #Build the Grob with the custom viewport
             grob     <- polygonGrob(  x = xvals,
@@ -109,9 +101,9 @@ GeomMask <- ggproto("GeomMask", Geom,
                                       default.units = "npc",
                                       id   = rep(1,length(xvals)),
                                       vp   = vp,
-                                      name = sprintf("mask-%i-%i",ixEl,ix),
-                                      gp   = gpar(  col  = if(ix != 1){ e$colour }else{ fillLoc },
-                                                    fill = alpha(fillLoc, is.numericor(e$alpha,1) ),
+                                      name = sprintf("mask-%i",ix),
+                                      gp   = gpar(  col  = colLoc,
+                                                    fill = fillLoc,
                                                     lwd  = sizeLoc*find_global_tern(".pt"),
                                                     lty  = e$linetype)
                                       
@@ -121,17 +113,18 @@ GeomMask <- ggproto("GeomMask", Geom,
             items[[length(items) + 1]] = grob
           }
         }
-      }
-      
-      #Render Foreground on top of the mask
-      if(!.theme.get.gridsontop(theme)){
-        extrm = .get.tern.extremes(coord,panel_scales,transform=TRUE)
-        items = .render.fgset(coord,extrm,scale_details,theme,items)
-      }
-      
-    },error=function(e){
-      writeLines(as.character(e))
-    })
+        
+        #Render Axis items on top of the mask, if grids are on top, this
+        #will be rendered in the coord_tern render_fg routine instead.
+        if(!.theme.get.gridsontop(theme)){
+          extrm = .get.tern.extremes(coord,panel_scales,transform=TRUE)
+          items = .render.fgset(coord,extrm,scale_details,theme,items)
+        }
+        
+      },error=function(e){
+        writeLines(as.character(e))
+      })
+    }
     
     do.call("gList",items)
   },

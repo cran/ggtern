@@ -11,7 +11,8 @@
                          'aes_to_scale',
                          'scales_add_missing','scales_list','scales_transform_df','scales_map_df','scales_train_df',
                          'predictdf','contour_lines','check_required_aesthetics','snake_class',
-                         'ggname','camelize')
+                         'ggname','camelize',
+                         'plot_clone')
 .functions.gridExtra  = c('latticeGrob')
   .functions          = rbind(data.frame(p='ggplot2',  f=unique(.functions.ggplot2)),
                               data.frame(p='gridExtra',f=unique(.functions.gridExtra)))
