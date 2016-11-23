@@ -14,8 +14,6 @@
 #' 
 #' @section Aesthetics (geom_errorbarR):
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "errorbarr")}
-#' @rdname geom_errorbarX
-#' @name geom_errorbarX
 #' @examples
 #' #Example with Dummy Data.
 #' tmp <- data.frame(x=1/3,
@@ -28,10 +26,12 @@
 #'   geom_errorbarT(aes(Tmin=Min,Tmax=Max),colour='red')+
 #'   geom_errorbarL(aes(Lmin=Min,Lmax=Max),colour='green')+
 #'   geom_errorbarR(aes(Rmin=Min,Rmax=Max),colour='blue') 
+#' @author Nicholas Hamilton
+#' @rdname geom_errorbarX
+#' @name geom_errorbarX
 NULL
 
 #' @rdname geom_errorbarX
-#' @aliases GeomErrorbart
 #' @export
 geom_errorbarT <- function(mapping = NULL, data = NULL, stat = "identity",position = "identity", 
                            ...,
@@ -55,7 +55,6 @@ geom_errorbarT <- function(mapping = NULL, data = NULL, stat = "identity",positi
 }
 
 #' @rdname geom_errorbarX
-#' @aliases GeomErrorbarl
 #' @export
 geom_errorbarL <- function(mapping = NULL, data = NULL, stat = "identity",
                            position = "identity", arrow = NULL, lineend = "butt",
@@ -79,7 +78,6 @@ geom_errorbarL <- function(mapping = NULL, data = NULL, stat = "identity",
 }
 
 #' @rdname geom_errorbarX
-#' @aliases GeomErrorbarr
 #' @export
 geom_errorbarR <- function(mapping = NULL, data = NULL, stat = "identity",
                            position = "identity", arrow = NULL, lineend = "butt",
@@ -105,7 +103,6 @@ geom_errorbarR <- function(mapping = NULL, data = NULL, stat = "identity",
 
 
 #' @rdname geom_errorbarX
-#' @aliases GeomErrorbart
 #' @usage NULL
 #' @format NULL
 #' @export
@@ -118,7 +115,6 @@ GeomErrorbart <- ggproto("GeomErrorbart",
 )
 
 #' @rdname geom_errorbarX
-#' @aliases GeomErrorbarl
 #' @usage NULL
 #' @format NULL
 #' @export
@@ -130,7 +126,6 @@ GeomErrorbarl <- ggproto("GeomErrorbarl",
                          }
 )
 #' @rdname geom_errorbarX
-#' @aliases GeomErrorbarr
 #' @usage NULL
 #' @format NULL
 #' @export
@@ -161,7 +156,7 @@ GeomErrorbarr <- ggproto("GeomErrorbarr",
   excl      = setdiff(total,feat)
   
   #Ensure the data is normalized
-  data = tlr2xy(tlr2xy(data,coord),coord,inverse = TRUE)
+  #data = tlr2xy(tlr2xy(data,coord),coord,inverse = TRUE)
   
   #Determine the deltas
   deltaMin  = data[,mapping[[feat]]] - data[,sprintf("%smin",feat)]

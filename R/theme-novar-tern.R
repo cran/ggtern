@@ -1,9 +1,5 @@
 # ################################################################
 # ### start code
-
-#' @name
-#' theme_novar_tern
-#'
 #' @title
 #' Blank one variable's annotations in ternary plot
 #'
@@ -37,21 +33,21 @@
 #' the grid and axis elements for the chosen ternary species.
 #'
 #' @examples
-#' \dontrun{
-#'  theme_novar_tern("L")
-#'  theme_novar_tern(c("T","L"))
-#'  theme_novar_tern(T,L)
-#' }
+#' base = ggtern() + theme_rgbg()
+#' base + theme_novar_tern("L")
+#' base + theme_novar_tern(c("T","L"))
+#' base + theme_novar_tern('L',R)
+
 #'
 #' @author
 #' Nicholas Hamilton, John Szumiloski
-
+#' @rdname theme_novar_tern
 #' @export
 theme_novar_tern <- function(species, ...) {
   
   species = unique(c(as.character(species),sapply(substitute(list(...)), deparse)[-1]))
   if(length(species) > 1)
-    return(lapply(species,theme_novar_tern))
+    return(lapply(species,ggtern::theme_novar_tern))
   
   species <- substring(toupper(species[1]),1,1)
   

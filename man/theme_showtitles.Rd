@@ -25,4 +25,7 @@ theme a flag to switch OFF the apex titles.
  data(Feldspar)
  ggtern(data=Feldspar,aes(An,Ab,Or)) + geom_point() + theme_bw() + theme_hidetitles()
 }
+\author{
+Nicholas Hamilton
+}
 

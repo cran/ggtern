@@ -15,6 +15,7 @@
 #'scale_color_gradient(low='green',high='red') +
 #'labs(title="Feldspar",color="Temperature",fill='Confidence')
 #'@inheritParams ggplot2::geom_point
+#'@author Nicholas Hamilton
 #'@rdname geom_point_swap
 #'@export
 geom_point_swap <- function(mapping = NULL, data = NULL,

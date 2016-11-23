@@ -2,9 +2,12 @@
 % Please edit documentation in R/plot-construction.R
 \name{+.gg}
 \alias{+.gg}
+\alias{\%+\%}
 \title{Plot Construction}
 \usage{
 \method{+}{gg}(e1, e2)
+
+e1 \%+\% e2
 }
 \arguments{
 \item{e1}{first object}
@@ -13,5 +16,8 @@
 }
 \description{
 \code{"+.gg"} is a local copy of the ggplot2 add function, no change other than exporting from the ggtern namespace
+}
+\author{
+Nicholas Hamilton
 }
 

@@ -69,4 +69,7 @@ elements being valid (renderable, ie say \code{\link{element_line}} as opposed t
   plot = plot + theme_hidegrid(); plot
   plot + theme_showgrid()
 }
+\author{
+Nicholas Hamilton
+}
 

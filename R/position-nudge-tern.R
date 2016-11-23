@@ -5,6 +5,7 @@
 #'
 #' @family position adjustments
 #' @param x,y,z Amount of compositions to nudge
+#' @author Nicholas Hamilton
 #' @rdname position_nudge_tern
 #' @export
 position_nudge_tern <- function(x = 0, y = 0, z = 0) {

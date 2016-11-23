@@ -8,7 +8,6 @@
 #' @section Aesthetics:
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "crosshair_tern")}
 #' @inheritParams ggplot2:::geom_segment
-#' @name geom_crosshair_tern
 #' @examples 
 #' set.seed(1)
 #' df = data.frame(x=runif(10),y=runif(10),z=runif(10))
@@ -18,6 +17,8 @@
 #' base + geom_Rmark()
 #' base + geom_Lmark()
 #' @author Nicholas Hamilton
+#' @name geom_crosshair_tern
+#' @rdname geom_crosshair_tern
 NULL
 
 
@@ -207,11 +208,11 @@ GeomRmark <- ggproto("GeomRmark",Geom,
     mapping[ (others[-ix.feat])[ ix.feat[1]+c(0,1) ] ]
   }; others = getOthers(mapping,feat)
   
-  cw   = calc_element('tern.axis.clockwise',coord$theme) ##Clockwise
-  
+  cw = calc_element('tern.axis.clockwise',coord$theme) ##Clockwise
+  limits = coord$scales[[ names(others)[1] ]]$limits %||% c(0,1)
   data[,sprintf("%send",mapping[[feat]]) ]                = data[, mapping[[feat]] ]
-  data[,sprintf("%send",others[[ 2 - as.integer(cw) ]]) ] = 1 - data[, mapping[[feat]] ] - min(coord$scales[[ names(others)[1] ]]$limits)
-  data[,sprintf("%send",others[[ 1 + as.integer(cw) ]]) ] = min(coord$scales[[ names(others)[1] ]]$limits)
+  data[,sprintf("%send",others[[ 2 - cw ]]) ] = 1 - data[, mapping[[feat]] ] - min(limits)
+  data[,sprintf("%send",others[[ 1 + cw ]]) ] = min(limits)
   
   scale_details = list( x.range = ranges[['x']], y.range = ranges[['y']] )
   data          = coord$transform(data,scale_details)

@@ -8,8 +8,9 @@
 #'   display in this key
 #' @param params A list of additional parameters supplied to the geom.
 #' @param size Width and height of key in mm.
-#' @keywords internal
+#' @author Nicholas Hamilton
 #' @name draw_key_tern
+#' @rdname draw_key_tern
 NULL
 
 #' @export

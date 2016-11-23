@@ -3,7 +3,8 @@
 #' \code{theme_clockwise, theme_anticlockwise} (or their aliasses) are function that instructs the axes 
 #' precession to be clockwise or anticlockwise respectively.
 #' 
-#' If the \code{\link{tern.axis.arrow.show}} value is \code{FALSE}, these functions will set it to \code{TRUE}.
+#' If the \code{tern.axis.arrow.show} value is \code{FALSE}, these functions will set it to \code{TRUE}.
+#' @author Nicholas Hamilton
 #' @rdname theme_clockwise
 #' @name theme_clockwise
 NULL
@@ -21,14 +22,20 @@ theme_anticlockwise    <- function(){.tern_clockwise(FALSE)}
 theme_counterclockwise <- function(){.tern_clockwise(FALSE)}
 
 #' @rdname theme_clockwise
+#' @usage NULL
+#' @format NULL
 #' @export
 tern_clockwise         <- function(){.tern_clockwise(TRUE)}
 
 #' @rdname theme_clockwise
+#' @usage NULL
+#' @format NULL
 #' @export
 tern_anticlockwise     <- function(){.tern_clockwise(FALSE)}
 
 #' @rdname theme_clockwise
+#' @usage NULL
+#' @format NULL
 #' @export
 tern_counterclockwise  <- function(){.tern_clockwise(FALSE)}
 

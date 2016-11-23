@@ -6,7 +6,6 @@
 #' the \code{geom_point(...)} layer, but before the \code{geom_label(...)} layer, this situation has been
 #' demonstrated in the example below. In the event that the user wishes to suppress the mask altogether, then a convenience
 #' function has been provided, \code{theme_nomask()}.
-#' @author Nicholas Hamilton
 #' @examples 
 #' data(Feldspar)
 #' x = ggtern(Feldspar,aes(Ab,An,Or,label=Experiment)) + geom_point()
@@ -16,8 +15,9 @@
 #' 
 #' #Insert manual mask before the labels, to prevent them being truncated
 #' x + geom_point(size=6) + geom_mask() + geom_label()
-#' @export
+#' @author Nicholas Hamilton
 #' @rdname geom_mask
+#' @export
 geom_mask <- function() {
   layer(
     data        = data.frame(x=1,y=1,z=1),
@@ -34,9 +34,10 @@ geom_mask <- function() {
 }
 
 
-#' @rdname geom_mask
 #' @format NULL
 #' @usage NULL
+#' @rdname geom_mask
+#' @export
 GeomMask <- ggproto("GeomMask", Geom,
   default_aes = aes("x","y","z"),
   draw_panel  = function(self, data, panel_scales, coord){

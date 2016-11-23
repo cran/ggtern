@@ -20,4 +20,7 @@ Convenience functions to enable or disable the axis ticklabels
 \code{theme_hidelabels} or \code{theme_nolabels} (Alias) are functions that apends to the current theme a flag 
 to switch OFF the axis ticklabels
 }
+\author{
+Nicholas Hamilton
+}
 

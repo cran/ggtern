@@ -4,10 +4,12 @@
 \alias{label_formatter}
 \title{\code{label_formatter} is a function that formats / parses labels for use in the grid.}
 \usage{
-label_formatter(label)
+label_formatter(label, ...)
 }
 \arguments{
 \item{label}{character label}
+
+\item{...}{additional arguments}
 }
 \description{
 \code{label_formatter} is a function that formats / parses labels for use in the grid.

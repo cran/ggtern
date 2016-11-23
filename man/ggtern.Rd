@@ -5,10 +5,21 @@
 \alias{ggtern}
 \title{ggtern Constructor}
 \usage{
-ggtern(...)
+ggtern(data = NULL, mapping = aes(), ..., environment = parent.frame())
 }
 \arguments{
-\item{...}{Other arguments passed on to methods. Not currently used.}
+\item{data}{Default dataset to use for plot. If not already a data.frame,
+will be converted to one by \code{\link{fortify}}. If not specified,
+must be suppled in each layer added to the plot.}
+
+\item{mapping}{Default list of aesthetic mappings to use for plot.
+If not specified, must be suppled in each layer added to the plot.}
+
+\item{...}{additional arguments passed through to \code{\link{ggplot}}}
+
+\item{environment}{If an variable defined in the aesthetic mapping is not
+found in the data, ggplot will look for it in this environment. It defaults
+to using the environment in which \code{ggplot()} is called.}
 }
 \value{
 \code{ggtern(...)} returns an object of class \code{ggplot}.
@@ -16,6 +27,12 @@ ggtern(...)
 \description{
 Plots in \code{ggtern} are instigated via the default constructor: \code{ggtern(...)}, which is essentially a convenience wrapper for the following: 
 \code{ggplot{...} + coord_tern()}, indeed, if one wishes to use \code{ggplot{...} + coord_tern()} then this is quite satisfactory.
+}
+\examples{
+ggtern(data=data.frame(x=1,y=1,z=1),aes(x,y,z)) + geom_point()
+}
+\author{
+Nicholas Hamilton
 }
 \seealso{
 For an introduction to the \code{ggtern} package, (including many examples), click \link[=ggtern-package]{HERE}.

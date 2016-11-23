@@ -7,7 +7,6 @@
 \alias{geom_interpolate_tern}
 \alias{stat_interpolate_tern}
 \title{Ternary Interpolation}
-\format{An object of class \code{StatInterpolateTern} (inherits from \code{Stat}, \code{ggproto}) of length 6.}
 \usage{
 geom_interpolate_tern(mapping = NULL, data = NULL,
   stat = "InterpolateTern", position = "identity", ..., method = "auto",
@@ -51,10 +50,15 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{color = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
-\item{method}{smoothing method (function) to use, eg. lm, glm, gam, loess,
-rlm. For datasets with n < 1000 default is \code{\link{loess}}. For datasets
-with 1000 or more observations defaults to gam, see \code{\link[mgcv]{gam}}
-for more details.}
+\item{method}{smoothing method (function) to use, eg. "lm", "glm",
+  "gam", "loess", "rlm".
+
+  For \code{method = "auto"} the smoothing method is chosen based on the
+  size of the largest group (across all panels). \code{\link{loess}} is
+  used for than 1,000 observations; otherwise \code{\link[mgcv]{gam}} is
+  used with \code{formula = y ~ s(x, bs = "cs")}. Somewhat anecdotally,
+  \code{loess} gives a better appearance, but is O(n^2) in memory, so does
+  not work for larger datasets.}
 
 \item{formula}{formula to use in smoothing function, eg. \code{y ~ x},
 \code{y ~ poly(x, 2)}, \code{y ~ log(x)}}
@@ -65,8 +69,8 @@ for more details.}
 
 \item{linemitre}{Line mitre limit (number greater than 1)}
 
-\item{na.rm}{If \code{FALSE} (the default), removes missing values with
-a warning.  If \code{TRUE} silently removes missing values.}
+\item{na.rm}{If \code{FALSE}, the default, missing values are removed with
+a warning. If \code{TRUE}, missing values are silently removed.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -102,6 +106,9 @@ stat_interpolate_tern(geom="polygon",
                      breaks=seq(0,1000,by=100),
                      aes(fill=..level..),expand=1) +
                      geom_point()
+}
+\author{
+Nicholas Hamilton
 }
 \keyword{datasets}
 

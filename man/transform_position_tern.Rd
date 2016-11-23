@@ -16,5 +16,8 @@ transform_position_tern(df, trans_x = NULL, trans_y = NULL,
 \description{
 Convenience function to transform all position variables in a ternary plot
 }
+\author{
+Nicholas Hamilton
+}
 \keyword{internal}
 

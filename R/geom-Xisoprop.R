@@ -7,8 +7,6 @@
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "Tisoprop")}
 #' @inheritParams ggplot2:::geom_segment
 #' @param value, the isoproportion ratio to draw
-#' @name geom_Xisoprop
-#' @rdname geom_Xisoprop
 #' @examples 
 #' data(Feldspar)
 #' ggtern(data=Feldspar,aes(Ab,An,Or)) +
@@ -17,11 +15,12 @@
 #' geom_Risoprop(value=0.5) +
 #' geom_point()
 #' @author Nicholas Hamilton
-NULL
-
-#' @export
 #' @name geom_Xisoprop
 #' @rdname geom_Xisoprop
+NULL
+
+#' @rdname geom_Xisoprop
+#' @export
 geom_Tisoprop <- function(mapping = NULL, data = NULL, 
                           ... , 
                           value,
@@ -50,7 +49,6 @@ geom_Tisoprop <- function(mapping = NULL, data = NULL,
   )
 }
 
-#' @name geom_Xisoprop
 #' @rdname geom_Xisoprop
 #' @format NULL
 #' @usage NULL
@@ -64,7 +62,6 @@ GeomTisoprop <- ggproto("GeomTisoprop",Geom,
                     draw_key        = draw_key_Tiso
 )
 
-#' @name geom_Xisoprop
 #' @rdname geom_Xisoprop
 #' @export
 geom_Lisoprop <- function(mapping = NULL, data = NULL, 
@@ -95,7 +92,6 @@ geom_Lisoprop <- function(mapping = NULL, data = NULL,
   )
 }
 
-#' @name geom_Xisoprop
 #' @rdname geom_Xisoprop
 #' @format NULL
 #' @usage NULL
@@ -109,7 +105,6 @@ GeomLisoprop <- ggproto("GeomLisoprop",Geom,
                       draw_key     = draw_key_Liso
 )
 
-#' @name geom_Xisoprop
 #' @rdname geom_Xisoprop
 #' @export
 geom_Risoprop <- function(mapping = NULL, data = NULL, 
@@ -140,7 +135,6 @@ geom_Risoprop <- function(mapping = NULL, data = NULL,
   )
 }
 
-#' @name geom_Xisoprop
 #' @rdname geom_Xisoprop
 #' @format NULL
 #' @usage NULL

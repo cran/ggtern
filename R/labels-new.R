@@ -39,6 +39,7 @@
 #' @param label the desired label
 #' @param labelarrow the desired label, if different to label, for the markers along the procession arrows 
 #' @aliases llab tlab rlab wlab tarrowlab larrowlab rarrowlab ggtern-labels
+#' @author Nicholas Hamilton
 #' @rdname ggtern_labels
 #' @name ggtern_labels
 #' @seealso ggplot2 \code{\link[ggplot2]{labs}}
@@ -60,7 +61,11 @@
 #'       yarrow  = "Anorthite (Na,K)AlSi_3O_8",
 #'       z       = "KAlSi_3O_8",
 #'       zarrow  = "Orthoclase KAlSi_3O_8") + 
-#' geom_point() + theme_showarrows() + theme_clockwise() + weight_percent()
+#' theme_latex(TRUE) + 
+#' geom_point() + 
+#' theme_showarrows() + 
+#' theme_clockwise() + 
+#' weight_percent()
 NULL
 
 #' \code{Tlab} modifies the label of the TOP apex species

@@ -93,20 +93,21 @@ stops the current procedure, with a common message format
 \strong{DEPRECIATED:} \code{clipPolygons(\dots)} Using the using the PolyClip Package, This clips input polygons for 
 use in the density and contour geometries.
 
-\strong{DEPRECIATED:} \code{theme_arrowbaseline(\dots)} The ternary arrows can have an offset unit value (see \code{\link{tern.axis.arrow.sep}}), however, it is convenient to set this relative
-to either the axis, ticks or axis ticklabels (since the latter two can be hidden / removed.). This function permits this to be set
+\strong{DEPRECIATED:} \code{theme_arrowbaseline(\dots)} The ternary arrows can have an offset unit value (see \code{tern.axis.arrow.sep}), 
+however, it is convenient to set this relative to either the axis, ticks or axis ticklabels (since the latter
+ two can be hidden / removed.). This function permits this to be set
 
 \strong{DEPRECIATED:} \code{element_ternary(\dots)} Replaced by individual theme elements:
 \enumerate{
-  \item \code{\link{tern.axis.arrow.show}}
+  \item \code{tern.axis.arrow.show}
   \item \code{tern.axis.padding}
-  \item \code{\link{tern.axis.arrow.sep}}
-  \item \code{\link{tern.axis.arrow.start}}
-  \item \code{\link{tern.axis.arrow.finish}}
-  \item \code{\link{tern.axis.vshift}}
-  \item \code{\link{tern.axis.hshift}}
-  \item \code{\link{tern.axis.ticks.length.major}}
-  \item \code{\link{tern.axis.ticks.length.minor}}
+  \item \code{tern.axis.arrow.sep}
+  \item \code{tern.axis.arrow.start}
+  \item \code{tern.axis.arrow.finish}
+  \item \code{tern.axis.vshift}
+  \item \code{tern.axis.hshift}
+  \item \code{tern.axis.ticks.length.major}
+  \item \code{tern.axis.ticks.length.minor}
 }
 
 \strong{DEPRECIATED:} \code{ggtern.multi} is a function which permits the arrangement of muliple \code{ggtern} or \code{ggplot2} objects,

@@ -34,7 +34,6 @@
 #' @param y vector of numeric \code{y} values
 #' @param close logical value (default \code{FALSE}), as to whether the set should be closed by adding (duplicating) 
 #' the first row (after ordering) to the end of the set.
-
 NULL
 
 
@@ -60,8 +59,9 @@ clipPolygons <- function(df,coord,plyon=c('level','piece','group'),op="intersect
 
 #' Set The Ternary Arrow Baseline
 #' 
-#' \strong{DEPRECIATED:} \code{theme_arrowbaseline(\dots)} The ternary arrows can have an offset unit value (see \code{\link{tern.axis.arrow.sep}}), however, it is convenient to set this relative
-#' to either the axis, ticks or axis ticklabels (since the latter two can be hidden / removed.). This function permits this to be set
+#' \strong{DEPRECIATED:} \code{theme_arrowbaseline(\dots)} The ternary arrows can have an offset unit value (see \code{tern.axis.arrow.sep}), 
+#' however, it is convenient to set this relative to either the axis, ticks or axis ticklabels (since the latter
+#'  two can be hidden / removed.). This function permits this to be set
 #' @rdname zzz-depreciated
 #' @export
 theme_arrowbaseline <- function(label='labels'){
@@ -73,15 +73,15 @@ theme_arrowbaseline <- function(label='labels'){
 #' 
 #' \strong{DEPRECIATED:} \code{element_ternary(\dots)} Replaced by individual theme elements:
 #' \enumerate{
-#'   \item \code{\link{tern.axis.arrow.show}}
+#'   \item \code{tern.axis.arrow.show}
 #'   \item \code{tern.axis.padding}
-#'   \item \code{\link{tern.axis.arrow.sep}}
-#'   \item \code{\link{tern.axis.arrow.start}}
-#'   \item \code{\link{tern.axis.arrow.finish}}
-#'   \item \code{\link{tern.axis.vshift}}
-#'   \item \code{\link{tern.axis.hshift}}
-#'   \item \code{\link{tern.axis.ticks.length.major}}
-#'   \item \code{\link{tern.axis.ticks.length.minor}}
+#'   \item \code{tern.axis.arrow.sep}
+#'   \item \code{tern.axis.arrow.start}
+#'   \item \code{tern.axis.arrow.finish}
+#'   \item \code{tern.axis.vshift}
+#'   \item \code{tern.axis.hshift}
+#'   \item \code{tern.axis.ticks.length.major}
+#'   \item \code{tern.axis.ticks.length.minor}
 #' }
 #' 
 #' Used to define the layout of some of the ggtern plot features which are unique to the ternary diagrams , and hence, this package.

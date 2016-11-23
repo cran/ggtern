@@ -18,11 +18,11 @@ ifthenelse(x, a, b)
 
 is.numericor(A, B)
 
-find_global_tern(name, env = environment())
+find_global_tern(name, env = environment(), mode = "any")
 
 tern_dep(version, msg)
 
-arrow_label_formatter(label, suffix = NULL, sep = "/")
+arrow_label_formatter(label, suffix = NULL, sep = "/", ...)
 
 joinCharacterSeries(x, lastWord = "and")
 
@@ -49,6 +49,8 @@ layers_add_or_remove_mask(plot)
 
 \item{env}{environment to search within as first priority}
 
+\item{mode}{the mode to search within}
+
 \item{version}{The last version of ggplot2 where this function was good
 (in other words, the last version where it was not deprecated).}
 
@@ -60,9 +62,13 @@ layers_add_or_remove_mask(plot)
 
 \item{sep}{the seperator between label and suffix}
 
+\item{...}{additional arguments}
+
 \item{dependent}{whether to return the dependent variables (TRUE) or the indpenedent variables (FALSE)}
 
 \item{plot}{ggplot object}
+
+\item{latex}{logical as to whether latex formats should be parsed}
 
 \item{x}{character vector}
 

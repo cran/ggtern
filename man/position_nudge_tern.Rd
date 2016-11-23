@@ -15,6 +15,9 @@ position_nudge_tern(x = 0, y = 0, z = 0)
 This is useful if you want to nudge labels a little ways from their points, input data will normalised to sum to unity before applying the particular
 nudge, so the nudge variables should be as a fraction ie (0,1)
 }
+\author{
+Nicholas Hamilton
+}
 \seealso{
 Other position.adjustments: \code{\link{position_jitter_tern}}
 }

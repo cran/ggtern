@@ -32,11 +32,10 @@ tested.  Neither has this function been tested with non-ternary plots available 
 the \pkg{ggplot2} framework.
 }
 \examples{
-\dontrun{
- theme_novar_tern("L")
- theme_novar_tern(c("T","L"))
- theme_novar_tern(T,L)
-}
+base = ggtern() + theme_rgbg()
+base + theme_novar_tern("L")
+base + theme_novar_tern(c("T","L"))
+base + theme_novar_tern('L',R)
 
 }
 \author{

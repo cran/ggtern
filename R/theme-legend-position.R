@@ -4,7 +4,7 @@
 #' @param x the position, valid values are topleft, middleleft, bottomleft, topright, middleright and bottomright, or the shortened versions 
 #' respecitvely, tl, ml, bl, tr, mr, br
 #' @author Nicholas Hamilton
-#' @rdname themelegendposition
+#' @rdname theme_legendposition
 #' @export
 theme_legend_position = function(x='topleft'){
   

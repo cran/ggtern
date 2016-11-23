@@ -1,5 +1,4 @@
 #' @inheritParams stat_density_tern
-#' @name geom_interpolate_tern
 #' @rdname geom_interpolate_tern
 #' @export
 stat_interpolate_tern <- function(mapping = NULL, data = NULL, geom = "interpolate_tern",position = "identity",
@@ -25,9 +24,9 @@ stat_interpolate_tern <- function(mapping = NULL, data = NULL, geom = "interpola
   )
 }
 
-#' @name geom_interpolate_tern
 #' @rdname geom_interpolate_tern
 #' @usage NULL
+#' @format NULL
 #' @export
 StatInterpolateTern <- ggproto("StatInterpolateTern", 
   Stat,

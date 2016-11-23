@@ -6,8 +6,6 @@
 \alias{calc_element}
 \alias{combine_elements}
 \alias{plot_theme}
-\alias{theme_get}
-\alias{theme_set}
 \alias{theme_update}
 \alias{update_theme}
 \alias{validate_element}
@@ -20,10 +18,6 @@ validate_element(el, elname)
 theme_update(...)
 
 plot_theme(x)
-
-theme_get()
-
-theme_set(new)
 
 add_theme(t1, t2, t2name)
 
@@ -43,8 +37,6 @@ calc_element(element, theme, verbose = FALSE)
 \item{...}{named list of theme settings}
 
 \item{x}{gg object}
-
-\item{new}{new theme (a list of theme elements)}
 
 \item{t1}{A theme object}
 
@@ -89,6 +81,9 @@ which do not inherit from 'element' objects.
 \code{combine_elements} is a local copy of the ggplot2 function that combines two theme elements
 
 \code{calc_element} is a local copy of the ggplot2 function which determines the net element based on inheritances, given input theme.
+}
+\author{
+Nicholas Hamilton
 }
 \seealso{
 \code{\link[ggplot2]{theme_update}}

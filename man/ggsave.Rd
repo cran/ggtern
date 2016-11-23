@@ -2,6 +2,7 @@
 % Please edit documentation in R/save.R
 \name{ggsave}
 \alias{ggsave}
+\alias{grid.draw.ggplot}
 \title{Save a ggplot (or other grid object) with sensible defaults (ggtern version)}
 \usage{
 ggsave(filename, plot = last_plot(), device = NULL, path = NULL,
@@ -48,5 +49,8 @@ data(Feldspar)
 base = ggtern(Feldspar,aes(Ab,An,Or)) + geom_point()
 ggsave("./output.pdf",base,width=10,height=10)
 }
+}
+\author{
+Nicholas Hamilton
 }
 

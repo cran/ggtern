@@ -7,13 +7,9 @@
 \alias{tern_limits}
 \title{Restrict Ternary Limits}
 \usage{
-tern_limits(T = 1, L = 1, R = 1, ...)
-
-limits_tern(...)
+tern_limit(T = 1, L = 1, R = 1, ...)
 
 limit_tern(...)
-
-tern_limit(...)
 }
 \arguments{
 \item{T, L, R}{numeric value (scalar) of the maximum \code{T,L,R} species limit for each scale respectively}
@@ -36,8 +32,27 @@ of the proposed scales, then a warning message will be reported and an empty lis
 the main function, \code{tern_limits(\dots)} and can be used interchangeably.
 }
 \examples{
-df = data.frame(x=runif(10),y=runif(10),z=runif(10))
-ggtern(df,aes(x,y,z)) + geom_point() + tern_limits(0.7,0.3,0.4)
+#Display a non-zoomed and zoomed plot side by side
+data(Feldspar)
+df.lims = data.frame(Ab = c(1,.25,.25), 
+                     An = c(0,.75,.00), 
+                     Or = c(0,.00,.75))
+#Build the non-zoomed plot
+A = ggtern(Feldspar,aes(Ab,An,Or)) +
+ stat_density_tern(geom='polygon',aes(fill=..level..,alpha=..level..)) + 
+ geom_point() + 
+ geom_mask() + 
+ geom_polygon(data=df.lims,color='red',alpha=0,size=0.5) +
+ guides(color='none',fill='none',alpha='none') + 
+ labs(title = "Non-Zoomed")
+
+#Build the zoomed plot
+B = A + 
+  tern_limits(T=max(df.lims$An), L=max(df.lims$Ab), R=max(df.lims$Or)) +
+  labs(title = "Zoomed")
+
+#Arrange the above plots side by side for illustration
+grid.arrange(A,B,ncol=2,top="Demonstration of Limiting Region")
 }
 \author{
 Nicholas Hamilton

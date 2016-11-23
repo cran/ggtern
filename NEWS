@@ -1,3 +1,18 @@
+ggtern 2.1.5
+----------------------------------------------------------------
+* Fixed bug to do with theme element rendering, some properties were being ignored (Thanks to Ivan Galvan for picking up on this)
+* Created new theme element, and convenience functions, to enable or disable the parsing of text objects into expressions using latex markup. Previously, the parsing was done by default, however now, they are rendered without parsing unless the user states that they wish it to be parsed via the 'tern.plot.latex' theme element, or theme_latex() convenience functions.
+* Improved the logic in handling the breaks / minor breaks and labels when they are to be calculated automatically.
+* Reworked the theme_mesh function, to now accept an ellipsis term, which is passed through to limits_tern. By this token, theme_mesh now works over a restricted plotting region.
+* Improved logic of the getBreaks function, when determining minor breaks
+* Fixed bug in validate_element, when validating plot.margin theme elements, thanks to Degang Wu for picking up the problem
+* Eliminated some masked functions (theme_get, theme_set), reverting back to the ggplot2 originals.
+* Fixed bug with normalisation of data for errorbars, thanks to Andy London for picking up the issue.
+* Added new custom themes: theme_matrix, theme_tropical, theme_bluedark, theme_bluelight
+* Review of documentation for use in staticdocs for website.
+* New Convenience Function for Zooming
+* New three-colored themes (theme_bvbw and theme_bvbg) for colourblind sensitive viewers.
+
 ggtern 2.1.4
 ----------------------------------------------------------------
 * Create grid_mesh convenience function

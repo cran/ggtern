@@ -12,21 +12,20 @@
 #' @param scale logical as to whether the transformed coordinates are scaled (or reverse scaled in the case of inverse 
 #' transformation) according to the training routine defined in the coordinate system.
 #' @param drop drop all non columns which are not involved in the transformation
-#' @aliases ternary-transformation
 #' @author Nicholas Hamilton
-#' @name ternary-transformation
 #' @examples 
 #' data(Feldspar)
 #' dfm = plyr::rename(Feldspar,c("Ab"="x","An"="y","Or"="z"))
 #' crd = coord_tern()
 #' fwd = tlr2xy(dfm,crd)
 #' rev = tlr2xy(fwd,crd,inverse = TRUE)
-#' @rdname ternary-transformation
+#' @rdname ternary_transformation
+#' @name ternary_transformation
 NULL
 
 #' @details \code{tlr2xy} transforms from the ternary to cartesian spaces, an inverse transformation 
 #' transforms between cartesian to ternary spaces
-#' @rdname ternary-transformation
+#' @rdname ternary_transformation
 #' @export
 tlr2xy <- function(data,coord,...,inverse=FALSE,scale=TRUE,drop=FALSE){
   
@@ -131,7 +130,7 @@ tlr2xy <- function(data,coord,...,inverse=FALSE,scale=TRUE,drop=FALSE){
 #' transforms between ternary to cartesian spaces, it is the reciprocal to \code{\link{tlr2xy}}, therefore
 #' an inverse transformation in \code{\link{xy2tlr}} function is the same as the forward 
 #' transformation in \code{\link{tlr2xy}} 
-#' @rdname ternary-transformation
+#' @rdname ternary_transformation
 #' @export
 xy2tlr <- function(data,coord,...,inverse=FALSE,scale=TRUE) 
   tlr2xy(data,coord,...,inverse=!inverse,scale=scale) 

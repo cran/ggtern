@@ -25,8 +25,6 @@
 #' @aliases theme_nogrid_minor theme_tern_nogrid_minor theme_hidegrid_minor theme_showgrid_minor
 #' theme_nogrid_major theme_tern_nogrid_major theme_nogrid theme_tern_nogrid
 #' 
-#' @rdname theme_showgrid
-#' @name theme_showgrid
 #' @examples
 #'   #Load data
 #'   data(Feldspar)
@@ -36,6 +34,9 @@
 #'   plot
 #'   plot = plot + theme_hidegrid(); plot
 #'   plot + theme_showgrid()
+#' @author Nicholas Hamilton
+#' @rdname theme_showgrid
+#' @name theme_showgrid
 NULL
 
 #' @rdname theme_showgrid

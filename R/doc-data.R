@@ -20,22 +20,26 @@
 #' @format 
 #' \code{Feldsdpar} - One (1) row per Feldspar composition, \code{FeldsdparRaster} - Raster Matrix
 #' @examples
-#' #Plot Felspar Data
+#' #Summarize the Feldspar Data
 #' data(Feldspar)
 #' summary(Feldspar)
-#' ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + geom_point()
+#' 
+#' #Plot Felspar Data
+#' ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
+#'     geom_point()
 #' 
 #' # Plot Feldspar data and Underlying Raster Image
 #' data(FeldsparRaster)
 #' ggtern(Feldspar,aes(Ab,An,Or)) + 
-#' theme_rgbw() + 
-#' annotation_raster_tern(FeldsparRaster,xmin=0,xmax=1,ymin=0,ymax=1) +
-#' geom_point(size=5,aes(shape=Feldspar,fill=Feldspar),color='black') +
-#' scale_shape_manual(values=c(21,24)) +
-#' labs(title="Demonstration of Raster Annotation")
+#'     theme_rgbw() + 
+#'     annotation_raster_tern(FeldsparRaster,xmin=0,xmax=1,ymin=0,ymax=1) +
+#'     geom_point(size=5,aes(shape=Feldspar,fill=Feldspar),color='black') +
+#'     scale_shape_manual(values=c(21,24)) +
+#'     labs(title = "Demonstration of Raster Annotation")
+#'     
 #' @seealso \link[=data]{Data}
-#' @name data_sets_Feldspar
-#' @rdname data_sets_Feldspar
+#' @name data_Feldspar
+#' @rdname data_Feldspar
 #' @aliases Feldspar FeldsparRaster
 #' @author Nicholas Hamilton
 NULL
@@ -55,25 +59,36 @@ NULL
 #' #Load the Libraries
 #' library(ggtern)
 #' library(plyr)
+#' 
 #' #Load the Data.
 #' data(USDA)
+#' 
 #' #Put tile labels at the midpoint of each tile.
-#' USDA.LAB <- ddply(USDA,"Label",function(df){apply(df[,1:3],2,mean)})
+#' USDA.LAB <- ddply(USDA,"Label",function(df){
+#'   apply(df[,1:3],2,mean)
+#' })
+#' 
 #' #Tweak
-#' USDA.LAB$Angle=0; USDA.LAB$Angle[which(USDA.LAB$Label == "Loamy Sand")] = -35
+#' USDA.LAB$Angle = sapply(as.character(USDA.LAB$Label),function(x){
+#'     switch(x,"Loamy Sand"=-35,0)
+#' })
+#' 
 #' #Construct the plot.
 #' ggtern(data=USDA,aes(Sand,Clay,Silt,color=Label,fill=Label)) +
-#' geom_polygon(alpha=0.75,size=0.5,color="black") +
-#' geom_mask() +  
-#' geom_text(data=USDA.LAB,aes(label=Label,angle=Angle),color="black",size=3.5) +
-#' theme_rgbw() + 
-#' theme_showsecondary() +
-#' theme_showarrows() +
-#' weight_percent() + guides(fill='none') + 
-#' theme_legend_position("topleft")
-#' labs(title="USDA Textural Classification Chart",fill="Textural Class",color="Textural Class")
-#' @name data_sets_USDA
-#' @rdname data_sets_USDA
+#'   geom_polygon(alpha=0.75,size=0.5,color="black") +
+#'   geom_mask() +  
+#'   geom_text(data=USDA.LAB,aes(label=Label,angle=Angle),color="black",size=3.5) +
+#'   theme_rgbw() + 
+#'   theme_showsecondary() +
+#'   theme_showarrows() +
+#'   weight_percent() + 
+#'   guides(fill='none') + 
+#'   theme_legend_position("topleft") + 
+#'   labs(title = "USDA Textural Classification Chart",
+#'        fill  = "Textural Class",
+#'        color = "Textural Class")
+#' @name data_USDA
+#' @rdname data_USDA
 #' @aliases USDA
 #' @author Nicholas Hamilton
 NULL
@@ -116,20 +131,24 @@ NULL
 #' \item \strong{Rf}: Rock Fragments Amount, percentage
 #' \item \strong{M}: Mica Amount, percentage
 #' }
-#' @name data_sets_Fragments
-#' @rdname data_sets_Fragments
-#' @aliases Fragments fragments
+#' @name data_Fragments
+#' @rdname data_Fragments
+#' @aliases Fragments
 #' @author Jeremy Hummon Grantham and Michael Anthony Velbel
 #' @examples 
 #' data(Fragments)
 #' ggtern(Fragments,aes(Qm+Qp,Rf,M,colour=Sample)) +
-#'   geom_density_tern(h=2,aes(fill=..level..),expand=0.75,alpha=0.5) + 
+#'   geom_density_tern(h=2,aes(fill=..level..),
+#'   expand=0.75,alpha=0.5,bins=5) + 
 #'   geom_point(aes(shape=Position,size=Relief)) + 
-#'   theme_bw() + theme_showarrows() + custom_percent('%') + 
+#'   theme_bw(base_size=8) + 
+#'   theme_showarrows() + 
+#'   custom_percent('%') + 
 #'   labs(title = "Grantham and Valbel Rock Fragment Data",
-#'        x = "Q_m+Q_p", xarrow = "Quartz (Multi + Poly)",
+#'        x = "Q_{m+p}", xarrow = "Quartz (Multi + Poly)",
 #'        y = "R_f",     yarrow = "Rock Fragments",
 #'        z = "M",       zarrow = "Mica") + 
+#'   theme_latex() + 
 #'   facet_wrap(~Sample,nrow=2)
 NULL
 

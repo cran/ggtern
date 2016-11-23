@@ -5,11 +5,8 @@
 \alias{CoordTern}
 \alias{coord_tern}
 \title{Ternary Coordinate System}
-\format{An object of class \code{CoordTern} (inherits from \code{CoordCartesian}, \code{Coord}, \code{ggproto}) of length 10.}
 \usage{
 coord_tern(Tlim = NULL, Llim = NULL, Rlim = NULL, expand = TRUE)
-
-CoordTern
 }
 \arguments{
 \item{Tlim}{the range of T in the ternary space}

@@ -5,6 +5,7 @@
 #' \code{theme_showlabels} is a function that apends to the current theme a flag to switch ON the axis ticklabels, whilst 
 #' \code{theme_hidelabels} or \code{theme_nolabels} (Alias) are functions that apends to the current theme a flag 
 #' to switch OFF the axis ticklabels
+#' @author Nicholas Hamilton
 #' @rdname theme_showlabels
 #' @name theme_showlabels
 NULL

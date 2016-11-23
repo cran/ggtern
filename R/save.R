@@ -22,18 +22,19 @@
 #'   save images larger than 50x50 inches, to prevent the common error of
 #'   specifying dimensions in pixels.
 #' @param ... Other arguments passed on to graphics device
-#' @export
 #' @examples
 #' \dontrun{
 #' data(Feldspar)
 #' base = ggtern(Feldspar,aes(Ab,An,Or)) + geom_point()
 #' ggsave("./output.pdf",base,width=10,height=10)
 #' }
+#'@rdname ggsave
+#'@author Nicholas Hamilton
+#'@export 
 ggsave <- function(filename, plot = last_plot(),
                    device = NULL, path = NULL, scale = 1,
                    width = NA, height = NA, units = c("in", "cm", "mm"),
                    dpi = 300, limitsize = TRUE, ...) {
-  
   dev <- plot_dev(device, filename, dpi = dpi)
   dim <- plot_dim(c(width, height), scale = scale, units = units,
                   limitsize = limitsize)
@@ -116,6 +117,9 @@ plot_dev <- function(device, filename, dpi = 300) {
   dev
 }
 
+#' @rdname ggsave
+#' @format NULL
+#' @usage NULL
 #' @export
 grid.draw.ggplot <- function(x, recording = TRUE) {
   print(x)

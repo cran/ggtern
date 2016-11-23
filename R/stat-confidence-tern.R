@@ -1,10 +1,13 @@
-#' @export
-#' @rdname geom_confidence_tern
+#' Confidence Interval
+#' 
+#' Statistic
 #' @param contour If \code{TRUE}, contour the results of the 2d density estimation
 #' @param n number of grid points in each direction
 #' @param h Bandwidth (vector of length two). If \code{NULL}, estimated using \code{\link[MASS]{bandwidth.nrd}}.
 #' @section Computed variables: 
 #' Same as \code{\link{stat_contour}}
+#' @rdname geom_confidence_tern
+#' @export
 stat_confidence_tern <- function( mapping  = NULL, data = NULL, geom = "ConfidenceTern", position = "identity", 
                                   ...,
                                   contour = TRUE, n = 100, h = NULL, na.rm = FALSE, breaks = c(0.50,0.90,0.95), 

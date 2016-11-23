@@ -7,8 +7,7 @@
 #' @param  whichlines the confidence values
 #' @param  m the number of values to return for each line
 #' @return list containing mdX and mdY values.
-#' @rdname calc_mahalanobis_distance
-#' @name   mahalanobis_distance
+#' @rdname mahalanobis_distance
 #' @author Nicholas Hamilton
 #' @export
 mahalanobis_distance <- function(x,x.mean,x.cov,whichlines=c(0.975,0.90,0.75),m=360){    

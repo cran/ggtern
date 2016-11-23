@@ -1,4 +1,4 @@
-#' Annotation: High-performance rectangular tiling, ggtern version
+#' Annotation: High-performance rectangular tiling (ggtern version)
 #'
 #' This is a special version of \code{\link{geom_raster}} optimised for static
 #' annotations that are the same in every panel. These annotations will not
@@ -14,8 +14,6 @@
 #'   location of raster
 #' @param interpolate If \code{TRUE} interpolate linearly, if \code{FALSE}
 #'   (the default) don't interpolate.
-#' @rdname annotation-raster-tern
-#' @export
 #' @examples 
 #' data(Feldspar)
 #' data(FeldsparRaster)
@@ -26,6 +24,9 @@
 #' geom_point(size=5,aes(shape=Feldspar,fill=Feldspar),color='black') +
 #' scale_shape_manual(values=c(21,24)) +
 #' labs(title="Demonstration of Raster Annotation")
+#' @author Nicholas Hamilton
+#' @rdname annotation_raster_tern
+#' @export
 annotation_raster_tern <- function(raster, xmin=0, xmax=1, ymin=0, ymax=1, interpolate = FALSE) {
   raster <- grDevices::as.raster(raster)
   layer(
@@ -47,7 +48,7 @@ annotation_raster_tern <- function(raster, xmin=0, xmax=1, ymin=0, ymax=1, inter
   
 }
 
-#' @rdname annotation-raster-tern
+#' @rdname annotation_raster_tern
 #' @format NULL
 #' @usage NULL
 #' @export

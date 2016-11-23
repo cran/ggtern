@@ -4,6 +4,7 @@
 #'   (will transform x, xmin, xmax, xend etc)
 #' @param ... Additional arguments passed to \code{trans_x} and \code{trans_y}.
 #' @keywords internal
+#' @author Nicholas Hamilton
 #' @rdname transform_position_tern
 #' @export
 transform_position_tern <- function(df, trans_x = NULL, trans_y = NULL, trans_z = NULL, ...) {

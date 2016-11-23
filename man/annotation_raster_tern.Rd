@@ -4,7 +4,7 @@
 \name{annotation_raster_tern}
 \alias{GeomRasterAnnTern}
 \alias{annotation_raster_tern}
-\title{Annotation: High-performance rectangular tiling, ggtern version}
+\title{Annotation: High-performance rectangular tiling (ggtern version)}
 \usage{
 annotation_raster_tern(raster, xmin = 0, xmax = 1, ymin = 0, ymax = 1,
   interpolate = FALSE)
@@ -40,6 +40,9 @@ geom_mask() +
 geom_point(size=5,aes(shape=Feldspar,fill=Feldspar),color='black') +
 scale_shape_manual(values=c(21,24)) +
 labs(title="Demonstration of Raster Annotation")
+}
+\author{
+Nicholas Hamilton
 }
 \keyword{datasets}
 

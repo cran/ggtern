@@ -1,4 +1,3 @@
-library(ggtern)
 data("Feldspar")
 
 #Base Plot

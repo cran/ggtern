@@ -2,6 +2,10 @@
 % Please edit documentation in R/theme-defaults.R
 \name{ggtern_themes}
 \alias{ggtern_themes}
+\alias{theme_bluedark}
+\alias{theme_bluelight}
+\alias{theme_bvbg}
+\alias{theme_bvbw}
 \alias{theme_bw}
 \alias{theme_classic}
 \alias{theme_custom}
@@ -9,19 +13,13 @@
 \alias{theme_darker}
 \alias{theme_ggtern}
 \alias{theme_gray}
-\alias{theme_grey}
 \alias{theme_light}
 \alias{theme_linedraw}
+\alias{theme_matrix}
 \alias{theme_minimal}
 \alias{theme_rgbg}
 \alias{theme_rgbw}
-\alias{theme_tern_bw}
-\alias{theme_tern_classic}
-\alias{theme_tern_gray}
-\alias{theme_tern_grey}
-\alias{theme_tern_minimal}
-\alias{theme_tern_rgbg}
-\alias{theme_tern_rgbw}
+\alias{theme_tropical}
 \alias{theme_void}
 \title{ggtern themes}
 \usage{
@@ -46,13 +44,25 @@ theme_void(base_size = 12, base_family = "")
 theme_darker(base_size = 12, base_family = "")
 
 theme_custom(base_size = 12, base_family = "",
-  tern.plot.background = "white", tern.panel.background = "grey92",
+  tern.plot.background = NULL, tern.panel.background = NULL,
   col.T = "black", col.L = "black", col.R = "black",
   col.grid.minor = "white")
 
 theme_rgbw(base_size = 12, base_family = "")
 
 theme_rgbg(base_size = 12, base_family = "")
+
+theme_matrix(base_size = 12, base_family = "")
+
+theme_tropical(base_size = 12, base_family = "")
+
+theme_bluedark(base_size = 12, base_family = "")
+
+theme_bluelight(base_size = 12, base_family = "")
+
+theme_bvbw(base_size = 12, base_family = "")
+
+theme_bvbg(base_size = 12, base_family = "")
 }
 \arguments{
 \item{base_size}{base font size}
@@ -81,11 +91,13 @@ background, gridlines, the size and colour of fonts.
 
 \item{\code{theme_gray}}{
 The signature ggplot2 theme with a grey background and white gridlines,
-designed to put the data forward yet make comparisons easy.}
+designed to put the data forward yet make comparisons easy.
+}
 
 \item{\code{theme_bw}}{
 The classic dark-on-light ggplot2 theme. May work better for presentations
-displayed with a projector.}
+displayed with a projector.
+}
 
 \item{\code{theme_linedraw}}{
 A theme with only black lines of various widths on white backgrounds,
@@ -95,7 +107,8 @@ may refuse.}
 
 \item{\code{theme_light}}{
 A theme similar to \code{theme_linedraw} but with light grey lines and axes,
-to direct more attention towards the data.}
+to direct more attention towards the data.
+}
 
 \item{\code{theme_dark}}{
 The dark cousin of \code{theme_light}, with similar line sizes but a dark background. 
@@ -129,17 +142,63 @@ A completely empty theme.
 \item{\code{theme_custom}}{
 Theme with custom basic colours
 }
+
+\item{\code{theme_matrix}}{
+Theme with very dark background and bright green features
+}
+
+\item{\code{theme_tropical}}{
+Theme with tropical colours
+}
+
+\item{\code{theme_bluelight}}{
+A blue theme with light background and dark features
+}
+
+\item{\code{theme_bluedark}}{
+A blue theme with dark background and light features
+}
+
+\item{\code{theme_bvbw}}{
+A black/vermillion/blue theme with white background, for colorblind sensitive readers, see references.
+}
+
+\item{\code{theme_bvbg}}{
+A black/vermillion/blue theme with grey background, for colorblind sensitive readers, see references.
+}
+
 }
 }
 \examples{
-data(Feldspar)
-p <- ggtern(Feldspar,aes(Ab,An,Or)) + 
-     geom_point(aes(colour=T.C,size=P.Gpa)) + 
-     facet_wrap(~Feldspar)
+#Create a list of the theme suffixes
+themesOrg = c('gray','bw','linedraw','light',
+              'dark','minimal','classic','void')
+themesNew = c('custom','darker','rgbw','rgbg','tropical',
+              'matrix','bluelight','bluedark','bvbw','bvbg')
 
-#Uncomment to run
-p + theme_gray()
-p + theme_rgbg()
-p + theme_dark()
+#Iterate over all the suffixes, creating a list of plots
+plotThemes = function(themes){
+   grobs = lapply(themes,function(x){
+     thmName = sprintf("theme_\%s",x)
+     thm = do.call(thmName,args=list(base_size=9))
+     df  = data.frame(label=thmName)
+     ggtern(df) + facet_wrap(~label) + thm
+   })
+   grobs
+}
+
+#Arrange the Original Themes
+grid.arrange(grobs=plotThemes(themesOrg),top = "Collection of Themes (Original)")
+
+#Arrange the New Themes
+grid.arrange(grobs=plotThemes(themesNew),top = "Collection of Themes (New Themes)")
+
+}
+\author{
+Nicholas Hamilton
+}
+\references{
+Okabe, Masataka, and Kei Ito. "How to make figures and presentations that are friendly to color blind people." 
+University of Tokyo (2002). http://jfly.iam.u-tokyo.ac.jp/color/
 }
 

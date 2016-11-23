@@ -56,8 +56,8 @@ to the paired geom/stat.}
 
 \item{linemitre}{Line mitre limit (number greater than 1)}
 
-\item{na.rm}{If \code{FALSE} (the default), removes missing values with
-a warning.  If \code{TRUE} silently removes missing values.}
+\item{na.rm}{If \code{FALSE}, the default, missing values are removed with
+a warning. If \code{TRUE}, missing values are silently removed.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -81,6 +81,8 @@ the default plot specification, e.g. \code{\link{borders}}.}
 }
 \description{
 Calculates the confidence intervals, via the Mahalnobis Distance and use of the \code{\link[=ilr]{Log-Ratio}} Transformation
+
+Statistic
 }
 \section{Aesthetics}{
 
@@ -93,7 +95,9 @@ Same as \code{\link{stat_contour}}
 }
 \examples{
   data(Feldspar)
-  ggtern(data=Feldspar,aes(An,Ab,Or)) + geom_point() + geom_confidence_tern()
+  ggtern(data=Feldspar,aes(An,Ab,Or)) + 
+    geom_point() + 
+    geom_confidence_tern()
 }
 \author{
 Nicholas Hamilton

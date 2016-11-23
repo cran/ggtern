@@ -2,8 +2,8 @@
 #'
 #'@description INTERNAL FUNCTIONS: \code{ggtern} makes use of several non-exported internal functions, list are as follows:
 #'@keywords internal
-#'@name zzz-internal
 #'@rdname undocumented
+#'@name zzz-internal
 NULL
 
 #' \code{ifthenelse} function takes input arguments \code{x}, \code{a} and \code{b} and returns \code{a} if \code{x} is \code{TRUE}, else, returns \code{b}
@@ -35,35 +35,88 @@ is.numericor <- function(A,B){
 #' now additionally searches within the \code{ggtern} namespace prior to the \code{ggplot2} namespace.
 #' @param name character name of object to search for
 #' @param env environment to search within as first priority
+#' @param mode the mode to search within
 #' @keywords internal
 #' @rdname undocumented
-find_global_tern <- function (name, env=environment()){  
+#' @export
+find_global_tern <- function (name, env=environment(),mode='any'){  
   if(!is.character(name)){stop("'name' must be provided as a character")}
   if(!inherits(environment(),"environment")){stop("'env' must inherit the environment class")}
-  if (exists(name, env)){ return(get(name, env))}
+  
+  if (exists(name, envir = env, mode = mode)){ 
+    return(get(name, envir = env, mode = mode))
+  }
+  
   nsenv <- asNamespace("ggtern")
-  if(exists(name, nsenv)){return(get(name, nsenv))}
+  if(exists(name, envir = nsenv, mode=mode)){
+    return(get(name, envir = nsenv, mode = mode))
+  }
+  
   nsenv <- asNamespace("ggplot2")
-  if(exists(name, nsenv)){return(get(name, nsenv))}
+  if(exists(name, envir = nsenv, mode=mode)){
+    return(get(name, envir = nsenv, mode = mode))
+  }
+  
   NULL
 }
 
-#' Generate Axis Breaks and Labels
+#' Convert RGB to HEX Color
 #' 
-#' Calculates the Breaks for Major or Minor Gridlines based 
-#' on the input limits.
+#' Function to convert rgb color to hex color
+#' @param r,g,b colors, numeric scalar between 0 and 255
+#' @keywords internal
+#' @author Nicholas Hamilton
+#' @examples 
+#' #Black
+#' rgb2hex(0,0,0)
+#' 
+#' #White
+#' rgb2hex(255,255,255)
+#' 
+#' #Red
+#' rgb2hex(255,0,0)
+#' 
+#' #Green
+#' rgb2hex(0,255,0) 
+#' 
+#' #Blue
+#' rgb2hex(0,0,255)
+#' 
+#' #Vectorised sequence of blue
+#' rgb2hex(0,0,seq(0,255,by=5))
+#' @export
+rgb2hex = function(r = 0, g = 0, b = 0){
+  df = data.frame(r, g, b)
+  check = function(x, ix = NULL){
+    nm = deparse(substitute(x))
+    ix = as.character({ix %||% ''})
+    if(!is.numeric(x))  stop(sprintf("'%s%s' must be numeric",             nm,ix),call. = FALSE)
+    if(length(x) != 1)  stop(sprintf("'%s%s' must be scalar",              nm,ix),call. = FALSE)
+    if(!is.finite(x))   stop(sprintf("'%s%s' must be finite",              nm,ix),call. = FALSE)
+    if(x < 0 | x > 255) stop(sprintf("'%s%s' must be in the range [0,255]",nm,ix),call. = FALSE)
+  }
+  nr = nrow(df)
+  sapply( c(1:nr), function(ix){
+    n = if(nr > 1){ ix }else{ NULL }
+    r = df$r[ix]; check(r,n)
+    g = df$g[ix]; check(g,n)
+    b = df$b[ix]; check(b,n)
+    sprintf("#%.2x%.2x%.2x",r,g,b) 
+  })
+}
+
+#' Generate Axis Breaks
+#' 
+#' Calculates the Breaks for Major or Minor Gridlines based on the input limits.
 #' @param limits the scale limits
 #' @param isMajor major or minor grids
 #' @param n number of breaks
-#' @param breaks numeric denoting the breaks
-#' @param format the formatting string to be passed through to the \code{\link{sprintf}} function
-#' @param factor the multiplicative factor
-#' @rdname getBreaks
-#' @name getBreaks
-
-#' @rdname getBreaks
+#' @rdname breaks_tern
+#' @examples 
+#'  breaks_tern()
+#'  breaks_tern(limits = c(0,.5),FALSE,10)
 #' @export
-getBreaks <- function(limits = c(0,1), isMajor = TRUE, n = 5){
+breaks_tern <- function(limits = c(0,1), isMajor = TRUE, n = 5){
   if(is.null(limits) || !all(is.numeric(limits)))
     limits = c(0,1)
   
@@ -76,22 +129,43 @@ getBreaks <- function(limits = c(0,1), isMajor = TRUE, n = 5){
   if(!isMajor){
     r = range(ret)
     d = diff(r)/(length(ret)-1)
-    minor = seq(min(ret)-d,max(ret)+d,by=d/2)
-    minor = minor[which(minor >= min(limits) & minor <= max(limits))]
+    minor = seq(min(ret)-d/2,max(ret)+d/2,by = d)
+    minor = minor[which(minor > min(limits) & minor < max(limits))]
     ret   = minor[which(!minor %in% ret)]
   }
   ret
 }
 
-#' @rdname getBreaks
-#' @name getLabels
+
+#' @rdname breaks_tern
+#' @name breaks_tern
+#' @usage NULL
+#' @format NULL
 #' @export
-getLabels = function(limits = c(0,1), breaks = getBreaks(limits), format = "%g", factor = 100){
+getBreaks = function(limits = c(0,1), isMajor = TRUE, n = 5){
+  tern_dep("2.1.4","'getBreaks' has been superceded by the 'breaks' function")
+  breaks_tern(limits,isMajor,n)
+}
+
+#' Generate Axis Labels
+#' 
+#' Calculates the Labels for Major or Minor Gridlines based on the input limits.
+#' @param breaks numeric denoting the breaks to produce corresponding labels
+#' @inheritParams breaks_tern
+#' @param format the formatting string to be passed through to the \code{\link{sprintf}} function
+#' @param factor the multiplicative factor
+#' @examples 
+#' labels_tern()
+#' labels_tern(limits = c(0,.5))
+#' @author Nicholas Hamilton
+#' @rdname labels_tern
+#' @export
+labels_tern = function(limits = c(0,1), breaks = breaks_tern(limits), format = "%g", factor = 100){
   if(!is.numeric(breaks)) 
     stop("'breaks' must be numeric",call.=FALSE)
   
   #Default Result
-  result = 100*breaks
+  result = factor[1]*breaks
   
   #Try and process...
   tryCatch({
@@ -100,7 +174,7 @@ getLabels = function(limits = c(0,1), breaks = getBreaks(limits), format = "%g",
     result = sprintf(format,factor[1]*breaks)
     
     #Stop First Label interfering with the main label
-    if(length(result) > 1) 
+    if(breaks[1] == min(limits))
       result[1] = ''
     
   },error=function(e){ })
@@ -109,8 +183,16 @@ getLabels = function(limits = c(0,1), breaks = getBreaks(limits), format = "%g",
   result
 }
 
-#' 
-#'
+#' @rdname labels_tern
+#' @name labels_tern
+#' @usage NULL
+#' @format NULL
+#' @export
+getLabels = function(limits = c(0,1), breaks = breaks_tern(limits), format = "%g", factor = 100){
+  tern_dep("2.1.4","'getBreaks' has been superceded by the 'breaks' function")
+  labels_tern(limits,breaks,format,factor)
+}
+
 #' \code{tern_dep} is a function that gives a deprecation error, warning, or messsage, 
 #' depending on version number, it is based of the \code{\link[ggplot2]{gg_dep}} function which is
 #' used inside the \code{ggplot2} package
@@ -156,20 +238,24 @@ tern_dep <- function(version, msg) {
 #' @param label character label
 #' @param suffix chacater suffix behind each label
 #' @param sep the seperator between label and suffix 
+#' @param ... additional arguments
+#' @param latex logical as to whether latex formats should be parsed
 #' @keywords internal
 #' @rdname undocumented
-arrow_label_formatter             = function(label,suffix=NULL,sep="/") UseMethod("arrow_label_formatter")
-arrow_label_formatter.default     = function(label,suffix=NULL,sep="/") arrow_label_formatter.character( as.character(label), suffix,sep)
-arrow_label_formatter.call        = function(label,suffix=NULL,sep="/") arrow_label_formatter.expression(as.expression(label),suffix,sep)    
-arrow_label_formatter.expression  = function(label,suffix=NULL,sep="/"){
+arrow_label_formatter             = function(label,suffix=NULL,sep="/",...) UseMethod("arrow_label_formatter")
+arrow_label_formatter.default     = function(label,suffix=NULL,sep="/",...) arrow_label_formatter.character( as.character(label), suffix, sep, ...)
+arrow_label_formatter.call        = function(label,suffix=NULL,sep="/",...) arrow_label_formatter.expression(as.expression(label),suffix, sep, ...)    
+arrow_label_formatter.expression  = function(label,suffix=NULL,sep="/",...){
   suffix = if(suffix  == "")   NULL else suffix
   sep    = if(is.null(suffix)) ""   else .trimAndPad(sep)
   parse(text=paste(as.character(label),suffix,sep))
 }
-arrow_label_formatter.character   = function(label,suffix=NULL,sep="/") {
+arrow_label_formatter.character   = function(label,suffix=NULL,sep="/",latex = FALSE,...) {
   suffix = if(suffix  == "")   NULL else suffix
   sep    = if(is.null(suffix)) ""   else .trimAndPad(sep)
-  TeX(paste(label,suffix,sep=sep)) 
+  result = paste(label,suffix,sep=sep)
+  if(latex[1]) result = TeX(result)
+  result
 }
 .trimAndPad <- function(x){
   x = gsub("^(\\s+)","",gsub("(\\s+)$","",x))
@@ -180,7 +266,8 @@ arrow_label_formatter.character   = function(label,suffix=NULL,sep="/") {
 
 #' \code{label_formatter} is a function that formats / parses labels for use in the grid.
 #' @param label character label
-label_formatter = function(label){ arrow_label_formatter(label,suffix="",sep="") }
+#' @param ... additional arguments
+label_formatter = function(label,...){ arrow_label_formatter(label,suffix="",sep="",...) }
 
 
 #' \code{joinCharacterSeries} is a function will turn a character vector 
@@ -232,9 +319,19 @@ scales_add_missing_tern <- function(plot){
   
   #Ensure required scales have been added
   rs = plot$coordinates$required_scales
-  ggint$scales_add_missing(plot,rs,plot$plot_env) ##NH
+  
+  aesthetics  = setdiff(rs, plot$scales$input())
+  env = plot$plot_env
+  for (aes in aesthetics) {
+    scale_name <- paste("scale", aes, "continuous", sep = "_")
+    scale_f <- find_global_tern(scale_name, env, mode = "function")
+    plot$scales$add(scale_f())
+  }
+  
+  #ggint$scales_add_missing(plot,rs,plot$plot_env) ##NH
   #plot$scales$scales = plot$scales$scales[!sapply(plot$scales$scales,is.null)] 
- 
+  #plot$scales$scales = compact(plot$scales$scales)
+  
   #Push some details to the coordinates
   plot$coordinates$scales        = sapply(rs,plot$scales$get_scales) ##NH
   for(r in rs) 
@@ -264,7 +361,6 @@ layers_add_or_remove_mask = function(plot){
   }
   plot
 } 
-
 
 
 

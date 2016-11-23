@@ -14,12 +14,13 @@ NULL
 #' a new (and equivalent) \code{.element_tree} is created within ggtern to handle the new theme elements created within this package.
 #' @param el the element
 #' @param elname the element name
+#' @author Nicholas Hamilton
 #' @rdname overloaded
 validate_element <- function(el, elname) {
   eldef <- ggint$.element_tree[[elname]]
   
   if (is.null(eldef)) {
-    stop('"', elname, '" is not a valid theme element name...')
+    stop('"', elname, '" is not a valid theme element name.')
   }
   
   # NULL values for elements are OK
@@ -30,7 +31,9 @@ validate_element <- function(el, elname) {
     # but sometimes its a vector like c(0,0)
     if (!is.character(el) && !is.numeric(el))
       stop("Element ", elname, " must be a string or numeric vector.")
-    
+  } else if (eldef$class == "margin") {
+    if (!is.unit(el) && length(el) == 4)
+      stop("Element ", elname, " must be a unit vector of length 4.")
   } else if (!inherits(el, eldef$class) && !inherits(el, "element_blank")) {
     stop("Element ", elname, " must be a ", eldef$class, " object.")
   }
@@ -45,48 +48,35 @@ theme_update <- function(...) {
   theme_set(theme_get() %+replace% do.call(theme, list(...)))
 }
 
-#' @rdname theme_elements
+#' Set theme elements (ggtern version)
+#' 
+#' Use this function to modify theme settings.
 #' @inheritParams ggplot2::theme
+#' @author Nicholas Hamilton
+#' @rdname theme
 #' @export
-theme <- function(..., complete = FALSE) {
+theme <- function(..., complete = FALSE, validate = TRUE) {
   elements <- list(...)
+  
+  if (!is.null(elements$axis.ticks.margin)) {
+    warning("`axis.ticks.margin` is deprecated. Please set `margin` property ",
+            " of `axis.text` instead", call. = FALSE)
+    elements$axis.ticks.margin <- NULL
+  }
+  
   # Check that all elements have the correct class (element_text, unit, etc)
-  mapply(validate_element, elements, names(elements))
-  structure(elements, class = c("theme", "gg"), complete = complete)
+  if (validate) {
+    mapply(validate_element, elements, names(elements))
+  }
+  
+  structure(elements, class = c("theme", "gg"),
+            complete = complete, validate = validate)
 }
-
 
 #' \code{plot_theme} is a local copy of the method that determines the net theme between a plot and the current global theme.
 #' @param x gg object
 #' @rdname overloaded
-plot_theme <- function(x) {defaults(x$theme, ggtern::theme_get())}
-
-
-.theme_new <- (function() {
-  theme <- theme_gray()
-  list(
-    get = function(){theme},
-    set = function(new){
-      ggplot2::theme_set(new) ##HACK
-      thm <- theme_gray()
-      missing <- setdiff(names(thm),names(new))
-      if (length(missing) > 0)
-        warning("New theme missing the following elements: ",paste(missing, collapse = ", "), call. = FALSE)
-      old <- theme
-      theme <<- new
-      invisible(old)
-    }
-  )
-})()
-
-#' @rdname overloaded
-#' @export
-theme_get <- .theme_new$get
-
-#' @rdname overloaded
-#' @export
-theme_set <- .theme_new$set
-
+plot_theme <- function(x) {defaults(x$theme, theme_get())}
 
 
 #' \code{add_theme} is a local copy of the ggplot2 function which modifies the current theme, by a proposed theme. 

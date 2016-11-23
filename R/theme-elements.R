@@ -9,31 +9,29 @@
 #' \code{line}, and all rectangular objects inherit from \code{rect}.
 #'
 #' Modifying the newly created items requires the same procedures as introduced in the ggplot2 \code{\link[ggplot2]{theme}} documentation.
-#' Some convenience functions have been also newly created, proceed to \code{\link{convenience}} for additional information.
+#' Some convenience functions have been also newly created, proceed to \code{\link{theme_convenience_functions}} for additional information.
 #' 
 #' @section New/Additional Inheritance Structures:
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_theme()}
 #' **  \strong{NB:} \code{tern.panel.background}, whilst the ternary area is 'triangular' per-se, \code{\link{element_rect}} has been used, 
 #' as it actually holds NO information regarding the geometry (width, height), only fill, color, 
 #' size and linetype border (ie the style of how it will be rendered).
-#' @aliases themeelements elements newelements theme-tern newthemes newtheme theme 
-#' tern.panel.background tern.plot.background tern.axis.clockwise tern.axis 
-#' tern.axis.hshift tern.axis.vshift tern.axis.line tern.axis.line.T tern.axis.line.L 
-#' tern.axis.line.R tern.axis.text tern.axis.text.T tern.axis.text.L tern.axis.text.R 
-#' tern.axis.arrow.show tern.axis.arrow.sep tern.axis.arrow.start tern.axis.arrow.finish 
-#' tern.axis.arrow tern.axis.arrow.T tern.axis.arrow.L tern.axis.arrow.R tern.axis.arrow.text 
-#' tern.axis.arrow.text.T tern.axis.arrow.text.L tern.axis.arrow.text.R tern.axis.title.show
-#' tern.axis.title tern.axis.title.T tern.axis.title.L tern.axis.title.R tern.axis.ticks.length.major 
-#' tern.axis.ticks.length.minor tern.axis.ticks.outside tern.axis.ticks.primary.show tern.axis.ticks.secondary.show 
-#' tern.axis.ticks tern.axis.ticks.major tern.axis.ticks.major.T tern.axis.ticks.major.L tern.axis.ticks.major.R 
-#' tern.axis.ticks.minor tern.axis.ticks.minor.T tern.axis.ticks.minor.L tern.axis.ticks.minor.R tern.panel.grid.major.show 
-#' tern.panel.grid tern.panel.grid.major tern.panel.grid.major.T tern.panel.grid.major.L tern.panel.grid.major.R 
-#' tern.panel.grid.minor.show tern.panel.grid.minor 
-#' tern.panel.grid.minor.T tern.panel.grid.minor.L tern.panel.grid.minor.R ternary.options
-#' panel.margin.tern tern.panel.expand tern.panel.rotate tern.panel.grid.ontop tern.panel.border.ontop
-#' tern.axis.text.show
+#' @author Nicholas Hamilton
+#' @rdname theme_elements
 #' @name theme_elements
 NULL
+
+
+# Given a theme object and element name, return a grob for the element
+element_render <- function(theme, element, ..., name = NULL) {
+  # Get the element from the theme, calculating inheritance
+  el <- calc_element(element, theme)
+  if (is.null(el)) {
+    message("Theme element ", element, " missing")
+    return(zeroGrob())
+  }
+  ggint$ggname(paste(element, name, sep = "."), element_grob(el, ...))
+}
 
 
 #SEARCH FOR THE ORIGINAL FUNCTIONS
@@ -44,6 +42,7 @@ ggint$.element_tree.orig <- ggint$.element_tree #To determine the new set relati
 ##TERNARY PANEL
 ggint$.element_tree$tern.panel.background          = .el_def("element_rect", "panel.background",     description="Background of Ternary Plot Area**")
 ggint$.element_tree$tern.plot.background           = .el_def("element_rect", "plot.background",      description="Background of Ternary Clipping Area**")
+ggint$.element_tree$tern.plot.latex                = .el_def("logical",                              description="Whether to parse characters as latex commands")
 
 ##AXIS ARROWS
 ggint$.element_tree$tern.axis.hshift               = .el_def("numeric",                              description="Amount to nudge the plot horizontally") #

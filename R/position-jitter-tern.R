@@ -1,8 +1,9 @@
-#' Jitter ternary points to avoid overplotting.
-#'
+#' Jitter Ternary Points
 #' 
+#' Jitter ternary points to avoid overplotting.
 #' @family position adjustments
 #' @param x,y,z amount of positional jitter
+#' @author Nicholas Hamilton
 #' @rdname position_jitter_tern
 #' @export
 position_jitter_tern <- function(x = NULL, y = NULL, z=NULL) {

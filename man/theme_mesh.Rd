@@ -4,14 +4,28 @@
 \alias{theme_mesh}
 \title{Create Grid Mesh}
 \usage{
-theme_mesh(n = 5)
+theme_mesh(n = 5, ...)
 }
 \arguments{
 \item{n}{the 'target' number of major breaks}
+
+\item{...}{additional arguments to be passed through to \code{\link{tern_limits}}}
 }
 \description{
 Convenience function for creation of a grid mesh of an ideal number of 'n' major breaks. Note that 
 the value of 'n' is the target number of breaks, and due to the use of the \code{\link{pretty}} function
-within \code{\link{getBreaks}} convenience function, may not be strictly adhered or reflected.
+within \code{\link{breaks_tern}} convenience function, may not be strictly adhered or reflected.
+}
+\examples{
+#Default example of a target n=10 mesh
+ggtern() + 
+ theme_mesh(10)
+
+#Default example, of a target n=5 mesh, with limiting region
+ggtern() + 
+ theme_mesh(5,T=.5,L=.5,R=.5)
+}
+\author{
+Nicholas Hamilton
 }
 

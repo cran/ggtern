@@ -5,9 +5,7 @@
 #' both use the same arguments. Use \code{geom_smooth_tern} unless you want to
 #' display the results with a non-standard geom.
 #'
-#' @aliases GeomSmoothTern geom_smooth
 #' @inheritParams ggplot2::geom_smooth
-#' @rdname geom_smooth_tern
 #' @param expand expand the range of values by this much (vector of length 2) when fullrange is set to TRUE
 #' @examples 
 #' data(Feldspar)
@@ -15,6 +13,8 @@
 #'   geom_smooth_tern(method=lm,fullrange=TRUE,colour='red') + 
 #'   geom_point() +
 #'   labs(title="Example Smoothing")
+#' @author Nicholas Hamilton
+#' @rdname geom_smooth_tern
 #' @export
 geom_smooth_tern <- function( mapping = NULL, data = NULL,position = "identity",
                               ...,

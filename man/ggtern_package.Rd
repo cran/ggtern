@@ -56,13 +56,13 @@ the transformation procedures when incorporating a 'third' dimention. \strong{NB
 \section{\code{ggtern} New Theme Elements and Heirarchies}{
 
 \code{ggtern} implements many new theme elements and heirarchies which can be tailored on a case-by-case basis. 
-The full list of new elements can is provided \link[=newelements]{HERE}.
+The full list of new elements can is provided \link[=theme_elements]{HERE}.
 }
 
 \section{\code{ggtern} Theme Element Convenience Functions}{
 
 \code{ggtern} has made available a number of convenience functions, for rapid tweaking of common theme elements, for a comprehensive list, 
-see \link[=convenience]{HERE}.
+see \link[=theme_convenience]{HERE}.
 }
 
 \section{\code{ggtern} Modification to Required Aesthetics}{
@@ -77,9 +77,9 @@ This is made possible without affecting the standard ggplot2 behaviour because \
 
 \code{ggtern} ships with a number of datasets, including:
 \enumerate{
-  \item \code{\link[=data_sets_Feldspar]{Elkin and Groves Feldspar Data}}
-  \item \code{\link[=data_sets_USDA]{USDA Textural Classification Data}}
-  \item \code{\link[=data_sets_Fragments]{Grantham and Valbel Rock Fragment Data}}
+  \item \code{\link[=data_Feldspar]{Elkin and Groves Feldspar Data}}
+  \item \code{\link[=data_USDA]{USDA Textural Classification Data}}
+  \item \code{\link[=data_Fragments]{Grantham and Valbel Rock Fragment Data}}
 }
 }
 \examples{
@@ -95,6 +95,7 @@ ggtern(data=df,aes(x,y,z,color=Group)) +
   theme_rgbw() + 
   geom_point() + geom_path() + 
   labs(x="X",y="Y",z="Z",title="Title")
+
 }
 \author{
 Nicholas Hamilton

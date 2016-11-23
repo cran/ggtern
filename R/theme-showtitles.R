@@ -2,12 +2,13 @@
 #' 
 #' Convenience functions to SHOW or HIDE the apex labels.
 #' 
-#' @rdname theme_showtitles
-#' @name theme_showtitles
 #' @examples
 #'  #Load data
 #'  data(Feldspar)
 #'  ggtern(data=Feldspar,aes(An,Ab,Or)) + geom_point() + theme_bw() + theme_hidetitles()
+#' @author Nicholas Hamilton
+#' @rdname theme_showtitles
+#' @name theme_showtitles
 NULL
 
 #' \code{theme_showtitles} is a function that apends to the current theme a flag to switch ON the apex titles.

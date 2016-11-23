@@ -43,11 +43,11 @@
 #'
 #' @section  \code{ggtern} New Theme Elements and Heirarchies:
 #' \code{ggtern} implements many new theme elements and heirarchies which can be tailored on a case-by-case basis. 
-#' The full list of new elements can is provided \link[=newelements]{HERE}.
+#' The full list of new elements can is provided \link[=theme_elements]{HERE}.
 #'
 #' @section  \code{ggtern} Theme Element Convenience Functions:
 #' \code{ggtern} has made available a number of convenience functions, for rapid tweaking of common theme elements, for a comprehensive list, 
-#' see \link[=convenience]{HERE}.
+#' see \link[=theme_convenience]{HERE}.
 #'
 #' @section  \code{ggtern} Modification to Required Aesthetics:
 #' Each geometry has a pre-determined set of \strong{required} aesthetics. These have been modifid such that where \code{x} and \code{y} were previously 
@@ -58,9 +58,9 @@
 #' @section  \code{ggtern} Provided Datasets:
 #' \code{ggtern} ships with a number of datasets, including:
 #' \enumerate{
-#'   \item \code{\link[=data_sets_Feldspar]{Elkin and Groves Feldspar Data}}
-#'   \item \code{\link[=data_sets_USDA]{USDA Textural Classification Data}}
-#'   \item \code{\link[=data_sets_Fragments]{Grantham and Valbel Rock Fragment Data}}
+#'   \item \code{\link[=data_Feldspar]{Elkin and Groves Feldspar Data}}
+#'   \item \code{\link[=data_USDA]{USDA Textural Classification Data}}
+#'   \item \code{\link[=data_Fragments]{Grantham and Valbel Rock Fragment Data}}
 #' }
 #' @examples
 #' ##-----------------------------------------------
@@ -75,9 +75,6 @@
 #'   theme_rgbw() + 
 #'   geom_point() + geom_path() + 
 #'   labs(x="X",y="Y",z="Z",title="Title")
-#' @aliases ggtern-package
-#' @name    ggtern_package
-#' @rdname  ggtern_package
 #' 
 #' @import ggplot2 gtable plyr proto lattice gridExtra
 #' @importFrom scales rescale censor squish_infinite expand_range squish fullseq
@@ -89,4 +86,7 @@
 #' @importFrom grid grid.edit pop.viewport grid.path getGrob childNames convertNative grid.polygon grid.yaxis viewport.layout grid.multipanel grid.reorder engine.display.list is.grob grid.move.to placeGrob layout.heights viewport removeGrob grid.gedit layout.widths xsplinePoints absolute.size grid.legend nullGrob makeContent convertX explode convertY plotViewport functionGrob forceGrob arcCurvature grid.abline grid.gremove grid.display.list grid.convert setChildren rasterGrob addGrob vpTree grid.grob xaxisGrob depth grid.locator grid.gget calcStringMetric rectGrob grid.place grid.newpage nestedListing grid.revert grid.grabExpr grid.bezier grid.xaxis gpar yDetails grid.circle gPath grid.panel current.rotation grid.points seekViewport grid.collection current.parent layout.torture pushViewport grobName grid.cap grid.clip grobWidth vpList xDetails grid.copy unit.length current.transform push.viewport resolveRasterSize grid.polyline grid.arrows grid.pretty popViewport grid.convertHeight grid.refresh grid.text grid.convertX grid.convertY applyEdits grid.show.layout stringAscent valid.just grid.strip dataViewport pointsGrob resolveHJust grobAscent reorderGrob gEdit segmentsGrob polylineGrob draw.details grid.frame editGrob editDetails showViewport lineToGrob moveToGrob applyEdit unit.pmin grid.ls grobPathListing grid.pack convertWidth stringWidth linesGrob textGrob grob grid.add grid.delay makeContext grid.curve grid.force arrowsGrob current.vpTree grid.record convertHeight legendGrob grid.set setGrob preDrawDetails bezierPoints grobHeight grid.xspline stringDescent getNames current.viewport pathGrob gTree yaxisGrob convertUnit vpPath grid.plot.and.legend current.vpPath grid.function frameGrob grid.grep viewport.transform ascentDetails grid.remove grid.DLapply grobTree grid.draw downViewport unit.c pathListing packGrob grid.get unit.pmax is.unit curveGrob gEditList grid.grab grid.null grid.layout grid.raster heightDetails showGrob stringHeight widthDetails circleGrob roundrectGrob upViewport vpStack grid.segments layoutRegion gList grobDescent grid.rect unit.rep xsplineGrob grid.roundrect clipGrob grid.lines grid.grill grid.convertWidth drawDetails grid.show.viewport validDetails grid.line.to polygonGrob bezierGrob get.gpar resolveVJust grobX descentDetails grobY postDrawDetails
 #' 
 #' @author Nicholas Hamilton
+#' @aliases ggtern-package
+#' @name    ggtern_package
+#' @rdname  ggtern_package
 NULL

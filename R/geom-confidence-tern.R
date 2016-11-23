@@ -10,7 +10,9 @@
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "ConfidenceTern")}
 #' @examples
 #'   data(Feldspar)
-#'   ggtern(data=Feldspar,aes(An,Ab,Or)) + geom_point() + geom_confidence_tern()
+#'   ggtern(data=Feldspar,aes(An,Ab,Or)) + 
+#'     geom_point() + 
+#'     geom_confidence_tern()
 #' @aliases geom_confidence
 #' @name   geom_confidence_tern
 #' @rdname geom_confidence_tern

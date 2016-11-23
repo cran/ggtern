@@ -14,4 +14,7 @@ theme_ticksinside()
 \code{theme_ticksinside} is a function that ensures the ticks are placed INSIDE of the plot area 
 (opposite to \code{theme_ticksoutside})
 }
+\author{
+Nicholas Hamilton
+}
 

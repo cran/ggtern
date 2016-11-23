@@ -14,18 +14,15 @@ theme_clockwise()
 theme_anticlockwise()
 
 theme_counterclockwise()
-
-tern_clockwise()
-
-tern_anticlockwise()
-
-tern_counterclockwise()
 }
 \description{
 \code{theme_clockwise, theme_anticlockwise} (or their aliasses) are function that instructs the axes 
 precession to be clockwise or anticlockwise respectively.
 }
 \details{
-If the \code{\link{tern.axis.arrow.show}} value is \code{FALSE}, these functions will set it to \code{TRUE}.
+If the \code{tern.axis.arrow.show} value is \code{FALSE}, these functions will set it to \code{TRUE}.
+}
+\author{
+Nicholas Hamilton
 }
 

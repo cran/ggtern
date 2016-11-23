@@ -3,9 +3,7 @@
 #' Plot fixed value lines, for the top, left and right axis, analagous to the \code{\link{geom_hline}}
 #' and \code{\link{geom_vline}} geometries in \code{\link[=ggplot]{ggplot2}}
 #' 
-#' @name geom_Xline
 #' @aliases geom_Tline geom_Lline geom_Rline Tline tline Lline lline Rline rline
-#' @author Nicholas Hamilton
 #' @inheritParams ggplot2:::geom_hline
 #' @param Tintercept,Lintercept,Rintercept the intercepts for the T, L and R axis respectively
 #' @examples 
@@ -13,12 +11,13 @@
 #' geom_Tline(Tintercept=.5,arrow=arrow(), colour='red') + 
 #' geom_Lline(Lintercept=.2, colour='green') + 
 #' geom_Rline(Rintercept=.1, colour='blue')
+#' @author Nicholas Hamilton
 #' @rdname geom_Xline
+#' @name geom_Xline
 NULL
 
-#' @export
-#' @name geom_Xline
 #' @rdname geom_Xline
+#' @export
 geom_Tline <- function(mapping = NULL, data = NULL,
                        ...,
                        Tintercept,
@@ -59,16 +58,16 @@ GeomTline <- ggproto("GeomTline",Geom,
                      draw_key = draw_key_Tline
 )
 
-#' @export
 #' @rdname geom_Xline
+#' @export
 Tline <- geom_Tline
 
+#' @rdname geom_Xline
 #' @export
-#' @name geom_Xline
 tline <- Tline
 
-#' @export
 #' @rdname geom_Xline
+#' @export
 geom_Lline <- function(mapping = NULL, data = NULL,
                        ...,
                        Lintercept,
@@ -96,10 +95,10 @@ geom_Lline <- function(mapping = NULL, data = NULL,
   )
 }
 
-#' @export
-#' @rdname geom_Xline
+#' @rdname  geom_Xline
 #' @format NULL
 #' @usage NULL
+#' @export
 GeomLline <- ggproto("GeomLline",Geom,
                      draw_panel = function(self,data, panel_scales,coord){
                        .drawTRLLinesX(self,data,panel_scales,coord,'L')
@@ -109,16 +108,16 @@ GeomLline <- ggproto("GeomLline",Geom,
                      draw_key = draw_key_Lline
 )
 
-#' @export
 #' @rdname geom_Xline
+#' @export
 Lline <- geom_Lline
 
+#' @rdname geom_Xline
 #' @export
-#' @name geom_Xline
 lline <- Lline
 
-#' @export
 #' @rdname geom_Xline
+#' @export
 geom_Rline <- function(mapping = NULL, data = NULL,
                        ...,
                        Rintercept,
@@ -146,10 +145,10 @@ geom_Rline <- function(mapping = NULL, data = NULL,
   )
 }
 
-#' @export
-#' @rdname geom_Xline
+#' @rdname  geom_Xline
 #' @format NULL
 #' @usage NULL
+#' @export
 GeomRline <- ggproto("GeomRline",Geom,
                      draw_panel = function(self,data, panel_scales,coord){
                        .drawTRLLinesX(self,data,panel_scales,coord,'R')
@@ -159,12 +158,13 @@ GeomRline <- ggproto("GeomRline",Geom,
                      draw_key = draw_key_Rline
 )
 
-#' @export
 #' @rdname geom_Xline
+#' @export
 Rline <- geom_Rline
 
+
+#' @rdname geom_Xline
 #' @export
-#' @name geom_Xline
 rline <- Rline
 
 
@@ -193,9 +193,10 @@ rline <- Rline
   featIntercept = sprintf("%sintercept",feat)
   for(x in c(0:1) ){
     s = if(x == 0) "" else "end"
+    limits = coord$scales[[ names(others)[2-x] ]]$limits %||% c(0,1)
     data[,sprintf("%s%s",mapping[[feat]],s) ] = data[,featIntercept]
-    data[,sprintf("%s%s",  others[[1+x]],s) ] = 1 - data[, mapping[[feat]] ] - min(coord$scales[[ names(others)[2-x] ]]$limits)
-    data[,sprintf("%s%s",  others[[2-x]],s) ] = min(coord$scales[[ names(others)[2-x] ]]$limits)
+    data[,sprintf("%s%s",  others[[1+x]],s) ] = 1 - data[, mapping[[feat]] ] - min(limits)
+    data[,sprintf("%s%s",  others[[2-x]],s) ] = min(limits)
   }
   scale_details = list( x.range = ranges[['x']], y.range = ranges[['y']] )
   data          = coord$transform(data,scale_details)

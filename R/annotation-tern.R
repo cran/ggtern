@@ -29,6 +29,7 @@
 #'               color = c("green","red",'blue')) +
 #'   theme_dark() + 
 #'   theme_nomask()
+#' @author Nicholas Hamilton
 #' @export
 annotate <- function(geom, 
                           x = NULL, y = NULL, z = NULL,

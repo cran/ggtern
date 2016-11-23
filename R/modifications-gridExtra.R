@@ -3,7 +3,8 @@
 #' A very slight modification to the original function, removing the explicit direction to use the ggplotGrob function
 #' from the ggplot2 namespace
 #' @inheritParams gridExtra::arrangeGrob
-#' @rdname modification-gridExtra
+#' @author Nicholas Hamilton
+#' @rdname arrangeGrob
 #' @export
 arrangeGrob = function (..., grobs = list(...), layout_matrix, vp = NULL, name = "arrange", 
                         as.table = TRUE, respect = FALSE, clip = "off", nrow = NULL, 
@@ -123,7 +124,8 @@ arrangeGrob = function (..., grobs = list(...), layout_matrix, vp = NULL, name =
 
 #' @inheritParams gridExtra::arrangeGrob
 #' @inheritParams gridExtra::grid.arrange
-#' @rdname modification-gridExtra
+#' @rdname arrangeGrob 
+#' @aliases grid.arrange
 #' @export
 grid.arrange = function (..., newpage = TRUE) {
   if (newpage) 

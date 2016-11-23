@@ -1,21 +1,24 @@
 Package: ggtern
 Type: Package
 Title: An Extension to 'ggplot2', for the Creation of Ternary Diagrams
-Version: 2.1.4
-Date: 2016-7-16
+Version: 2.2.0
+Date: 2016-11-23
 Description: Extends the functionality of 'ggplot2', providing the capability
     to plot ternary diagrams for (subset of) the 'ggplot2' geometries. Additionally,
     'ggtern' has implemented several NEW geometries which are unavailable to the
     standard 'ggplot2' release. For further examples and documentation, please
     proceed to the 'ggtern' website.
-Depends: ggplot2 (>= 2.1.0)
+Authors@R: 
+  person("Nicholas","Hamilton", ,"nick@ggtern.com", role = c("aut", "cre"))
+Author: Nicholas Hamilton [aut, cre]
+Maintainer: Nicholas Hamilton <nick@ggtern.com>
+Depends: ggplot2 (>= 2.2.0)
 Imports: compositions, grid, gridExtra, gtable (>= 0.1.2), latex2exp
         (>= 0.4), MASS, plyr (>= 1.8.3), scales (>= 0.3.0), stats,
         proto, utils, lattice
 Enhances: sp
 License: GPL-2
 URL: http://www.ggtern.com
-LazyData: true
 Collate: 'ggtern-package.R' 'aes.R' 'coord-tern.R' 'calc-tern-tlr2xy.R'
         'calc-mahalanobis-distance.R' 'calc-kde2d-weighted.R'
         'doc-data.R' 'doc-theme-convenience.R' 'depreciated.R'
@@ -27,10 +30,11 @@ Collate: 'ggtern-package.R' 'aes.R' 'coord-tern.R' 'calc-tern-tlr2xy.R'
         'strip-unapproved.R' 'tern-limits.R' 'theme.R'
         'theme-arrowlength.R' 'theme-clockwise.R' 'theme-defaults.R'
         'theme-elements.R' 'theme-gridsontop.R' 'theme-bordersontop.R'
-        'theme-legend-position.R' 'theme-mesh.R' 'theme-noarrows.R'
-        'theme-nomask.R' 'theme-novar-tern.R' 'theme-rotate.R'
-        'theme-showgrid.R' 'theme-showlabels.R' 'theme-showsecondary.R'
-        'theme-showtitles.R' 'theme-ticksoutside.R' 'utilities.R'
+        'theme-legend-position.R' 'theme-latex.R' 'theme-mesh.R'
+        'theme-noarrows.R' 'theme-nomask.R' 'theme-novar-tern.R'
+        'theme-rotate.R' 'theme-showgrid.R' 'theme-showlabels.R'
+        'theme-showsecondary.R' 'theme-showtitles.R'
+        'theme-ticksoutside.R' 'theme-zoom.R' 'utilities.R'
         'utilities-help.R' 'geom-density-tern.R' 'stat-density-tern.R'
         'geom-mask.R' 'geom-Xline.R' 'geom-Xisoprop.R'
         'geom-confidence-tern.R' 'stat-confidence-tern.R'
@@ -40,9 +44,7 @@ Collate: 'ggtern-package.R' 'aes.R' 'coord-tern.R' 'calc-tern-tlr2xy.R'
         'geom-point-swap.R' 'annotation-tern.R'
         'annotation-raster-tern.R'
 NeedsCompilation: no
-Author: Nicholas Hamilton [aut, cre]
-Maintainer: Nicholas Hamilton <nick@ggtern.com>
 Repository: CRAN
 RoxygenNote: 5.0.1
-Packaged: 2016-07-21 11:26:53 UTC; nick
-Date/Publication: 2016-07-22 01:39:03
+Packaged: 2016-11-23 13:36:18 UTC; nick
+Date/Publication: 2016-11-23 17:24:09

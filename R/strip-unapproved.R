@@ -19,9 +19,9 @@
 #' progress with regards to the \code{ggtern} package.
 #' 
 #' @aliases approved_stat approved_geom approved_position
+#' @author Nicholas Hamilton
 #' @name approved_layers
 #' @rdname approved_layers
-#' @author Nicholas Hamilton
 NULL
 
 #' Strip Unapproved Layers
@@ -33,55 +33,30 @@ NULL
 #' 
 #' @param layers list of the layers to strip unnaproved layers from.
 #' @return \code{strip_unapproved} returns a list of approved layers (may be empty if none are approved).
-#' @author Nicholas Hamilton
-#' @keywords internal
-strip_unapproved <- function(layers){  
-  ##Remove Unapproved Ternary Layers:
-  tryCatch({
-    L <- length(layers)
-    for(ix in L:1){ #backwards.
-      layer = layers[[ix]]
-      if(inherits(layer,"ggproto")){
-        
-        #Get the geom and stat name for this layer
-        geomName <- class(layer$geom)[1]
-        statName <- class(layer$stat)[1]
-        postName <- class(layer$position)[1]
-        
-        #Reset
-        remove = FALSE
-        
-        #Check the Geometries
-        if(!any(geomName %in% .approvedgeom)){
-          msg = sprintf("Removing Layer %i ('%s'), as it is not an approved geometry (for ternary plots) under the present ggtern package.",
-                        (L - ix + 1),
-                        paste(geomName,collapse="', '"))
-          warning(msg,call. = FALSE)
-          remove = TRUE
-          
-        #Check the Stats
-        } else if(!any(statName %in% .approvedstat)){
-          msg = sprintf("Removing Layer %i ('%s'), as it is not an approved stat (for ternary plots) under the present ggtern package.",
-                        (L - ix + 1),
-                        paste(statName,collapse="', '"))
-          warning(msg,call. = FALSE)
-          remove = TRUE
-          
-        #Check the Positions
-        } else if(!any(postName %in% .approvedposition)){
-          msg = sprintf("Removing Layer %i ('%s'), as it is not an approved position (for ternary plots) under the present ggtern package.",
-                        (L - ix + 1),
-                        paste(postName,collapse="', '"))
-          warning(msg,call. = FALSE)
-          remove = TRUE
-        }
-        
-        #Instructed to remove
-        if(remove) layers[[ix]] <- NULL
-      }
+strip_unapproved <- function(layers){
+  layers = lapply(seq_along(layers),function(ix){
+    layer    <- layers[[ix]]
+    f <- function(type,name)
+      sprintf("Removing Layer %i ('%s'), as it is not an approved %s (for ternary plots) under the present ggtern package.", 
+              ix,paste(name,collapse="', '"),type)
+    n = class(layer$geom)[1]
+    if(!any(n %in% .approvedgeom)){
+      warning(f('geometry',n),call.=FALSE)
+      return(NULL)
     }
-  },error=function(e){})
-  layers
+    n = class(layer$stat)[1]
+    if(!any(n %in% .approvedstat)){
+      warning(f('stat',n),call.=FALSE)
+      return(NULL)
+    }
+    n = class(layer$position)[1]
+    if(!any(n %in% .approvedposition)){
+      warning(f('position',n),call.=FALSE)
+      return(NULL)
+    }
+    layer
+  })
+  compact(layers)
 }
 
 #LIST OF APPROVED GEOMS
@@ -138,10 +113,19 @@ strip_unapproved <- function(layers){
 
 #Method for building rd file
 .rd_approvedX <- function(type="geom"){
-  if(!type %in% c('geom','stat','position')) stop("Invalid type",call.=FALSE)
+  if(!type %in% c('geom','stat','position')) 
+    stop("Invalid type",call.=FALSE)
+  
+  theNames = .nonBlankNames(type)
+  theObjs  = unlist(lapply(theNames,function(x){
+    o = sprintf("%s_%s",type,x)
+    #if(find(o) != 'package:ggplot2') 
+    o = sprintf("\\link{%s}",o)
+    o
+  }))
   paste(sprintf("The following %ss have been approved so far, including a combination of existing %ss and newly created %ss for the ggtern package\n",type,type,type),
         sprintf("APPROVED %ss in \\code{ggtern} are as follows:\n\n\\itemize{\n",type),
-        paste( sprintf("\\item\\code{\\link{%s_",type),.nonBlankNames(type),"}}",collapse="\n", sep = ""),
+        paste("\\item\\code{",theObjs,"}",collapse="\n",sep=""),
         "\n}\n",sep = "")
 }
 

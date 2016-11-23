@@ -19,7 +19,7 @@
 #'                      breaks=seq(0,1000,by=100),
 #'                      aes(fill=..level..),expand=1) +
 #'                      geom_point()
-#' @name geom_interpolate_tern
+#' @author Nicholas Hamilton                    
 #' @rdname geom_interpolate_tern
 #' @export
 geom_interpolate_tern <- function( mapping = NULL, data = NULL, 
@@ -48,7 +48,6 @@ geom_interpolate_tern <- function( mapping = NULL, data = NULL,
   )
 }
 
-#' @name geom_interpolate_tern
 #' @rdname geom_interpolate_tern
 #' @format NULL
 #' @usage NULL

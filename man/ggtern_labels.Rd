@@ -114,7 +114,14 @@ labs( x       = "NaAlSi_3O_8",
       yarrow  = "Anorthite (Na,K)AlSi_3O_8",
       z       = "KAlSi_3O_8",
       zarrow  = "Orthoclase KAlSi_3O_8") + 
-geom_point() + theme_showarrows() + theme_clockwise() + weight_percent()
+theme_latex(TRUE) + 
+geom_point() + 
+theme_showarrows() + 
+theme_clockwise() + 
+weight_percent()
+}
+\author{
+Nicholas Hamilton
 }
 \seealso{
 ggplot2 \code{\link[ggplot2]{labs}}

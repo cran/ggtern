@@ -74,5 +74,8 @@ is fleshed out as layers are added. This method is useful when
 multiple data frames are used to produce different layers, as
 is often the case in complex graphics.
 }
+\author{
+Nicholas Hamilton
+}
 \keyword{hplot}
 

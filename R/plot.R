@@ -31,6 +31,8 @@
 #' multiple data frames are used to produce different layers, as
 #' is often the case in complex graphics.
 #' @inheritParams ggplot2::ggplot
+#' @author Nicholas Hamilton
+#' @rdname ggplot
 #' @export
 ggplot <- function(data = NULL, mapping = aes(), ...,
                    environment = parent.frame()) {
