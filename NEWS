@@ -1,3 +1,20 @@
+ggtern 2.2.1
+----------------------------------------------------------------
+* Modified the masked ggplot_gtable and ggplot_build functions, to call the parent versions if the plot is not ternary (ie the functions within the starndard ggplot2 plot), reducing the fragility of the ggtern package to changes in ggplot2
+* Approved geom_encircle from the ggalt package as an approved geometry, as requested by David Zakharov.
+* Fixed error warning excess aesthetic
+* Fixed issue w/ theme, where element blank was being ignored.
+* Mean Ellipses Geomery. Thanks to Ashton Drew from KDV Decision Analysis for requesting this.
+* Fixed inheritence of ternary ticks (tern.axis.ticks), which previousl inherited from axis.line, when it really should inherit from axis.ticks.
+* New Labelling Geometries, geom_text_viewport and geom_label_viewport, for positioning text and labels at fractional coordinates relative to the panel viewport.
+
+ggtern 2.2.0
+----------------------------------------------------------------
+* Tidied up strip_unnaproved function
+* Removed hidden functions no longer used
+* Fixed ggproto modifications, plot build, plot construction and ternary scales
+* Documentation Improvements
+
 ggtern 2.1.5
 ----------------------------------------------------------------
 * Fixed bug to do with theme element rendering, some properties were being ignored (Thanks to Ivan Galvan for picking up on this)

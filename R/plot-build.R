@@ -18,17 +18,18 @@
 #' @rdname ggplot_build
 #' @export
 ggplot_build <- function(plot) {
+  #Check if plot is ternary plot, if not, call the parent method
+  isTernary = inherits(plot$coordinates,'CoordTern') ##NH
+  if(!isTernary) 
+    return( ggplot2::ggplot_build(plot) )
+  
   plot <- ggint$plot_clone(plot)
   if (length(plot$layers) == 0) {
     plot <- plot + geom_blank()
   }
   
-  #Check if plot is ternary plot, Add clipping mask if necessary
-  isTernary = inherits(plot$coordinates,'CoordTern') ##NH
-  if(isTernary){
-    plot$layers <- strip_unapproved(plot$layers) ##NH
-    plot <- layers_add_or_remove_mask(plot)
-  }
+  plot$layers <- strip_unapproved(plot$layers) ##NH
+  plot <- layers_add_or_remove_mask(plot)
   
   #Check the Layers
   layers <- plot$layers
@@ -158,6 +159,11 @@ layer_data <- function(plot, i = 1L) {
 #' @rdname ggplot_gtable
 #' @export
 ggplot_gtable <- function(data) {
+  #Check if plot is ternary plot, if not, call the parent method
+  isTernary  <- inherits(data$plot$coordinates,'CoordTern') ##NH
+  if(!isTernary) 
+    return( ggplot2::ggplot_gtable(data) )
+  
   plot       <- data$plot
   layout     <- data$layout
   data       <- data$data
@@ -167,13 +173,12 @@ ggplot_gtable <- function(data) {
                     plot$layers, data)
   plot_table <- layout$render(geom_grobs, data, plot$coordinates, theme, plot$labels) ##NH 
   
-  #Check if plot is ternary plot
-  isTernary  <- inherits(plot$coordinates,'CoordTern') ##NH
-  if(isTernary){#NH
+  #Check if plot is ternary plot -- PLOT IS TERNARY, based on above return statement
+  #if(isTernary){ #NH
     latex = calc_element('tern.plot.latex', theme, verbose = FALSE)
     plot$labels = lapply(plot$labels,function(x) label_formatter(x,latex = latex))
     plot_table = plot$coordinates$remove_labels(plot_table)
-  }
+  #}
   
   # Legends
   position <- theme$legend.position

@@ -141,48 +141,16 @@ add_theme <- function(t1, t2, t2name) {
 #' @param newtheme new theme object
 #' @rdname overloaded
 update_theme <- function(oldtheme, newtheme) {
-  # If the newtheme is a complete one, don't bother searching
-  # the default theme -- just replace everything with newtheme
-  if (attr(newtheme, "complete"))
+  if (attr(newtheme, "complete")) 
     return(newtheme)
-  
-  # These are elements in newtheme that aren't already set in oldtheme.
-  # They will be pulled from the default theme.
-  newitems <- ! names(newtheme) %in% names(oldtheme)
+  newitems <- !names(newtheme) %in% names(oldtheme)
   newitem_names <- names(newtheme)[newitems]
   oldtheme[newitem_names] <- theme_get()[newitem_names]
-  
-  # Update the theme elements with the things from newtheme
-  # Turn the 'theme' list into a proper theme object first, and preserve
-  # the 'complete' attribute. It's possible that oldtheme is an empty
-  # list, and in that case, set complete to FALSE.
-  oldtheme <- do.call(theme, c(oldtheme,complete = isTRUE(attr(oldtheme, "complete"))))
-  
+  old.validate <- isTRUE(attr(oldtheme, "validate"))
+  new.validate <- isTRUE(attr(newtheme, "validate"))
+  oldtheme <- do.call(theme, c(oldtheme, complete = isTRUE(attr(oldtheme, 
+                                                                "complete")), validate = old.validate & new.validate))
   oldtheme + newtheme
-}
-
-#' \code{combine_elements} is a local copy of the ggplot2 function that combines two theme elements
-#' @rdname overloaded
-#' @param e1 first element
-#' @param e2 second element
-combine_elements <- function(e1, e2) {
-  
-  # If e2 is NULL, nothing to inherit
-  if (is.null(e2))  return(e1)
-  
-  # If e1 is NULL, or if e2 is element_blank, inherit everything from e2
-  if (is.null(e1) || inherits(e2, "element_blank"))  return(e2)
-  
-  # If e1 has any NULL properties, inherit them from e2
-  n <- vapply(e1[names(e2)], is.null, logical(1))
-  e1[n] <- e2[n]
-  
-  # Calculate relative sizes
-  if (ggint$is.rel(e1$size)) {
-    e1$size <- e2$size * unclass(e1$size)
-  }
-  
-  e1
 }
 
 

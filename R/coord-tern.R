@@ -406,19 +406,20 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
 .render.background <- function(self,data.extreme,theme,items){
   tryCatch({
       e <- calc_element('tern.panel.background',theme=theme,verbose=F)
-      if(!identical(e,element_blank())){
-        grob  <- polygonGrob( data.extreme$x, 
+      if(inherits(e, "element_blank"))
+        return(items)
+      
+      g <- polygonGrob( data.extreme$x, 
                               data.extreme$y, 
                               default.units = "npc",
                               id   = rep(1,nrow(data.extreme)),
-                              gp   = gpar(  col  = e$colour,
-                                            fill = alpha(e$fill,ifthenelse(!is.numeric(e$alpha),1,e$alpha)),
+                              gp   = gpar(  col  = e$colour %||% 'transparent',
+                                            fill = alpha(e$fill %||% 'transparent',ifthenelse(!is.numeric(e$alpha),1,e$alpha)),
                                             lwd  = 0, #ifthenelse(!is.numeric(e$size),0,e$size)*find_global_tern(".pt"),
                                             lty  = e$linetype
                               )
-        )
-        items[[length(items) + 1]] <- grob
-      }
+      )
+      items[[length(items) + 1]] <- g
   },error = function(e){ 
     warning(e) 
   })
@@ -429,11 +430,14 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   tryCatch({
     #e      = calc_element('tern.panel.background',theme,verbose=F)
     e      = calc_element('panel.border',theme,verbose=F)
-    if(identical(e,element_blank())) return(items)
+    if(inherits(e, "element_blank"))
+      return(items)
     ex     = rbind(data.extreme,data.extreme[1,])
     grob   = ggint$element_grob.element_line(e,size=e$size,x=ex$x,y=ex$y)
     items[[length(items) + 1]] = grob
-  },error=function(e){ })
+  },error=function(e){ 
+    warning(e)
+  })
   items
 }
 
@@ -450,7 +454,9 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     tryCatch({
       grob = element_render(theme,name, x = data.extreme$x[c(s,f)], y = data.extreme$y[c(s,f)])
       items[[length(items) + 1]] <- grob
-    },error=function(e){ warning(e) })
+    },error=function(e){ 
+      #warning(e) 
+    })
     items
   }
  
@@ -482,11 +488,33 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   #Function to render the grobs
   grobs  <- function(name,items,df,primary=TRUE){
     tryCatch({  
-      ix.x   = c('x','xend'); if(!primary) ix.x = paste0(ix.x,'.sec')
-      ix.y   = c('y','yend'); if(!primary) ix.y = paste0(ix.y,'.sec')
-      grob  = lapply(1:nrow(df),function(x){ element_render(theme,name,x=df[x,ix.x],y=df[x,ix.y]) })
-      items = c(items,grob)
-    },error = function(e){ warning(e) })
+      append = function(x) paste0(x,if(primary) NULL else '.sec')
+      ix.x   = append(c('x','xend'))
+      ix.y   = append(c('y','yend'))
+      
+      e = calc_element(name,theme)
+      if(inherits(e, "element_blank"))
+        return(items)
+      
+      
+      g = lapply(1:nrow(df),function(ix){ 
+        segmentsGrob(x0 = df[ix,ix.x[1]], 
+                     x1 = df[ix,ix.x[2]], 
+                     y0 = df[ix,ix.y[1]], 
+                     y1 = df[ix,ix.y[2]],
+                     default.units ="npc",
+                     arrow         = NULL,
+                     gp            = gpar(col     = e$colour %||% 'transparent', 
+                                          lty     = e$linetype,
+                                          lineend = 'butt',
+                                          lwd     = e$size %||% 0)
+        )
+      })
+      
+      items = c(items,g)
+    },error = function(e){ 
+      warning(e) 
+    })
     items
   }
   
@@ -528,8 +556,9 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   grobs <- function(name,items,df,outside,showprimary){ 
     tryCatch({
       df        = df[which(df$Labels != ''),]
-      e         = calc_element(name,theme=theme,verbose=F)
-      if(empty(df) || identical(e,element_blank())) 
+      e         = calc_element(name,theme,verbose=FALSE)
+      
+      if(empty(df) || inherits(e, "element_blank"))
         return(items)
       
       latex     = calc_element('tern.plot.latex',theme)
@@ -540,17 +569,28 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       angle     = is.numericor(e$angle,0) + is.numericor(unique(df$Angle.Text)[1],0)
       dA        = angle - atan2(ytf - yts, xtf - xts)*180/pi #DEGREES, Angle Difference between Ticks and Labels
       adj       = as.numeric(!outside)
-      grob      = element_render(theme, name,
-                                 label = label_formatter(df$Labels,latex=latex),
-                                 angle = angle,
-                                 x     = ifthenelse(showprimary || !outside,xtf,xts) + 
-                                   convertX(cos(pi*(df$Angle/180 + adj))*unit(2,'pt'),'npc',valueOnly = T),
-                                 y     = ifthenelse(showprimary || !outside,ytf,yts) + 
-                                   convertY(sin(pi*(df$Angle/180 + adj))*unit(2,'pt'),'npc',valueOnly = T),
-                                 hjust = +0.5*cos(pi*(dA/180 - 1)) + is.numericor(e$hjust,0), #BACK TO RADIANS
-                                 vjust = -0.5*sin(pi*(dA/180 - 1)) + is.numericor(e$vjust,0)) #BACK TO RADIANS
-      items[[length(items) + 1]] <- grob
-    },error = function(e){ warning(e) })
+      
+      g = textGrob(
+        label   = label_formatter(df$Labels,latex=latex),
+        x       = ifthenelse(showprimary || !outside,xtf,xts) + convertX(cos(pi*(df$Angle/180 + adj))*unit(2,'pt'),'npc',valueOnly = T),
+        y       = ifthenelse(showprimary || !outside,ytf,yts) + convertY(sin(pi*(df$Angle/180 + adj))*unit(2,'pt'),'npc',valueOnly = T),
+        hjust   = +0.5*cos(pi*(dA/180 - 1)) + is.numericor(e$hjust,0), #BACK TO RADIANS
+        vjust   = -0.5*sin(pi*(dA/180 - 1)) + is.numericor(e$vjust,0), #BACK TO RADIANS
+        rot     = angle,
+        default.units = 'npc',
+        gp  = gpar(
+          col        = e$colour %||% 'transparent',
+          fontsize   = e$size %||% 0,
+          fontfamily = e$family,
+          fontface   = e$fontface,
+          lineheight = e$lineheight
+        )
+      )
+      
+      items[[length(items) + 1]] <- g
+    },error = function(e){ 
+      warning(e) 
+    })
     items
   }
   
@@ -603,13 +643,25 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   
   grobs   <- function(name,items,df,showgrid.major=TRUE,showgrid.minor=TRUE){
     if((unique(df$Major) & showgrid.major) | (!unique(df$Major) & showgrid.minor)){
-      tryCatch({  
-        ixx   = c('x','xend.grid'); ixy = c('y','yend.grid')
-        grob  = lapply(1:nrow(df),function(x){ 
-          element_render(theme,name,x=df[x,ixx],y=df[x,ixy]) 
+      tryCatch({
+        e = calc_element(name,theme)
+        g = lapply(1:nrow(df),function(ix){ 
+          segmentsGrob(x0 = df$x[ix], 
+                       x1 = df$xend.grid[ix], 
+                       y0 = df$y[ix], 
+                       y1 = df$yend.grid[ix],
+                       default.units ="npc",
+                       arrow         = NULL,
+                       gp            = gpar(col     = e$colour %||% 'transparent', 
+                                            lty     = e$linetype,
+                                            lineend = 'butt',
+                                            lwd     = (e$size %||% 0)*.pt)
+          )
         })
-        items = c(items,grob)
-      },error = function(e){ warning(e) })
+        items = c(items,g)
+      },error = function(e){ 
+        warning(e) 
+      })
     }
     items
   }
@@ -641,8 +693,8 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     tryCatch({
       
       e = calc_element(name,theme=theme,verbose=F)
-      if(identical(e,element_blank()))
-        return(items)
+      if(inherits(e, "element_blank"))
+          return(items)
       
       ixc   <- c('x','y')
       latex <- calc_element('tern.plot.latex',theme)
@@ -659,7 +711,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
                               vjust = e$vjust - 0.5*sin(angle))
       items[[length(items) + 1]] <- grob
     },error = function(e){
-      warning(e)
+      #warning(e)
     })
     items
   }
@@ -771,16 +823,18 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     .render.arrow <- function(name,ix,items){
       tryCatch({  
         e = calc_element(name,theme=theme,verbose=F)
-        if(identical(e,element_blank())) return(items)
-        grob = segmentsGrob(x0 = d$x[ix], x1 = d$xend[ix], y0 = d$y[ix], y1 = d$yend[ix],
+        if(inherits(e, "element_blank"))
+          return(items)
+        
+        g = segmentsGrob(x0 = d$x[ix], x1 = d$xend[ix], y0 = d$y[ix], y1 = d$yend[ix],
                             default.units ="npc",
                             arrow         = e$lineend,
-                            gp            = gpar(col     = e$colour, 
+                            gp            = gpar(col     = e$colour %||% 'transparent', 
                                                  lty     = e$linetype,
                                                  lineend = 'butt',
                                                  lwd     = e$size)
         )
-        items[[length(items) + 1]] <- grob
+        items[[length(items) + 1]] <- g
       },error = function(e){
         warning(e)
       })
@@ -791,22 +845,24 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     .render.label <- function(name,ix,items){
       tryCatch({  
         e    = calc_element(name,theme=theme,verbose=F)
-        if(identical(e,element_blank()))return(items)
+        if(inherits(e, "element_blank"))
+          return(items)
+        
         latex = calc_element('tern.plot.latex',theme)
         dA    = e$angle + d$AL - 180*(atan2((d$yend - d$y)*.ratio(), d$xend - d$x)/pi + as.numeric(clockwise))
-        grob  = textGrob( label = arrow_label_formatter(d$LA[ix],d$W[ix],latex=latex), 
+        g     = textGrob( label = arrow_label_formatter(d$LA[ix],d$W[ix],latex=latex), 
                          x     = d$xmn[ix] + convertX(cos(pi*(d$angle[ix] + rotation)/180)*unit(2,'pt'),'npc',valueOnly = T), 
                          y     = d$ymn[ix] + convertY(sin(pi*(d$angle[ix] + rotation)/180)*unit(2,'pt'),'npc',valueOnly = T), 
                          hjust = e$hjust + 0.5*sin(dA[ix]*pi/180), 
                          vjust = e$vjust + 0.5*cos(dA[ix]*pi/180),
                          rot   = d$AL[ix] + e$angle, 
                          default.units="npc", 
-                         gp   = gpar(col        = e$colour, 
+                         gp   = gpar(col        = e$colour %||% 'transparent', 
                                      fontsize   = e$size,
                                      fontfamily = e$family, 
                                      fontface   = e$face, 
                                      lineheight = e$lineheight))
-        items[[length(items) + 1]] <- grob
+        items[[length(items) + 1]] <- g
       },error = function(e){ 
         warning(e) 
       })

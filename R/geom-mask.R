@@ -103,9 +103,9 @@ GeomMask <- ggproto("GeomMask", Geom,
                                       id   = rep(1,length(xvals)),
                                       vp   = vp,
                                       name = sprintf("mask-%i",ix),
-                                      gp   = gpar(  col  = colLoc,
-                                                    fill = fillLoc,
-                                                    lwd  = sizeLoc*find_global_tern(".pt"),
+                                      gp   = gpar(  col  = colLoc %||% 'transparent',
+                                                    fill = fillLoc %||% 'transparent',
+                                                    lwd  = sizeLoc,
                                                     lty  = e$linetype)
                                       
             )

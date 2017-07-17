@@ -4,7 +4,6 @@
 \alias{\%+replace\%}
 \alias{add_theme}
 \alias{calc_element}
-\alias{combine_elements}
 \alias{plot_theme}
 \alias{theme_update}
 \alias{update_theme}
@@ -25,8 +24,6 @@ e1 \%+replace\% e2
 
 update_theme(oldtheme, newtheme)
 
-combine_elements(e1, e2)
-
 calc_element(element, theme, verbose = FALSE)
 }
 \arguments{
@@ -45,9 +42,7 @@ calc_element(element, theme, verbose = FALSE)
 \item{t2name}{A name of the t2 object. This is used for printing
 informative error messages.}
 
-\item{e1}{first element}
-
-\item{e2}{second element}
+\item{e1}{Theme and element to combine}
 
 \item{oldtheme}{previous theme object}
 
@@ -77,8 +72,6 @@ which do not inherit from 'element' objects.
 \code{"\%+replace\%"} is a local copy of the ggplot2 replace operator, no different other than being exported from the ggtern namespace.
 
 \code{update_theme} is a local copy of a ggplot2 function, which copies elements from the new theme into an old theme.
-
-\code{combine_elements} is a local copy of the ggplot2 function that combines two theme elements
 
 \code{calc_element} is a local copy of the ggplot2 function which determines the net element based on inheritances, given input theme.
 }

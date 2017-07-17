@@ -400,11 +400,12 @@ theme_dark <- function(base_size = 12, base_family = "") {
 #' @rdname ggtern_themes
 #' @export
 theme_void <- function(base_size = 12, base_family = "") {
-  theme_bw(base_size, base_family) %+replace%
+  theme_ggtern(base_size,base_family) %+replace%
   ggplot2::theme_void(base_size,base_family) %+replace%
   theme(
-    line                 = element_blank(),
-    rect                 = element_blank(),
+    #text                 = element_blank(),
+    #line                 = element_blank(),
+    #rect                 = element_blank(),
     tern.axis.text       = element_blank(),
     tern.axis.title      = element_blank()
   )

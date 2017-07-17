@@ -91,8 +91,13 @@ strip_unapproved <- function(layers){
                         Lmark            = "GeomLmark",
                         Rmark            = "GeomRmark",
                         point_swap       = "GeomPointSwap",
+                        rect             = "GeomRect",
                         "GeomRasterAnnTern",
-                        "GeomDl"
+                        "GeomDl",
+                        "GeomEncircle",
+                        mean_ellipse     = "GeomMeanEllipse",
+                        text_viewport    = "GeomTextViewport",
+                        label_viewport   = "GeomLabelViewport"
 )
 
 #LIST OF APPROVED STATS
@@ -102,7 +107,8 @@ strip_unapproved <- function(layers){
                         smooth_tern      = "StatSmoothTern",
                         sum              = "StatSum",
                         unique           = "StatUnique",
-                        interpolate_tern = "StatInterpolateTern"
+                        interpolate_tern = "StatInterpolateTern",
+                        mean_ellipse     = "StatMeanEllipse"
 )
 
 #LIST OF APPROVED POSITIONS

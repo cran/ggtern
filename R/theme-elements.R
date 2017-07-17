@@ -85,7 +85,7 @@ ggint$.element_tree$tern.axis.arrow.start          = .el_def("numeric",         
 ggint$.element_tree$tern.axis.arrow.finish         = .el_def("numeric",                              description="Proportion of Axis when Arrow Finishes")
 
 #Ticks
-ggint$.element_tree$tern.axis.ticks                = .el_def("element_line", "axis.line",            description="Base Ticks") #
+ggint$.element_tree$tern.axis.ticks                = .el_def("element_line", "axis.ticks",           description="Base Ticks") #
 ggint$.element_tree$tern.axis.ticks.major          = .el_def("element_line", "tern.axis.ticks",      description="Base Major Ticks") #
 ggint$.element_tree$tern.axis.ticks.major.T        = .el_def("element_line", "tern.axis.ticks.major",description="Base Major Ticks for TOP Axis") #
 ggint$.element_tree$tern.axis.ticks.major.L        = .el_def("element_line", "tern.axis.ticks.major",description="Base Major Ticks for LHS Axis") #
