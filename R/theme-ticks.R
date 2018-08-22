@@ -1,3 +1,37 @@
+#' Modify the Ticklengths
+#' 
+#' Convenience Function for changing the major and/or minor ticklengths.
+#' @param major,minor lenth of major and minor ticklengths respectively. 
+#' Must be a unit object, or will be ignored.
+#' @examples 
+#' ggtern() +
+#'   theme_ticklength(major = unit(5.0,'mm'),
+#'                    minor = unit(2.5,'mm'))
+#' @author Nicholas Hamilton
+#' @rdname theme_ticklength
+#' @name theme_ticklength
+#' @export
+theme_ticklength = function(major=NULL,minor=NULL){
+  args = list()
+  if(is.unit(major))
+    args$tern.axis.ticks.length.major = major
+  if(is.unit(minor))
+    args$tern.axis.ticks.length.minor = minor
+  do.call(theme,args)
+}
+
+#'@rdname theme_ticklength
+#'@export
+theme_ticklength_major = function(major){
+  theme_ticklength(major,NULL)
+}
+
+#'@rdname theme_ticklength
+#'@export
+theme_ticklength_minor = function(minor){
+  theme_ticklength(NULL,minor)
+}
+
 #' Show or Hide the Primary/Secondary Ticks
 #' 
 #' Convenience functions to enable or disable the axis primary or secondary ticks.

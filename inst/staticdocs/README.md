@@ -33,8 +33,8 @@ citation('ggtern')
 ## 
 ## To cite package 'ggtern' in publications use:
 ## 
-##   Nicholas Hamilton (2016). ggtern: An Extension to 'ggplot2', for
-##   the Creation of Ternary Diagrams. R package version 2.1.5.
+##   Nicholas Hamilton (2018). ggtern: An Extension to 'ggplot2', for
+##   the Creation of Ternary Diagrams. R package version 2.2.2.
 ##   https://CRAN.R-project.org/package=ggtern
 ## 
 ## A BibTeX entry for LaTeX users is
@@ -42,8 +42,8 @@ citation('ggtern')
 ##   @Manual{,
 ##     title = {ggtern: An Extension to 'ggplot2', for the Creation of Ternary Diagrams},
 ##     author = {Nicholas Hamilton},
-##     year = {2016},
-##     note = {R package version 2.1.5},
+##     year = {2018},
+##     note = {R package version 2.2.2},
 ##     url = {https://CRAN.R-project.org/package=ggtern},
 ##   }
 ```

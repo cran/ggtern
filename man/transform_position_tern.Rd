@@ -20,4 +20,3 @@ Convenience function to transform all position variables in a ternary plot
 Nicholas Hamilton
 }
 \keyword{internal}
-

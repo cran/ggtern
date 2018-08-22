@@ -58,10 +58,9 @@ are unique to \code{ggtern}.
  }
 }
 }
-\author{
-Nicholas Hamilton
-}
 \seealso{
 \code{\link{ggtern_themes}}
 }
-
+\author{
+Nicholas Hamilton
+}

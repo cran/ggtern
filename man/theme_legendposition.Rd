@@ -16,4 +16,3 @@ A convenience function to position the legend at various internal positions
 \author{
 Nicholas Hamilton
 }
-

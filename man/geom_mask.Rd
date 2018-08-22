@@ -2,8 +2,8 @@
 % Please edit documentation in R/geom-mask.R
 \docType{data}
 \name{geom_mask}
-\alias{GeomMask}
 \alias{geom_mask}
+\alias{GeomMask}
 \title{Apply Manual Clipping Mask}
 \usage{
 geom_mask()
@@ -30,4 +30,3 @@ x + geom_point(size=6) + geom_mask() + geom_label()
 Nicholas Hamilton
 }
 \keyword{datasets}
-

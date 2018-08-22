@@ -62,3 +62,7 @@ div#sticker {
     position:fixed;
     top:0px;
 }
+
+.p>.img{
+  width:auto!important;
+}

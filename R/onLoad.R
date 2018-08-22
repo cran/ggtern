@@ -10,8 +10,6 @@
 
 .onAttach <- function(libname, pkgname){
   lines = c("--",
-            "Consider donating at: http://ggtern.com",
-            "Even small amounts (say $10-50) are very much appreciated!",
             sprintf("Remember to cite, run citation(package = '%s') for further info.",pkgname),
             "--")
   msg = paste(lines,collapse="\n")
@@ -68,6 +66,7 @@
 #------------------------------------------------------------------------------
 if(FALSE){
   library(grid)
+  source("./inst/staticdocs/icons.R")
   buildStaticDocs = function(){
     
     build_site = function(pkg = "."){
@@ -154,6 +153,29 @@ if(FALSE){
     build_sitemap(pkg = ".")
   }
   buildStaticDocs()
+}
+
+#------------------------------------------------------------------------------
+#Generate @params for theme
+#------------------------------------------------------------------------------
+if(FALSE){
+  el = ggtern:::ggint$.element_tree
+  el.ix = names(formals(theme)); el.ix = el.ix[grep(el.ix,pattern='tern')]
+  result = unlist(lapply(el.ix,function(x){
+    e = el[[x]]; print(e)
+    s = `if`(is.character(e$inherit),sprintf('; inherits from `%s`',e$inherit),'')
+    sprintf("#' @param %s %s (`%s`%s)",x,e$description,e$class,s)
+  }))
+  writeLines(result)
+}
+
+#------------------------------------------------------------------------------
+#Unit Checks
+#------------------------------------------------------------------------------
+if(FALSE){
+  #Check there are no new theme elements
+  all(names(formals(ggplot2::theme)) %in% 
+      names(formals(ggtern::theme)))
 }
 
 

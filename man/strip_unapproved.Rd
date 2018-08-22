@@ -18,4 +18,3 @@ from the current ternary plot in the event that such layers are not one of the
 approved layers. For a layer to be approved, it must use an approved geometry, and also an approved stat. 
 Refer to \link{approved_layers} for the current list of approved geometries and stats
 }
-

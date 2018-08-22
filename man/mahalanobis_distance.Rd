@@ -27,4 +27,3 @@ Modified version of the code provided in the \code{\link[chemometrics]{drawMahal
 \author{
 Nicholas Hamilton
 }
-

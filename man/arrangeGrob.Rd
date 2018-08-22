@@ -56,4 +56,3 @@ from the ggplot2 namespace
 \author{
 Nicholas Hamilton
 }
-

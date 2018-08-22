@@ -23,13 +23,12 @@ contain all information about axis limits, breaks etc.
 functions that returns the data, grob, or scales associated with a given
 layer. These are useful for tests.
 }
-\author{
-Nicholas Hamilton
-}
 \seealso{
 \code{\link{print.ggplot}} and \code{\link{benchplot}} for
  functions that contain the complete set of steps for generating
  a ggplot2 plot.
 }
+\author{
+Nicholas Hamilton
+}
 \keyword{internal}
-

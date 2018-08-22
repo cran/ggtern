@@ -2,8 +2,8 @@
 % Please edit documentation in R/doc-data.R
 \docType{data}
 \name{data_Fragments}
-\alias{Fragments}
 \alias{data_Fragments}
+\alias{Fragments}
 \title{Grantham and Valbel Rock Fragment Data}
 \format{1row per point, Each point contains data on the following:
 \enumerate{ 
@@ -55,12 +55,11 @@ ggtern(Fragments,aes(Qm+Qp,Rf,M,colour=Sample)) +
   theme_latex() + 
   facet_wrap(~Sample,nrow=2)
 }
-\author{
-Jeremy Hummon Grantham and Michael Anthony Velbel
-}
 \references{
 Grantham, Jeremy Hummon, and Michael Anthony Velbel. 
 "The influence of climate and topography on rock-fragment abundance in modern fluvial sands of the southern 
 Blue Ridge Mountains, North Carolina." Journal of Sedimentary Research 58.2 (1988).
 }
-
+\author{
+Jeremy Hummon Grantham and Michael Anthony Velbel
+}

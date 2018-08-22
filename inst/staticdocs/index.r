@@ -32,7 +32,13 @@ sd_section("Geoms",
             "geom_errorbarX",
             "geom_smooth_tern",
             "geom_point_swap",
-            "geom_mask"
+            "geom_mask",
+            "geom_label_viewport",
+            "geom_text_viewport",
+            "geom_mean_ellipse",
+            "geom_hex_tern",
+            "geom_tri_tern",
+            "geom_polygon_closed"
           )
 )
 
@@ -83,6 +89,7 @@ sd_section("Convenience Functions",
              "theme_showprimary",
              "theme_showtitles",
              "theme_ticksoutside",
+             "theme_ticklength",
              "theme_mesh",
              "theme_latex",
              "theme_zoom_X"
@@ -102,7 +109,9 @@ sd_section("Data",
            "The following datasets have been included in the present package.",
            c("data_Feldspar",
              "data_Fragments",
-             "data_USDA")
+             "data_USDA",
+             "data_WhiteCells",
+             "data_SkyeLava")
 )
 
 sd_section("Legend Keys",

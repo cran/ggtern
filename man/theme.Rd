@@ -2,11 +2,367 @@
 % Please edit documentation in R/theme.R
 \name{theme}
 \alias{theme}
-\title{Set theme elements (ggtern version)}
+\title{Modify components of a theme (ggtern version)}
 \usage{
-theme(..., complete = FALSE, validate = TRUE)
+theme(line, rect, text, title, aspect.ratio, axis.title, axis.title.x,
+  axis.title.x.top, axis.title.y, axis.title.y.right, axis.text, axis.text.x,
+  axis.text.x.top, axis.text.y, axis.text.y.right, axis.ticks, axis.ticks.x,
+  axis.ticks.y, axis.ticks.length, axis.line, axis.line.x, axis.line.y,
+  legend.background, legend.margin, legend.spacing, legend.spacing.x,
+  legend.spacing.y, legend.key, legend.key.size, legend.key.height,
+  legend.key.width, legend.text, legend.text.align, legend.title,
+  legend.title.align, legend.position, legend.direction, legend.justification,
+  legend.box, legend.box.just, legend.box.margin, legend.box.background,
+  legend.box.spacing, panel.background, panel.border, panel.spacing,
+  panel.spacing.x, panel.spacing.y, panel.grid, panel.grid.major,
+  panel.grid.minor, panel.grid.major.x, panel.grid.major.y, panel.grid.minor.x,
+  panel.grid.minor.y, panel.ontop, plot.background, plot.title, plot.subtitle,
+  plot.caption, plot.margin, strip.background, strip.placement, strip.text,
+  strip.text.x, strip.text.y, strip.switch.pad.grid, strip.switch.pad.wrap,
+  tern.axis.arrow, tern.axis.arrow.T, tern.axis.arrow.L, tern.axis.arrow.R,
+  tern.axis.arrow.text, tern.axis.arrow.text.T, tern.axis.arrow.text.L,
+  tern.axis.arrow.text.R, tern.axis.arrow.start, tern.axis.arrow.finish,
+  tern.axis.arrow.sep, tern.axis.arrow.show, tern.axis.clockwise,
+  tern.axis.vshift, tern.axis.hshift, tern.axis.line.ontop, tern.axis.line,
+  tern.axis.line.T, tern.axis.line.L, tern.axis.line.R, tern.axis.text,
+  tern.axis.text.T, tern.axis.text.L, tern.axis.text.R, tern.axis.text.show,
+  tern.axis.ticks, tern.axis.ticks.length.major, tern.axis.ticks.length.minor,
+  tern.axis.ticks.major, tern.axis.ticks.major.T, tern.axis.ticks.major.L,
+  tern.axis.ticks.major.R, tern.axis.ticks.minor, tern.axis.ticks.minor.T,
+  tern.axis.ticks.minor.L, tern.axis.ticks.minor.R, tern.axis.ticks.outside,
+  tern.axis.ticks.primary.show, tern.axis.ticks.secondary.show, tern.axis.title,
+  tern.axis.title.T, tern.axis.title.L, tern.axis.title.R, tern.axis.title.show,
+  tern.panel.background, tern.panel.expand, tern.panel.grid.major,
+  tern.panel.grid.major.T, tern.panel.grid.major.L, tern.panel.grid.major.R,
+  tern.panel.grid.major.show, tern.panel.grid.minor, tern.panel.grid.minor.T,
+  tern.panel.grid.minor.L, tern.panel.grid.minor.R, tern.panel.grid.minor.show,
+  tern.panel.grid.ontop, tern.panel.mask.show, tern.panel.rotate,
+  tern.plot.background, tern.plot.latex, ..., complete = FALSE,
+  validate = TRUE)
 }
 \arguments{
+\item{line}{all line elements (\code{element_line})}
+
+\item{rect}{all rectangular elements (\code{element_rect})}
+
+\item{text}{all text elements (\code{element_text})}
+
+\item{title}{all title elements: plot, axes, legends (\code{element_text};
+inherits from \code{text})}
+
+\item{aspect.ratio}{aspect ratio of the panel}
+
+\item{axis.title}{label of axes (\code{element_text}; inherits from
+\code{text})}
+
+\item{axis.title.x}{x axis label (\code{element_text}; inherits from
+\code{axis.title})}
+
+\item{axis.title.x.top}{x axis label on top axis (\code{element_text};
+inherits from \code{axis.title.x})}
+
+\item{axis.title.y}{y axis label (\code{element_text}; inherits from
+\code{axis.title})}
+
+\item{axis.title.y.right}{y axis label on right axis (\code{element_text};
+inherits from \code{axis.title.y})}
+
+\item{axis.text}{tick labels along axes (\code{element_text}; inherits from
+\code{text})}
+
+\item{axis.text.x}{x axis tick labels (\code{element_text}; inherits from
+\code{axis.text})}
+
+\item{axis.text.x.top}{x axis tick labels on top axis (\code{element_text};
+inherits from \code{axis.text.x})}
+
+\item{axis.text.y}{y axis tick labels (\code{element_text}; inherits from
+\code{axis.text})}
+
+\item{axis.text.y.right}{y axis tick labels on right axis
+(\code{element_text}; inherits from \code{axis.text.y})}
+
+\item{axis.ticks}{tick marks along axes (\code{element_line}; inherits from
+\code{line})}
+
+\item{axis.ticks.x}{x axis tick marks (\code{element_line}; inherits from
+\code{axis.ticks})}
+
+\item{axis.ticks.y}{y axis tick marks (\code{element_line}; inherits from
+\code{axis.ticks})}
+
+\item{axis.ticks.length}{length of tick marks (\code{unit})}
+
+\item{axis.line}{lines along axes (\code{element_line}; inherits from
+\code{line})}
+
+\item{axis.line.x}{line along x axis (\code{element_line}; inherits from
+\code{axis.line})}
+
+\item{axis.line.y}{line along y axis (\code{element_line}; inherits from
+\code{axis.line})}
+
+\item{legend.background}{background of legend (\code{element_rect}; inherits
+from \code{rect})}
+
+\item{legend.margin}{the margin around each legend (\code{margin})}
+
+\item{legend.spacing}{the spacing between legends (\code{unit})}
+
+\item{legend.spacing.x}{the horizontal spacing between legends (\code{unit});
+inherits from \code{legend.spacing}}
+
+\item{legend.spacing.y}{the horizontal spacing between legends (\code{unit});
+inherits from \code{legend.spacing}}
+
+\item{legend.key}{background underneath legend keys (\code{element_rect};
+inherits from \code{rect})}
+
+\item{legend.key.size}{size of legend keys (\code{unit})}
+
+\item{legend.key.height}{key background height (\code{unit}; inherits from
+\code{legend.key.size})}
+
+\item{legend.key.width}{key background width (\code{unit}; inherits from
+\code{legend.key.size})}
+
+\item{legend.text}{legend item labels (\code{element_text}; inherits from
+\code{text})}
+
+\item{legend.text.align}{alignment of legend labels (number from 0 (left) to
+1 (right))}
+
+\item{legend.title}{title of legend (\code{element_text}; inherits from
+\code{title})}
+
+\item{legend.title.align}{alignment of legend title (number from 0 (left) to
+1 (right))}
+
+\item{legend.position}{the position of legends ("none", "left", "right",
+"bottom", "top", or two-element numeric vector)}
+
+\item{legend.direction}{layout of items in legends ("horizontal" or
+"vertical")}
+
+\item{legend.justification}{anchor point for positioning legend inside plot
+("center" or two-element numeric vector) or the justification according to
+the plot area when positioned outside the plot}
+
+\item{legend.box}{arrangement of multiple legends ("horizontal" or
+"vertical")}
+
+\item{legend.box.just}{justification of each legend within the overall
+bounding box, when there are multiple legends ("top", "bottom", "left", or
+"right")}
+
+\item{legend.box.margin}{margins around the full legend area, as specified
+using \code{\link[=margin]{margin()}}}
+
+\item{legend.box.background}{background of legend area (\code{element_rect};
+inherits from \code{rect})}
+
+\item{legend.box.spacing}{The spacing between the plotting area and the
+legend box (\code{unit})}
+
+\item{panel.background}{background of plotting area, drawn underneath plot
+(\code{element_rect}; inherits from \code{rect})}
+
+\item{panel.border}{border around plotting area, drawn on top of plot so that
+it covers tick marks and grid lines. This should be used with
+\code{fill=NA}
+(\code{element_rect}; inherits from \code{rect})}
+
+\item{panel.spacing}{spacing between facet panels (\code{unit})}
+
+\item{panel.spacing.x}{horizontal spacing between facet panels (\code{unit};
+inherits from \code{panel.spacing})}
+
+\item{panel.spacing.y}{vertical spacing between facet panels (\code{unit};
+inherits from \code{panel.spacing})}
+
+\item{panel.grid}{grid lines (\code{element_line}; inherits from \code{line})}
+
+\item{panel.grid.major}{major grid lines (\code{element_line}; inherits from
+\code{panel.grid})}
+
+\item{panel.grid.minor}{minor grid lines (\code{element_line}; inherits from
+\code{panel.grid})}
+
+\item{panel.grid.major.x}{vertical major grid lines (\code{element_line};
+inherits from \code{panel.grid.major})}
+
+\item{panel.grid.major.y}{horizontal major grid lines (\code{element_line};
+inherits from \code{panel.grid.major})}
+
+\item{panel.grid.minor.x}{vertical minor grid lines (\code{element_line};
+inherits from \code{panel.grid.minor})}
+
+\item{panel.grid.minor.y}{horizontal minor grid lines (\code{element_line};
+inherits from \code{panel.grid.minor})}
+
+\item{panel.ontop}{option to place the panel (background, gridlines) over
+the data layers.  Usually used with a transparent or blank
+\code{panel.background}. (\code{logical})}
+
+\item{plot.background}{background of the entire plot (\code{element_rect};
+inherits from \code{rect})}
+
+\item{plot.title}{plot title (text appearance) (\code{element_text}; inherits
+from \code{title}) left-aligned by default}
+
+\item{plot.subtitle}{plot subtitle (text appearance) (\code{element_text};
+inherits from \code{title}) left-aligned by default}
+
+\item{plot.caption}{caption below the plot (text appearance)
+(\code{element_text}; inherits from \code{title}) right-aligned by default}
+
+\item{plot.margin}{margin around entire plot (\code{unit} with the sizes of
+the top, right, bottom, and left margins)}
+
+\item{strip.background}{background of facet labels (\code{element_rect};
+inherits from \code{rect})}
+
+\item{strip.placement}{placement of strip with respect to axes,
+either "inside" or "outside". Only important when axes and strips are
+on the same side of the plot.}
+
+\item{strip.text}{facet labels (\code{element_text}; inherits from
+\code{text})}
+
+\item{strip.text.x}{facet labels along horizontal direction
+(\code{element_text}; inherits from \code{strip.text})}
+
+\item{strip.text.y}{facet labels along vertical direction
+(\code{element_text}; inherits from \code{strip.text})}
+
+\item{strip.switch.pad.grid}{space between strips and axes when strips are
+switched (\code{unit})}
+
+\item{strip.switch.pad.wrap}{space between strips and axes when strips are
+switched (\code{unit})}
+
+\item{tern.axis.arrow}{Base Arrow Line (`element_line`; inherits from `axis.line`)}
+
+\item{tern.axis.arrow.T}{Arrow Line for TOP Axis (`element_line`; inherits from `tern.axis.arrow`)}
+
+\item{tern.axis.arrow.L}{Arrow Line for LHS Axis (`element_line`; inherits from `tern.axis.arrow`)}
+
+\item{tern.axis.arrow.R}{Arrow Line for RHS Axis (`element_line`; inherits from `tern.axis.arrow`)}
+
+\item{tern.axis.arrow.text}{Base Arrow Label (`element_text`; inherits from `tern.axis.text`)}
+
+\item{tern.axis.arrow.text.T}{Arrow Label on TOP Axis (`element_text`; inherits from `tern.axis.arrow.text`)}
+
+\item{tern.axis.arrow.text.L}{Arrow Label on LHS Axis (`element_text`; inherits from `tern.axis.arrow.text`)}
+
+\item{tern.axis.arrow.text.R}{Arrow Label on RHS Axis (`element_text`; inherits from `tern.axis.arrow.text`)}
+
+\item{tern.axis.arrow.start}{Proportion of Axis when Arrow Starts (`numeric`)}
+
+\item{tern.axis.arrow.finish}{Proportion of Axis when Arrow Finishes (`numeric`)}
+
+\item{tern.axis.arrow.sep}{Arrows Seperation from Axis (`numeric`)}
+
+\item{tern.axis.arrow.show}{Arrows Show or Hide (`logical`)}
+
+\item{tern.axis.clockwise}{Clockwise or Anticlockwise Precession (`logical`)}
+
+\item{tern.axis.vshift}{Amount to nudge the plot vertically (`numeric`)}
+
+\item{tern.axis.hshift}{Amount to nudge the plot horizontally (`numeric`)}
+
+\item{tern.axis.line.ontop}{Bring Axis Borders on Top of Everything (Depreciated) (`logical`)}
+
+\item{tern.axis.line}{Base Line (`element_line`; inherits from `axis.line`)}
+
+\item{tern.axis.line.T}{Line for TOP Axis (`element_line`; inherits from `tern.axis.line`)}
+
+\item{tern.axis.line.L}{Line for LHS Axis (`element_line`; inherits from `tern.axis.line`)}
+
+\item{tern.axis.line.R}{Line for RHS Axis (`element_line`; inherits from `tern.axis.line`)}
+
+\item{tern.axis.text}{Base Text (`element_text`; inherits from `axis.text`)}
+
+\item{tern.axis.text.T}{Text for TOP Axis (`element_text`; inherits from `tern.axis.text`)}
+
+\item{tern.axis.text.L}{Text for LHS Axis (`element_text`; inherits from `tern.axis.text`)}
+
+\item{tern.axis.text.R}{Text for RHS Axis (`element_text`; inherits from `tern.axis.text`)}
+
+\item{tern.axis.text.show}{Axis Labels Show or Hide (`logical`)}
+
+\item{tern.axis.ticks}{Base Ticks (`element_line`; inherits from `axis.ticks`)}
+
+\item{tern.axis.ticks.length.major}{Ticks Major Ticklength (`unit`)}
+
+\item{tern.axis.ticks.length.minor}{Ticks Minor Ticklength (`unit`)}
+
+\item{tern.axis.ticks.major}{Base Major Ticks (`element_line`; inherits from `tern.axis.ticks`)}
+
+\item{tern.axis.ticks.major.T}{Base Major Ticks for TOP Axis (`element_line`; inherits from `tern.axis.ticks.major`)}
+
+\item{tern.axis.ticks.major.L}{Base Major Ticks for LHS Axis (`element_line`; inherits from `tern.axis.ticks.major`)}
+
+\item{tern.axis.ticks.major.R}{Base Major Ticks for RHS Axis (`element_line`; inherits from `tern.axis.ticks.major`)}
+
+\item{tern.axis.ticks.minor}{Base Minor Ticks (`element_line`; inherits from `tern.axis.ticks`)}
+
+\item{tern.axis.ticks.minor.T}{Base Minor Ticks for TOP Axis (`element_line`; inherits from `tern.axis.ticks.minor`)}
+
+\item{tern.axis.ticks.minor.L}{Base Minor Ticks for LHS Axis (`element_line`; inherits from `tern.axis.ticks.minor`)}
+
+\item{tern.axis.ticks.minor.R}{Base Minor Ticks for RHS Axis (`element_line`; inherits from `tern.axis.ticks.minor`)}
+
+\item{tern.axis.ticks.outside}{Ticks Outside or Inside (`logical`)}
+
+\item{tern.axis.ticks.primary.show}{Ticks Show Primary (`logical`)}
+
+\item{tern.axis.ticks.secondary.show}{Ticks Show Secondary (`logical`)}
+
+\item{tern.axis.title}{Base Apex Title (`element_text`; inherits from `axis.title`)}
+
+\item{tern.axis.title.T}{Apex Title for TOP Axis (`element_text`; inherits from `tern.axis.title`)}
+
+\item{tern.axis.title.L}{Apex Title for LHS Axis (`element_text`; inherits from `tern.axis.title`)}
+
+\item{tern.axis.title.R}{Apex Title for RHS Axis (`element_text`; inherits from `tern.axis.title`)}
+
+\item{tern.axis.title.show}{Apex Titles Show or Hide (`logical`)}
+
+\item{tern.panel.background}{Background of Ternary Plot Area** (`element_rect`; inherits from `panel.background`)}
+
+\item{tern.panel.expand}{The amount to expand the ternary plotting panel, in ratio to npc units (`numeric`)}
+
+\item{tern.panel.grid.major}{Base Major Gridline (`element_line`; inherits from `panel.grid.major`)}
+
+\item{tern.panel.grid.major.T}{Major Gridline for TOP Axis (`element_line`; inherits from `tern.panel.grid.major`)}
+
+\item{tern.panel.grid.major.L}{Major Gridline for LHS Axis (`element_line`; inherits from `tern.panel.grid.major`)}
+
+\item{tern.panel.grid.major.R}{Major Gridline for RHS Axis (`element_line`; inherits from `tern.panel.grid.major`)}
+
+\item{tern.panel.grid.major.show}{Show or Hide Major Gridline (`logical`)}
+
+\item{tern.panel.grid.minor}{Base Minor Gridline (`element_line`; inherits from `panel.grid.minor`)}
+
+\item{tern.panel.grid.minor.T}{Minor Gridline for TOP Axis (`element_line`; inherits from `tern.panel.grid.minor`)}
+
+\item{tern.panel.grid.minor.L}{Minor Gridline for LHS Axis (`element_line`; inherits from `tern.panel.grid.minor`)}
+
+\item{tern.panel.grid.minor.R}{Minor Gridline for RHS Axis (`element_line`; inherits from `tern.panel.grid.minor`)}
+
+\item{tern.panel.grid.minor.show}{Show or Hide Minor Gridline (`logical`)}
+
+\item{tern.panel.grid.ontop}{Bring grids, axis and axis labels on top of everything else (`logical`)}
+
+\item{tern.panel.mask.show}{Show or Hide the Clipping Mask (`logical`)}
+
+\item{tern.panel.rotate}{The amount to rotate the ternary diagram in degrees (`numeric`)}
+
+\item{tern.plot.background}{Background of Ternary Clipping Area** (`element_rect`; inherits from `plot.background`)}
+
+\item{tern.plot.latex}{Whether to parse characters as latex commands (`logical`)}
+
 \item{...}{additional element specifications not part of base ggplot2. If
 supplied \code{validate} needs to be set to \code{FALSE}.}
 
@@ -19,9 +375,22 @@ elements.}
 \item{validate}{\code{TRUE} to run validate_element, \code{FALSE} to bypass checks.}
 }
 \description{
-Use this function to modify theme settings.
+Use `theme()` to modify individual components of a theme, allowing
+you to control the appearance of all non-data components of the plot.
+`theme()` only affects a single plot: see [theme_update()] if
+you want modify the active theme, to affect all subsequent plots.
 }
+\section{Theme inheritance}{
+
+Theme elements inherit properties from other theme elements.
+For example, `axis.title.x` inherits from `axis.title`,
+which in turn inherits from `text`. All text elements inherit
+directly or indirectly from `text`; all lines inherit from
+`line`, and all rectangular objects inherit from `rect`.
+This means that you can modify the appearance of multiple elements by
+setting a single high-level component.
+}
+
 \author{
 Nicholas Hamilton
 }
-

@@ -41,4 +41,3 @@ base + theme_novar_tern('L',R)
 \author{
 Nicholas Hamilton, John Szumiloski
 }
-

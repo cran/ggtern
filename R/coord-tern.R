@@ -108,6 +108,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       right = zeroGrob()
     )
   },
+  
   render_bg       = function(self,scale_details, theme){
     items = list() 
     extrm = .get.tern.extremes(self,scale_details)
@@ -119,6 +120,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     }
     gTree(children = do.call("gList",items))
   },
+  
   render_fg     = function(self,scale_details, theme){
     items = list() 
     extrm = .get.tern.extremes(self,scale_details)
@@ -129,6 +131,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     items = .render.titles(self,extrm,scale_details,theme,items)
     gTree(children = do.call("gList", items))
   },
+  
   remove_labels = function(self,table){
     #Determine the Layout
     layout <- table$layout
@@ -140,7 +143,9 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     table  <- table[-xrows$t,]
     table
   },
-  train = function(self, scale_details) {
+  
+  setup_panel_params = function(self, scale_x, scale_y,params = list() ) {
+    
     train_cartesian <- function(scale_details,limits,name,continuousAmount) {
       if (self$expand) {
         expand <- ggint$expand_default(scale_details,continuous=continuousAmount)
@@ -170,13 +175,10 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     shift           = 0*(currentMidpoint - ternaryMidpoint)
     
     #Execute the Training
-    ret = c(
-      train_cartesian(scale_details$x, self$limits$x - shift[1],"x",c(expand.amount,0) ),
-      train_cartesian(scale_details$y, self$limits$y - shift[2],"y",c(expand.amount,0) )
+    c(
+      train_cartesian(scale_x, self$limits$x - shift[1],"x",c(expand.amount,0) ),
+      train_cartesian(scale_y, self$limits$y - shift[2],"y",c(expand.amount,0) )
     )
-    
-    #Done
-    ret
   }
 )
 

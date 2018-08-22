@@ -2,9 +2,9 @@
 % Please edit documentation in R/doc-data.R
 \docType{data}
 \name{data_Feldspar}
+\alias{data_Feldspar}
 \alias{Feldspar}
 \alias{FeldsparRaster}
-\alias{data_Feldspar}
 \title{Elkin and Groves Feldspar Data}
 \format{\code{Feldsdpar} - One (1) row per Feldspar composition, \code{FeldsdparRaster} - Raster Matrix}
 \usage{
@@ -40,9 +40,6 @@ ggtern(Feldspar,aes(Ab,An,Or)) +
     labs(title = "Demonstration of Raster Annotation")
     
 }
-\author{
-Nicholas Hamilton
-}
 \references{
 Elkins, L. T. & Grove, T. L. 
 Ternary Feldspar Experiments and Thermodynamic Models 
@@ -51,4 +48,6 @@ American Mineralogist, Mineral Soc America, 1990, 75, 544-559
 \seealso{
 \link[=data]{Data}
 }
-
+\author{
+Nicholas Hamilton
+}

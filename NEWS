@@ -1,3 +1,12 @@
+ggtern 2.2.2
+----------------------------------------------------------------
+* Fixed bug to do with enabling arrows on theme_bw theme preset
+* Added convenience function for changing major or minor ticklengths.
+* Additional datasets
+* Ternary version of hexbin
+* Update the theme(..) function to now include valid arguments relative to the new theme elements
+* New Geometry, geom_tri_tern and stat_tri_tern, which is like hexbin, but on triangular mesh
+
 ggtern 2.2.1
 ----------------------------------------------------------------
 * Modified the masked ggplot_gtable and ggplot_build functions, to call the parent versions if the plot is not ternary (ie the functions within the starndard ggplot2 plot), reducing the fragility of the ggtern package to changes in ggplot2

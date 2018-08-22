@@ -2,8 +2,8 @@
 % Please edit documentation in R/position-nudge-tern.R
 \docType{data}
 \name{position_nudge_tern}
-\alias{PositionNudgeTern}
 \alias{position_nudge_tern}
+\alias{PositionNudgeTern}
 \title{Nudge Ternary Points.}
 \usage{
 position_nudge_tern(x = 0, y = 0, z = 0)
@@ -15,11 +15,10 @@ position_nudge_tern(x = 0, y = 0, z = 0)
 This is useful if you want to nudge labels a little ways from their points, input data will normalised to sum to unity before applying the particular
 nudge, so the nudge variables should be as a fraction ie (0,1)
 }
+\seealso{
+Other position adjustments: \code{\link{position_jitter_tern}}
+}
 \author{
 Nicholas Hamilton
 }
-\seealso{
-Other position.adjustments: \code{\link{position_jitter_tern}}
-}
 \keyword{datasets}
-

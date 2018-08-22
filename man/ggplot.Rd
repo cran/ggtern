@@ -2,10 +2,10 @@
 % Please edit documentation in R/plot.R
 \name{ggplot}
 \alias{ggplot}
-\alias{ggplot.data.frame}
 \alias{ggplot.default}
-\alias{plot.ggplot}
+\alias{ggplot.data.frame}
 \alias{print.ggplot}
+\alias{plot.ggplot}
 \title{Create a new ggplot plot.}
 \usage{
 ggplot(data = NULL, mapping = aes(), ..., environment = parent.frame())
@@ -16,17 +16,15 @@ ggplot(data = NULL, mapping = aes(), ..., environment = parent.frame())
 }
 \arguments{
 \item{data}{Default dataset to use for plot. If not already a data.frame,
-will be converted to one by \code{\link{fortify}}. If not specified,
-must be suppled in each layer added to the plot.}
+will be converted to one by \code{\link[=fortify]{fortify()}}. If not specified,
+must be supplied in each layer added to the plot.}
 
 \item{mapping}{Default list of aesthetic mappings to use for plot.
-If not specified, must be suppled in each layer added to the plot.}
+If not specified, must be supplied in each layer added to the plot.}
 
 \item{...}{other arguments not used by this method}
 
-\item{environment}{If an variable defined in the aesthetic mapping is not
-found in the data, ggplot will look for it in this environment. It defaults
-to using the environment in which \code{ggplot()} is called.}
+\item{environment}{DEPRECATED. Used prior to tidy evaluation.}
 
 \item{x}{plot to display}
 
@@ -78,4 +76,3 @@ is often the case in complex graphics.
 Nicholas Hamilton
 }
 \keyword{hplot}
-

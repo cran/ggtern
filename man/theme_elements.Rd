@@ -23,7 +23,7 @@ Some convenience functions have been also newly created, proceed to \code{\link{
 as it actually holds NO information regarding the geometry (width, height), only fill, color, 
 size and linetype border (ie the style of how it will be rendered).
 }
+
 \author{
 Nicholas Hamilton
 }
-

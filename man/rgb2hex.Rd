@@ -35,4 +35,3 @@ rgb2hex(0,0,seq(0,255,by=5))
 Nicholas Hamilton
 }
 \keyword{internal}
-

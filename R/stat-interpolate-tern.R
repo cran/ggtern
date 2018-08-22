@@ -47,7 +47,7 @@ StatInterpolateTern <- ggproto("StatInterpolateTern",
     params
   },
   compute_group = function(self, data, scales, method='auto', bins = NULL, binwidth = NULL, breaks = NULL, 
-                           complete  = FALSE, na.rm = FALSE, formula=value~poly(x,y,degree=1), 
+                           complete  = FALSE, na.rm = FALSE, formula=value~poly(x,y,degree=1),closure='none', 
                            fullrange = FALSE, n = 80, h = 6, expand=0.5, method.args=list(),base='ilr') {
     
     if(!base %in% c('identity','ilr')) 
@@ -105,10 +105,27 @@ StatInterpolateTern <- ggproto("StatInterpolateTern",
     #Predict the data
     data = predictdf2d(model, xseq = xseq, yseq = yseq)
     data = data[which(complete.cases(data)),]
+
     
     #Draw the contours
     result    = StatContour$compute_group(data,scales,bins=bins,binwidth=binwidth,breaks=breaks,complete=complete,na.rm=na.rm)
-    
+
+      if(closure %in% c('upper','lower')){
+        result = ddply(result,setdiff(names(result),c('x','y')),function(df){
+          row      = df[nrow(df),,drop=F]
+          ix       = c(1,nrow(df))
+          if(closure == 'upper'){
+            row$x = max(df$x)
+            row$y = max(df$y)
+            rbind(df,row)
+          }else{
+            row$x = min(df$x)
+            row$y = min(df$y)
+            rbind(row,df)
+          }
+        })
+      }
+ 
     #Transform the data out of orthonormal space, into ternary space
     din  = result[self$required_aes[1:2]]
     func = if(base == 'ilr') sprintf("%sInv",base) else tlr2xy

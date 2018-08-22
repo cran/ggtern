@@ -20,4 +20,3 @@ e1 \%+\% e2
 \author{
 Nicholas Hamilton
 }
-

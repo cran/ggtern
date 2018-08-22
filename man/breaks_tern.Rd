@@ -2,6 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{breaks_tern}
 \alias{breaks_tern}
+\alias{breaks_tern}
 \alias{getBreaks}
 \title{Generate Axis Breaks}
 \usage{
@@ -21,4 +22,3 @@ Calculates the Breaks for Major or Minor Gridlines based on the input limits.
  breaks_tern()
  breaks_tern(limits = c(0,.5),FALSE,10)
 }
-

@@ -2,8 +2,8 @@
 % Please edit documentation in R/doc-data.R
 \docType{data}
 \name{data_USDA}
-\alias{USDA}
 \alias{data_USDA}
+\alias{USDA}
 \title{USDA Textural Classification Data}
 \format{1row per point, many points per classification representing the extremes of the area.}
 \source{
@@ -50,12 +50,11 @@ ggtern(data=USDA,aes(Sand,Clay,Silt,color=Label,fill=Label)) +
        fill  = "Textural Class",
        color = "Textural Class")
 }
+\seealso{
+\link[=data]{ggtern datasets}
+}
 \author{
 United States Department of Agriculture (USDA)
 
 Nicholas Hamilton
 }
-\seealso{
-\link[=data]{ggtern datasets}
-}
-

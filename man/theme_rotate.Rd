@@ -22,4 +22,3 @@ print(x + theme_rotate(a))
 \author{
 Nicholas Hamilton
 }
-

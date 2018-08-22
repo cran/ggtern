@@ -14,4 +14,3 @@ predictdf2d(model, xseq, yseq)
 \description{
 Get predictions with standard errors into data frame
 }
-

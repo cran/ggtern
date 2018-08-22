@@ -53,4 +53,3 @@ ggsave("./output.pdf",base,width=10,height=10)
 \author{
 Nicholas Hamilton
 }
-

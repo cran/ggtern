@@ -150,6 +150,7 @@ NULL
 #' }
 #'
 #' @examples
+#' \donttest{
 #' #Create a list of the theme suffixes
 #' themesOrg = c('gray','bw','linedraw','light',
 #'               'dark','minimal','classic','void')
@@ -172,6 +173,7 @@ NULL
 #' 
 #' #Arrange the New Themes
 #' grid.arrange(grobs=plotThemes(themesNew),top = "Collection of Themes (New Themes)")
+#' }
 #' 
 #' @references 
 #' Okabe, Masataka, and Kei Ito. "How to make figures and presentations that are friendly to color blind people." 
@@ -303,7 +305,11 @@ theme_bw <- function(base_size = 12, base_family = "") {
   base %+replace%
   theme(
     tern.plot.background  = element_rect(size=NA,color=NA),
-    tern.axis.line = element_line(color = base$panel.border$colour)
+    tern.axis.line        = element_line(color  = base$panel.border$colour),
+    tern.axis.arrow       = element_line(
+      color               = base$panel.border$colour,
+      lineend             = getOption('tern.arrow')
+    )
   )
 }
 

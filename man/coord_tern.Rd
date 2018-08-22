@@ -2,8 +2,9 @@
 % Please edit documentation in R/coord-tern.R
 \docType{data}
 \name{coord_tern}
-\alias{CoordTern}
 \alias{coord_tern}
+\alias{coord_tern}
+\alias{CoordTern}
 \title{Ternary Coordinate System}
 \usage{
 coord_tern(Tlim = NULL, Llim = NULL, Rlim = NULL, expand = TRUE)
@@ -39,8 +40,8 @@ requiring \code{x} and \code{y} coordinates, now require an additional \code{z} 
 In essence, the required aesthetics are the product between what
 is required of each 'layer' and what is required of the 'coordinate system'.
 }
+
 \author{
 Nicholas Hamilton
 }
 \keyword{datasets}
-

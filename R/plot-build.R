@@ -18,18 +18,22 @@
 #' @rdname ggplot_build
 #' @export
 ggplot_build <- function(plot) {
-  #Check if plot is ternary plot, if not, call the parent method
-  isTernary = inherits(plot$coordinates,'CoordTern') ##NH
-  if(!isTernary) 
-    return( ggplot2::ggplot_build(plot) )
-  
+  UseMethod('ggplot_build')
+}
+
+#' @export
+ggplot_build.ggplot <- function(plot) {
   plot <- ggint$plot_clone(plot)
   if (length(plot$layers) == 0) {
     plot <- plot + geom_blank()
   }
   
-  plot$layers <- strip_unapproved(plot$layers) ##NH
-  plot <- layers_add_or_remove_mask(plot)
+  #NH Check the plot is a teryary plot
+  isTernary = inherits(plot$coordinates,'CoordTern') ##NH
+  if(isTernary){
+    plot$layers <- strip_unapproved(plot$layers) ##NH
+    plot <- layers_add_or_remove_mask(plot) #NH
+  }
   
   #Check the Layers
   layers <- plot$layers
@@ -47,9 +51,8 @@ ggplot_build <- function(plot) {
   
   # Initialise panels, add extra data for margins & missing facetting
   # variables, and add on a PANEL variable to data
-  layout <- ggint$create_layout(plot$facet)
-  data   <- layout$setup(layer_data, plot$data, plot$plot_env, plot$coordinates)
-  data   <- layout$map(data)
+  layout <- ggint$create_layout(plot$facet,plot$coordinates)
+  data   <- layout$setup(layer_data, plot$data, plot$plot_env)
   
   # Compute aesthetics to produce data with generalised variable names
   data <- by_layer(function(l, d) l$compute_aesthetics(d, plot))
@@ -62,11 +65,10 @@ ggplot_build <- function(plot) {
   scale_x <- function() scales$get_scales("x")
   scale_y <- function() scales$get_scales("y")
   
-  layout$train_position(data, scale_x(), scale_y()) ##NH
-  data  <- layout$map_position(data) ##NH
+  layout$train_position(data, scale_x(), scale_y())
+  data  <- layout$map_position(data)
   
   # Apply and map statistics
-  #data <- by_layer(function(l, d) l$compute_statistic(d, panel))
   data <- by_layer(function(l, d) l$compute_statistic(d, layout))
   data <- by_layer(function(l, d) l$map_statistic(d, plot))
   
@@ -81,26 +83,22 @@ ggplot_build <- function(plot) {
   data <- by_layer(function(l, d) l$compute_geom_1(d))
   
   # Apply position adjustments
-  #data <- by_layer(function(l, d) l$compute_position(d, panel))
   data <- by_layer(function(l, d) l$compute_position(d, layout))
   
   # Reset position scales, then re-train and map.  This ensures that facets
   # have control over the range of a plot: is it generated from what's
   # displayed, or does it include the range of underlying data
-  layout$reset_scales() ##NH
-  layout$train_position(data, scale_x(), scale_y()) ##NH
-  data  <- layout$map_position(data)   ##NH
+  layout$reset_scales()
+  layout$train_position(data, scale_x(), scale_y())
+  layout$setup_panel_params()
+  data <- layout$map_position(data)
   
   # Train and map non-position scales
   npscales <- scales$non_position_scales()
-  
   if (npscales$n() > 0) {
     lapply(data, ggint$scales_train_df, scales = npscales)       ##NH
     data <- lapply(data, ggint$scales_map_df, scales = npscales) ##NH
   }
-  
-  # Train coordinate system
-  layout$train_ranges(plot$coordinates) ##NH
   
   # Fill in defaults etc.
   data <- by_layer(function(l, d) l$compute_geom_2(d))
@@ -111,7 +109,10 @@ ggplot_build <- function(plot) {
   # Let Layout modify data before rendering
   data <- layout$finish_data(data)
   
-  list(data = data, layout = layout, plot = plot)
+  structure(
+    list(data = data, layout = layout, plot = plot),
+    class = "ggplot_built"
+  )
 }
 
 #' @rdname ggplot_build
@@ -159,29 +160,29 @@ layer_data <- function(plot, i = 1L) {
 #' @rdname ggplot_gtable
 #' @export
 ggplot_gtable <- function(data) {
-  #Check if plot is ternary plot, if not, call the parent method
-  isTernary  <- inherits(data$plot$coordinates,'CoordTern') ##NH
-  if(!isTernary) 
-    return( ggplot2::ggplot_gtable(data) )
+  UseMethod('ggplot_gtable')
+}
+
+#' @export
+ggplot_gtable.ggplot_built <- function(data) {
+  plot <- data$plot
+  layout <- data$layout
+  data <- data$data
+  theme <- ggint$plot_theme(plot) #NH
   
-  plot       <- data$plot
-  layout     <- data$layout
-  data       <- data$data
-  theme      <- ggint$plot_theme(plot) #NH
+  geom_grobs <- Map(function(l, d) l$draw_geom(d, layout), plot$layers, data)
+  plot_table <- layout$render(geom_grobs, data, theme, plot$labels)
   
-  geom_grobs <- Map(function(l, d) l$draw_geom(d, layout, plot$coordinates),
-                    plot$layers, data)
-  plot_table <- layout$render(geom_grobs, data, plot$coordinates, theme, plot$labels) ##NH 
-  
-  #Check if plot is ternary plot -- PLOT IS TERNARY, based on above return statement
-  #if(isTernary){ #NH
-    latex = calc_element('tern.plot.latex', theme, verbose = FALSE)
-    plot$labels = lapply(plot$labels,function(x) label_formatter(x,latex = latex))
-    plot_table = plot$coordinates$remove_labels(plot_table)
-  #}
+  #NH For Ternary Plot.
+  isTernary  <- inherits(plot$coordinates,'CoordTern') ##NH
+  if(isTernary){
+    latex      <- calc_element('tern.plot.latex', theme, verbose = FALSE)
+    plot$labels<- lapply(plot$labels,function(x) label_formatter(x,latex = latex))
+    plot_table <- plot$coordinates$remove_labels(plot_table)
+  }
   
   # Legends
-  position <- theme$legend.position
+  position <- theme$legend.position %||% "right"
   if (length(position) == 2) {
     position <- "manual"
   }
@@ -196,8 +197,8 @@ ggplot_gtable <- function(data) {
     position <- "none"
   } else {
     # these are a bad hack, since it modifies the contents of viewpoint directly...
-    legend_width  <- gtable_width(legend_box)  #+ theme$legend.margin
-    legend_height <- gtable_height(legend_box) #+ theme$legend.margin
+    legend_width  <- gtable_width(legend_box)
+    legend_height <- gtable_height(legend_box)
     
     # Set the justification of the legend box
     # First value is xjust, second value is yjust
@@ -211,12 +212,12 @@ ggplot_gtable <- function(data) {
       
       # x and y are specified via theme$legend.position (i.e., coords)
       legend_box <- editGrob(legend_box,
-                             vp = viewport(x = xpos, y = ypos, just = c(xjust, yjust),
-                                           height = legend_height, width = legend_width))
+        vp = viewport(x = xpos, y = ypos, just = c(xjust, yjust),
+          height = legend_height, width = legend_width))
     } else {
       # x and y are adjusted using justification of legend box (i.e., theme$legend.justification)
       legend_box <- editGrob(legend_box,
-                             vp = viewport(x = xjust, y = yjust, just = c(xjust, yjust)))
+        vp = viewport(x = xjust, y = yjust, just = c(xjust, yjust)))
       legend_box <- gtable_add_rows(legend_box, unit(yjust, 'null'))
       legend_box <- gtable_add_rows(legend_box, unit(1 - yjust, 'null'), 0)
       legend_box <- gtable_add_cols(legend_box, unit(xjust, 'null'), 0)
@@ -233,55 +234,131 @@ ggplot_gtable <- function(data) {
     plot_table <- gtable_add_cols(plot_table, theme$legend.box.spacing, pos = 0)
     plot_table <- gtable_add_cols(plot_table, legend_width, pos = 0)
     plot_table <- gtable_add_grob(plot_table, legend_box, clip = "off",
-                                  t = panel_dim$t, b = panel_dim$b, l = 1, r = 1, name = "guide-box")
+      t = panel_dim$t, b = panel_dim$b, l = 1, r = 1, name = "guide-box")
   } else if (position == "right") {
     plot_table <- gtable_add_cols(plot_table, theme$legend.box.spacing, pos = -1)
     plot_table <- gtable_add_cols(plot_table, legend_width, pos = -1)
     plot_table <- gtable_add_grob(plot_table, legend_box, clip = "off",
-                                  t = panel_dim$t, b = panel_dim$b, l = -1, r = -1, name = "guide-box")
+      t = panel_dim$t, b = panel_dim$b, l = -1, r = -1, name = "guide-box")
   } else if (position == "bottom") {
-    plot_table <- gtable_add_cols(plot_table, theme$legend.box.spacing, pos = -1)
+    plot_table <- gtable_add_rows(plot_table, theme$legend.box.spacing, pos = -1)
     plot_table <- gtable_add_rows(plot_table, legend_height, pos = -1)
     plot_table <- gtable_add_grob(plot_table, legend_box, clip = "off",
-                                  t = -1, b = -1, l = panel_dim$l, r = panel_dim$r, name = "guide-box")
+      t = -1, b = -1, l = panel_dim$l, r = panel_dim$r, name = "guide-box")
   } else if (position == "top") {
-    plot_table <- gtable_add_cols(plot_table, theme$legend.box.spacing, pos = 0)
+    plot_table <- gtable_add_rows(plot_table, theme$legend.box.spacing, pos = 0)
     plot_table <- gtable_add_rows(plot_table, legend_height, pos = 0)
     plot_table <- gtable_add_grob(plot_table, legend_box, clip = "off",
-                                  t = 1, b = 1, l = panel_dim$l, r = panel_dim$r, name = "guide-box")
+      t = 1, b = 1, l = panel_dim$l, r = panel_dim$r, name = "guide-box")
   } else if (position == "manual") {
     # should guide box expand whole region or region without margin?
     plot_table <- gtable_add_grob(plot_table, legend_box,
-                                  t = panel_dim$t, b = panel_dim$b, l = panel_dim$l, r = panel_dim$r,
-                                  clip = "off", name = "guide-box")
+      t = panel_dim$t, b = panel_dim$b, l = panel_dim$l, r = panel_dim$r,
+      clip = "off", name = "guide-box")
   }
   
   # Title
-  title <- element_render(theme, "plot.title", plot$labels$title, expand_y = TRUE) ##NH
+  title <- element_render(theme, "plot.title", plot$labels$title, margin_y = TRUE)
   title_height <- grobHeight(title)
   
   # Subtitle
-  subtitle <- element_render(theme, "plot.subtitle", plot$labels$subtitle, expand_y = TRUE)
+  subtitle <- element_render(theme, "plot.subtitle", plot$labels$subtitle, margin_y = TRUE)
   subtitle_height <- grobHeight(subtitle)
+  
+  # Tag
+  tag <- element_render(theme, "plot.tag", plot$labels$tag, margin_y = TRUE, margin_x = TRUE)
+  tag_height <- grobHeight(tag)
+  tag_width <- grobWidth(tag)
   
   # whole plot annotation
   caption <- element_render(theme, "plot.caption", plot$labels$caption, expand_y = TRUE)
   caption_height <- grobHeight(caption)
   
   pans <- plot_table$layout[grepl("^panel", plot_table$layout$name), ,
-                            drop = FALSE]
+    drop = FALSE]
   
   plot_table <- gtable_add_rows(plot_table, subtitle_height, pos = 0)
   plot_table <- gtable_add_grob(plot_table, subtitle, name = "subtitle",
-                                t = 1, b = 1, l = min(pans$l), r = max(pans$r), clip = "off")
+    t = 1, b = 1, l = min(pans$l), r = max(pans$r), clip = "off")
   
   plot_table <- gtable_add_rows(plot_table, title_height, pos = 0)
   plot_table <- gtable_add_grob(plot_table, title, name = "title",
-                                t = 1, b = 1, l = min(pans$l), r = max(pans$r), clip = "off")
+    t = 1, b = 1, l = min(pans$l), r = max(pans$r), clip = "off")
   
   plot_table <- gtable_add_rows(plot_table, caption_height, pos = -1)
   plot_table <- gtable_add_grob(plot_table, caption, name = "caption",
-                                t = -1, b = -1, l = min(pans$l), r = max(pans$r), clip = "off")
+    t = -1, b = -1, l = min(pans$l), r = max(pans$r), clip = "off")
+  
+  plot_table <- gtable_add_rows(plot_table, unit(0, 'pt'), pos = 0)
+  plot_table <- gtable_add_cols(plot_table, unit(0, 'pt'), pos = 0)
+  plot_table <- gtable_add_rows(plot_table, unit(0, 'pt'), pos = -1)
+  plot_table <- gtable_add_cols(plot_table, unit(0, 'pt'), pos = -1)
+  
+  tag_pos <- theme$plot.tag.position %||% "topleft"
+  if (length(tag_pos) == 2) tag_pos <- "manual"
+  valid_pos <- c("topleft", "top", "topright", "left", "right", "bottomleft",
+                 "bottom", "bottomright")
+  
+  if (!(tag_pos == "manual" || tag_pos %in% valid_pos)) {
+    stop("plot.tag.position should be a coordinate or one of ",
+         paste(valid_pos, collapse = ', '), call. = FALSE)
+  }
+  
+  if (tag_pos == "manual") {
+    xpos <- theme$plot.tag.position[1]
+    ypos <- theme$plot.tag.position[2]
+    tag_parent <- ggint$justify_grobs(tag, x = xpos, y = ypos,
+                                hjust = theme$plot.tag$hjust,
+                                vjust = theme$plot.tag$vjust,
+                                int_angle = theme$plot.tag$angle,
+                                debug = theme$plot.tag$debug)
+    plot_table <- gtable_add_grob(plot_table, tag_parent, name = "tag", t = 1,
+                                  b = nrow(plot_table), l = 1,
+                                  r = ncol(plot_table), clip = "off")
+  } else {
+    # Widths and heights are reassembled below instead of assigning into them
+    # in order to avoid bug in grid 3.2 and below.
+    if (tag_pos == "topleft") {
+      plot_table$widths <- unit.c(tag_width, plot_table$widths[-1])
+      plot_table$heights <- unit.c(tag_height, plot_table$heights[-1])
+      plot_table <- gtable_add_grob(plot_table, tag, name = "tag",
+                                    t = 1, l = 1, clip = "off")
+    } else if (tag_pos == "top") {
+      plot_table$heights <- unit.c(tag_height, plot_table$heights[-1])
+      plot_table <- gtable_add_grob(plot_table, tag, name = "tag",
+                                    t = 1, l = 1, r = ncol(plot_table),
+                                    clip = "off")
+    } else if (tag_pos == "topright") {
+      plot_table$widths <- unit.c(plot_table$widths[-ncol(plot_table)], tag_width)
+      plot_table$heights <- unit.c(tag_height, plot_table$heights[-1])
+      plot_table <- gtable_add_grob(plot_table, tag, name = "tag",
+                                    t = 1, l = ncol(plot_table), clip = "off")
+    } else if (tag_pos == "left") {
+      plot_table$widths <- unit.c(tag_width, plot_table$widths[-1])
+      plot_table <- gtable_add_grob(plot_table, tag, name = "tag",
+                                    t = 1, b = nrow(plot_table), l = 1,
+                                    clip = "off")
+    } else if (tag_pos == "right") {
+      plot_table$widths <- unit.c(plot_table$widths[-ncol(plot_table)], tag_width)
+      plot_table <- gtable_add_grob(plot_table, tag, name = "tag",
+                                    t = 1, b = nrow(plot_table), l = ncol(plot_table),
+                                    clip = "off")
+    } else if (tag_pos == "bottomleft") {
+      plot_table$widths <- unit.c(tag_width, plot_table$widths[-1])
+      plot_table$heights <- unit.c(plot_table$heights[-nrow(plot_table)], tag_height)
+      plot_table <- gtable_add_grob(plot_table, tag, name = "tag",
+                                    t = nrow(plot_table), l = 1, clip = "off")
+    } else if (tag_pos == "bottom") {
+      plot_table$heights <- unit.c(plot_table$heights[-nrow(plot_table)], tag_height)
+      plot_table <- gtable_add_grob(plot_table, tag, name = "tag",
+                                    t = nrow(plot_table), l = 1, r = ncol(plot_table), clip = "off")
+    } else if (tag_pos == "bottomright") {
+      plot_table$widths <- unit.c(plot_table$widths[-ncol(plot_table)], tag_width)
+      plot_table$heights <- unit.c(plot_table$heights[-nrow(plot_table)], tag_height)
+      plot_table <- gtable_add_grob(plot_table, tag, name = "tag",
+                                    t = nrow(plot_table), l = ncol(plot_table), clip = "off")
+    }
+  }
   
   # Margins
   plot_table <- gtable_add_rows(plot_table, theme$plot.margin[1], pos = 0)
@@ -291,8 +368,8 @@ ggplot_gtable <- function(data) {
   
   if (inherits(theme$plot.background, "element")) {
     plot_table <- gtable_add_grob(plot_table,
-                                  element_render(theme, "plot.background"), ##NH
-                                  t = 1, l = 1, b = -1, r = -1, name = "background", z = -Inf)
+      element_render(theme, "plot.background"),
+      t = 1, l = 1, b = -1, r = -1, name = "background", z = -Inf)
     plot_table$layout <- plot_table$layout[c(nrow(plot_table$layout), 1:(nrow(plot_table$layout) - 1)),]
     plot_table$grobs <- plot_table$grobs[c(nrow(plot_table$layout), 1:(nrow(plot_table$layout) - 1))]
   }

@@ -25,4 +25,3 @@ for application in ternary phase diagrams. Does not alter the standard behaviour
 \seealso{
 Parent \code{\link[ggplot2]{aes}} function.
 }
-

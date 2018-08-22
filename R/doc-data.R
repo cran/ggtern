@@ -152,3 +152,76 @@ NULL
 #'   facet_wrap(~Sample,nrow=2)
 NULL
 
+
+#' Aichisons Skye Lavas
+#' 
+#' AFM compositions of 23 aphyric Skye lavas.
+#' 
+#' @docType data
+#' @references Aitchison, J. 
+#'             The statistical analysis of compositional data 
+#'             Chapman and Hall London, 1986, pp360
+#' @name data_SkyeLava
+#' @rdname data_SkyeLava
+#' @aliases SkyeLava
+#' @author J. Aitchison
+#' @format 1 row per point, 23 points in total, Each point contains data on the following:
+#' \enumerate{ 
+#' \item \strong{No}: ID, S1 to S23
+#' \item \strong{A}: Percent Na2O+K2O , 
+#' \item \strong{F}: Percent Fe2O3
+#' \item \strong{F}: Percent MgO
+#' }
+#' @examples 
+#' 
+#' # Emulate & Enhance plot produced in Fig. 3, pg 7 of:
+#' # Martin-Fernandez, J.; Chacon-Duran, J. & Mateu-Figueras, G.
+#' # Updating on the kernel density estimation for compositional data 
+#' # Proceedings of 17th Conference IASC-ERSS, Compstat, Roma,(Italy), 2006, 713-720
+#' 
+#' data(SkyeLava)
+#' breaks  = c(.01,.05,.10,.25,.5,.75,.9,.95,.99)
+#' ggtern(SkyeLava,aes(F,A,M)) + 
+#' theme_bw() + 
+#' theme_showarrows() + 
+#' theme_latex() + 
+#' theme(tern.panel.grid.minor = element_blank(),
+#'       tern.panel.grid.major = element_line(linetype='dotted',color='darkgray'),
+#'       tern.axis.text        = element_text(size=8)) + 
+#'       geom_density_tern() + 
+#'       geom_point() +
+#'       limit_tern(breaks = breaks,
+#'                  labels = sprintf("%.2f",breaks)) +
+#' labs(title    = "Aphyric Skye Lavas",
+#'      subtitle = "AFM Compositions of 23 samples",
+#'      Tarrow = "A = Na_2O + K_2O",
+#'      Larrow = "F = Fe_20_3",
+#'      Rarrow = "M = MgO")
+NULL
+
+#' Aichisons White Cells
+#' 
+#' White-cell compositions of 30 blood cells by two different methods
+#' @docType data
+#' @references Aitchison, J. 
+#'             The statistical analysis of compositional data 
+#'             Chapman and Hall London, 1986, pp366
+#' @name data_WhiteCells
+#' @rdname data_WhiteCells
+#' @aliases WhiteCells
+#' @author J. Aitchison
+#' @format 1 row per point, 60 points in total, 2 experiments x 30 points each, Each point contains data on the following:
+#' \enumerate{ 
+#' \item \strong{No}: ID, S1 to S30
+#' \item \strong{Experiment}: MicroscopicInspection or ImageAnalysis
+#' \item \strong{G}: Fraction Granulocytes
+#' \item \strong{L}: Fraction Lymphocytes
+#' \item \strong{M}: Fraction Monocytes
+#' }
+#' @examples
+#' data(WhiteCells)
+#'    ggtern(WhiteCells,aes(G,L,M)) + 
+#'    geom_density_tern(aes(color=Experiment)) +
+#'    geom_point(aes(shape=Experiment)) +
+#'    facet_wrap(~Experiment,nrow=2)
+NULL

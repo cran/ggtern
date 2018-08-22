@@ -2,8 +2,8 @@
 % Please edit documentation in R/annotation-raster-tern.R
 \docType{data}
 \name{annotation_raster_tern}
-\alias{GeomRasterAnnTern}
 \alias{annotation_raster_tern}
+\alias{GeomRasterAnnTern}
 \title{Annotation: High-performance rectangular tiling (ggtern version)}
 \usage{
 annotation_raster_tern(raster, xmin = 0, xmax = 1, ymin = 0, ymax = 1,
@@ -45,4 +45,3 @@ labs(title="Demonstration of Raster Annotation")
 Nicholas Hamilton
 }
 \keyword{datasets}
-

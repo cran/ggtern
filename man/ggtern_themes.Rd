@@ -2,25 +2,25 @@
 % Please edit documentation in R/theme-defaults.R
 \name{ggtern_themes}
 \alias{ggtern_themes}
-\alias{theme_bluedark}
-\alias{theme_bluelight}
-\alias{theme_bvbg}
-\alias{theme_bvbw}
-\alias{theme_bw}
-\alias{theme_classic}
-\alias{theme_custom}
-\alias{theme_dark}
-\alias{theme_darker}
 \alias{theme_ggtern}
 \alias{theme_gray}
-\alias{theme_light}
+\alias{theme_bw}
 \alias{theme_linedraw}
-\alias{theme_matrix}
+\alias{theme_light}
 \alias{theme_minimal}
-\alias{theme_rgbg}
-\alias{theme_rgbw}
-\alias{theme_tropical}
+\alias{theme_classic}
+\alias{theme_dark}
 \alias{theme_void}
+\alias{theme_darker}
+\alias{theme_custom}
+\alias{theme_rgbw}
+\alias{theme_rgbg}
+\alias{theme_matrix}
+\alias{theme_tropical}
+\alias{theme_bluedark}
+\alias{theme_bluelight}
+\alias{theme_bvbw}
+\alias{theme_bvbg}
 \title{ggtern themes}
 \usage{
 theme_ggtern(base_size = 11, base_family = "")
@@ -170,6 +170,7 @@ A black/vermillion/blue theme with grey background, for colorblind sensitive rea
 }
 }
 \examples{
+\donttest{
 #Create a list of the theme suffixes
 themesOrg = c('gray','bw','linedraw','light',
               'dark','minimal','classic','void')
@@ -192,13 +193,13 @@ grid.arrange(grobs=plotThemes(themesOrg),top = "Collection of Themes (Original)"
 
 #Arrange the New Themes
 grid.arrange(grobs=plotThemes(themesNew),top = "Collection of Themes (New Themes)")
-
 }
-\author{
-Nicholas Hamilton
+
 }
 \references{
 Okabe, Masataka, and Kei Ito. "How to make figures and presentations that are friendly to color blind people." 
 University of Tokyo (2002). http://jfly.iam.u-tokyo.ac.jp/color/
 }
-
+\author{
+Nicholas Hamilton
+}

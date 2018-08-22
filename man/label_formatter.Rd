@@ -14,4 +14,3 @@ label_formatter(label, ...)
 \description{
 \code{label_formatter} is a function that formats / parses labels for use in the grid.
 }
-
