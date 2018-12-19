@@ -2,7 +2,6 @@
 % Please edit documentation in R/theme-clockwise.R
 \name{theme_clockwise}
 \alias{theme_clockwise}
-\alias{theme_clockwise}
 \alias{theme_anticlockwise}
 \alias{theme_counterclockwise}
 \alias{tern_clockwise}

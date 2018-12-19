@@ -3,7 +3,6 @@
 \docType{data}
 \name{coord_tern}
 \alias{coord_tern}
-\alias{coord_tern}
 \alias{CoordTern}
 \title{Ternary Coordinate System}
 \usage{

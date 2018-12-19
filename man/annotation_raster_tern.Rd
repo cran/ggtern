@@ -6,8 +6,8 @@
 \alias{GeomRasterAnnTern}
 \title{Annotation: High-performance rectangular tiling (ggtern version)}
 \usage{
-annotation_raster_tern(raster, xmin = 0, xmax = 1, ymin = 0, ymax = 1,
-  interpolate = FALSE)
+annotation_raster_tern(raster, xmin = 0, xmax = 1, ymin = 0,
+  ymax = 1, interpolate = FALSE)
 }
 \arguments{
 \item{raster}{raster object to display}

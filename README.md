@@ -35,6 +35,20 @@ Nicholas Hamilton [aut, cre]
 
 This project is licensed under GPL2 - see the [LICENSE](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) for details.
 
+### Citation
+
+Please cite ggtern via the following:
+
+Hamilton NE and Ferry M (2018). "ggtern: Ternary Diagrams Using ggplot2." 
+Journal of Statistical Software, Code Snippets, 87(3), pp. 1-17. 
+doi: 10.18637/jss.v087.c03 (URL:http://doi.org/10.18637/jss.v087.c03)
+
+A bibtex entry can be obtained by executing the following command:
+
+```
+  citation('ggtern')
+```
+
 ### Acknowledgments
 
 HUGE thanks to Hadley Wickham and all those that have controbuted to the [ggplot2](http://ggplot2.org/) package, without which, this would not be possible.

@@ -9,7 +9,8 @@
 \usage{
 geom_mean_ellipse(mapping = NULL, data = NULL, stat = "MeanEllipse",
   position = "identity", ..., lineend = "butt", linejoin = "round",
-  linemitre = 1, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+  linemitre = 1, na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE)
 
 stat_mean_ellipse(mapping = NULL, data = NULL, geom = "MeanEllipse",
   position = "identity", ..., steps = 72, r = 1, na.rm = FALSE,
@@ -32,18 +33,18 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
+the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data.}
 
 \item{stat}{Use to override the default connection between
-\code{geom_smooth} and \code{stat_smooth}.}
+\code{geom_smooth()} and \code{stat_smooth()}.}
 
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
 
 \item{...}{Other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
+\code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
 \item{lineend}{Line end style (round, butt, square).}
@@ -67,7 +68,7 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
 \item{geom}{Use to override the default connection between
-\code{geom_smooth} and \code{stat_smooth}.}
+\code{geom_smooth()} and \code{stat_smooth()}.}
 
 \item{steps}{the number of discretisation points to draw the ellipses}
 
@@ -76,8 +77,6 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 \description{
 Produce ellipses from a mean and a variance of ternary compositional data, based off the function 
 included in the \code{\link{compositions}} package.
-
-Mean Ellipses
 }
 \section{Aesthetics}{
 

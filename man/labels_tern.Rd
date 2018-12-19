@@ -2,7 +2,6 @@
 % Please edit documentation in R/utilities.R
 \name{labels_tern}
 \alias{labels_tern}
-\alias{labels_tern}
 \alias{getLabels}
 \title{Generate Axis Labels}
 \usage{

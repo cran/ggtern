@@ -17,7 +17,7 @@ scale_R_continuous(name = waiver(), limits = NULL, breaks = waiver(),
   minor_breaks = waiver(), labels = waiver(), ...)
 }
 \arguments{
-\item{name}{The name of the scale. Used as axis or legend title. If
+\item{name}{The name of the scale. Used as the axis or legend title. If
 \code{waiver()}, the default, the name of the scale is taken from the first
 mapping used for that aesthetic. If \code{NULL}, the legend title will be
 omitted.}

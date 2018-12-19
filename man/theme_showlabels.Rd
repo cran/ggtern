@@ -2,7 +2,6 @@
 % Please edit documentation in R/theme-showlabels.R
 \name{theme_showlabels}
 \alias{theme_showlabels}
-\alias{theme_showlabels}
 \alias{theme_hidelabels}
 \alias{theme_nolabels}
 \title{Show or Hide Axis Ticklabels}

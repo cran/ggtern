@@ -62,6 +62,17 @@
 #'   \item \code{\link[=data_USDA]{USDA Textural Classification Data}}
 #'   \item \code{\link[=data_Fragments]{Grantham and Valbel Rock Fragment Data}}
 #' }
+#' 
+#' @references
+#' To cite this package, please use the following:
+#' 
+#' Hamilton NE and Ferry M (2018). "ggtern: Ternary Diagrams Using ggplot2." 
+#' Journal of Statistical Software, Code Snippets, 87(3), pp. 1-17. 
+#' doi: 10.18637/jss.v087.c03 (URL:http://doi.org/10.18637/jss.v087.c03)
+#' 
+#' A bibtex entry can be obtained by executing the following command:
+#' \code{citation('ggtern')}
+#' 
 #' @examples
 #' ##-----------------------------------------------
 #' ## Basic Usage

@@ -2,7 +2,6 @@
 % Please edit documentation in R/utilities.R
 \name{breaks_tern}
 \alias{breaks_tern}
-\alias{breaks_tern}
 \alias{getBreaks}
 \title{Generate Axis Breaks}
 \usage{

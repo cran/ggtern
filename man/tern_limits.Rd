@@ -5,7 +5,6 @@
 \alias{tern_limit}
 \alias{limit_tern}
 \alias{limits_tern}
-\alias{tern_limits}
 \title{Restrict Ternary Limits}
 \usage{
 tern_limit(T = 1, L = 1, R = 1, ...)

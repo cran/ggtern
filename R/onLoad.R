@@ -66,6 +66,9 @@
 #------------------------------------------------------------------------------
 if(FALSE){
   library(grid)
+  # install.packages("devtools")
+  devtools::install_github("hadley/staticdocs",force=TRUE)
+  library(devtools)
   source("./inst/staticdocs/icons.R")
   buildStaticDocs = function(){
     

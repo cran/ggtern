@@ -10,12 +10,14 @@
 \usage{
 geom_density_tern(mapping = NULL, data = NULL, stat = "DensityTern",
   position = "identity", ..., lineend = "butt", linejoin = "round",
-  linemitre = 1, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+  linemitre = 1, na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE)
 
 stat_density_tern(mapping = NULL, data = NULL, geom = "density_tern",
   position = "identity", ..., contour = TRUE, n = 100, h = NULL,
   bdl = 0, bdl.val = NA, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE, weight = 1, base = "ilr", expand = c(0.5, 0.5))
+  inherit.aes = TRUE, weight = 1, base = "ilr", expand = c(0.5,
+  0.5))
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -34,7 +36,7 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
+the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data.}
 
 \item{stat}{The statistical transformation to use on the data for this
@@ -45,7 +47,7 @@ a call to a position adjustment function.}
 
 \item{...}{Other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
+\code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
 \item{lineend}{Line end style (round, butt, square).}

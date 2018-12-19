@@ -5,7 +5,8 @@
 \alias{constructor}
 \title{ggtern Constructor}
 \usage{
-ggtern(data = NULL, mapping = aes(), ..., environment = parent.frame())
+ggtern(data = NULL, mapping = aes(), ...,
+  environment = parent.frame())
 }
 \arguments{
 \item{data}{Default dataset to use for plot. If not already a data.frame,

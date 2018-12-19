@@ -23,12 +23,13 @@ clipPolygons(df, coord, plyon = c("level", "piece", "group"),
 
 theme_arrowbaseline(label = "labels")
 
-element_ternary(showarrows, padding, arrowsep, arrowstart, arrowfinish, vshift,
-  hshift, ticklength.major, ticklength.minor)
+element_ternary(showarrows, padding, arrowsep, arrowstart, arrowfinish,
+  vshift, hshift, ticklength.major, ticklength.minor)
 
 ggtern.multi(..., plotlist = NULL, cols = 1, layout = NULL)
 
-point.in.sequence(x, y, ..., df = data.frame(x = x, y = y), close = FALSE)
+point.in.sequence(x, y, ..., df = data.frame(x = x, y = y),
+  close = FALSE)
 }
 \arguments{
 \item{src}{character name of current procedure}

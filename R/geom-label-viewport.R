@@ -1,3 +1,6 @@
+#' @include geom-text-viewport.R
+NULL
+
 #' Draw Label at Relative Position on Viewport
 #' 
 #' Since it is sometimes counter intuitive for working with ternary or other non-cartesian coordinates in the 
@@ -31,7 +34,8 @@
 #' @inheritParams ggplot2::geom_text
 #' @inheritParams ggplot2::geom_point
 #' @inheritParams ggplot2::geom_label
-#' @inheritParams ggtern::geom_text_viewport
+#' @param hjust horizontal justification
+#' @param vjust vertical justification
 #' @seealso \code{\link[ggplot2]{geom_label}}
 #' @author Nicholas Hamilton
 #' @rdname geom_label_viewport

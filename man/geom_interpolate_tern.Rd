@@ -10,15 +10,16 @@
 \title{Ternary Interpolation}
 \usage{
 geom_interpolate_tern(mapping = NULL, data = NULL,
-  stat = "InterpolateTern", position = "identity", ..., method = "auto",
-  formula = value ~ poly(x, y, degree = 1), lineend = "butt",
-  linejoin = "round", linemitre = 1, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE)
+  stat = "InterpolateTern", position = "identity", ...,
+  method = "auto", formula = value ~ poly(x, y, degree = 1),
+  lineend = "butt", linejoin = "round", linemitre = 1,
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
 
 stat_interpolate_tern(mapping = NULL, data = NULL,
-  geom = "interpolate_tern", position = "identity", ..., method = "auto",
-  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, n = 80,
-  formula = value ~ poly(x, y, degree = 1), base = "ilr")
+  geom = "interpolate_tern", position = "identity", ...,
+  method = "auto", na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE, n = 80, formula = value ~ poly(x, y, degree =
+  1), base = "ilr")
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -37,32 +38,33 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
+the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data.}
 
 \item{stat}{Use to override the default connection between
-\code{geom_smooth} and \code{stat_smooth}.}
+\code{geom_smooth()} and \code{stat_smooth()}.}
 
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
 
 \item{...}{Other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
+\code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
-\item{method}{Smoothing method (function) to use, eg. \code{lm}, \code{glm},
-\code{gam}, \code{loess}, \code{MASS::rlm}.
+\item{method}{Smoothing method (function) to use, accepts either a character vector,
+e.g. \code{"auto"}, \code{"lm"}, \code{"glm"}, \code{"gam"}, \code{"loess"} or a function, e.g.
+\code{MASS::rlm} or \code{mgcv::gam}, \code{base::lm}, or \code{base::loess}.
 
 For \code{method = "auto"} the smoothing method is chosen based on the
 size of the largest group (across all panels). \code{\link[=loess]{loess()}} is
 used for less than 1,000 observations; otherwise \code{\link[mgcv:gam]{mgcv::gam()}} is
 used with \code{formula = y ~ s(x, bs = "cs")}. Somewhat anecdotally,
-\code{loess} gives a better appearance, but is O(n^2) in memory, so does
-not work for larger datasets.
+\code{loess} gives a better appearance, but is \eqn{O(N^{2})}{O(N^2)} in memory,
+so does not work for larger datasets.
 
-If you have fewer than 1,000 observations but want to use the same \code{gam}
-model that \code{method = "auto"} would use then set
+If you have fewer than 1,000 observations but want to use the same \code{gam()}
+model that \code{method = "auto"} would use, then set
 \code{method = "gam", formula = y ~ s(x, bs = "cs")}.}
 
 \item{formula}{Formula to use in smoothing function, eg. \code{y ~ x},
@@ -89,7 +91,7 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
 \item{geom}{Use to override the default connection between
-\code{geom_smooth} and \code{stat_smooth}.}
+\code{geom_smooth()} and \code{stat_smooth()}.}
 
 \item{n}{number of grid points in each direction}
 

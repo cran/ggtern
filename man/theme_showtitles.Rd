@@ -2,7 +2,6 @@
 % Please edit documentation in R/theme-showtitles.R
 \name{theme_showtitles}
 \alias{theme_showtitles}
-\alias{theme_showtitles}
 \alias{theme_hidetitles}
 \alias{theme_notitles}
 \title{Show or Hide the Axis (Apex) Titles}
@@ -15,11 +14,6 @@ theme_notitles()
 }
 \description{
 Convenience functions to SHOW or HIDE the apex labels.
-
-\code{theme_showtitles} is a function that apends to the current theme a flag to switch ON the apex titles.
-
-\code{theme_hidetitles} or \code{theme_notitles} (alias) is a function that apends to the current 
-theme a flag to switch OFF the apex titles.
 }
 \examples{
  #Load data

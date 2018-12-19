@@ -25,8 +25,6 @@ stores them in a special data structure called a \code{\link{gtable}}.
 This object is amenable to programmatic manipulation, should you want
 to (e.g.) make the legend box 2 cm wide, or combine multiple plots into
 a single display, preserving aspect ratios across the plots.
-
-Generate a ggplot2 plot grob (ggtern version)
 }
 \seealso{
 \code{\link{print.ggplot}} and \code{link{benchplot}} for

@@ -3,7 +3,6 @@
 \name{theme_arrowlength}
 \alias{theme_arrowlength}
 \alias{theme_arrowcustomlength}
-\alias{theme_arrowlength}
 \alias{theme_arrowsmall}
 \alias{theme_arrowshort}
 \alias{theme_arrownormal}

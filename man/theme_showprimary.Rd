@@ -4,7 +4,6 @@
 \alias{theme_showprimary}
 \alias{theme_noprimary}
 \alias{theme_hideprimary}
-\alias{theme_showprimary}
 \alias{theme_nosecondary}
 \alias{theme_hidesecondary}
 \alias{theme_showsecondary}

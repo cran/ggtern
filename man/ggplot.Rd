@@ -8,7 +8,8 @@
 \alias{plot.ggplot}
 \title{Create a new ggplot plot.}
 \usage{
-ggplot(data = NULL, mapping = aes(), ..., environment = parent.frame())
+ggplot(data = NULL, mapping = aes(), ...,
+  environment = parent.frame())
 
 \method{print}{ggplot}(x, newpage = is.null(vp), vp = NULL, ...)
 
@@ -42,8 +43,6 @@ Invisibly returns the result of \code{\link{ggplot_build}}, which
 declare the input data frame for a graphic and to specify the
 set of plot aesthetics intended to be common throughout all
 subsequent layers unless specifically overridden.
-
-Draw plot on current graphics device.
 }
 \details{
 \code{ggplot()} is typically used to construct a plot

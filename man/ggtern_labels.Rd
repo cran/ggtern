@@ -44,14 +44,6 @@ Rarrowlab(label)
 \description{
 New label modification functions, equivalent to the original functions in ggplot2 (\code{\link{xlab}} and \code{\link{ylab}}) 
 however for the new axes used in the \code{ggtern} package
-
-\code{Tlab} modifies the label of the TOP apex species
-
-\code{Llab} modifies the label of the LHS apex species
-
-\code{Rlab} modifies the label of the RHS apex species
-
-\code{Wlab} modifies the label of the arrow suffix
 }
 \details{
 \code{Tlab} and \code{\link{xlab}} are equivalent (when \code{T='x'} in the \code{\link{coord_tern}} definition), 

@@ -7,8 +7,9 @@
 \usage{
 arrangeGrob(..., grobs = list(...), layout_matrix, vp = NULL,
   name = "arrange", as.table = TRUE, respect = FALSE, clip = "off",
-  nrow = NULL, ncol = NULL, widths = NULL, heights = NULL, top = NULL,
-  bottom = NULL, left = NULL, right = NULL, padding = unit(0.5, "line"))
+  nrow = NULL, ncol = NULL, widths = NULL, heights = NULL,
+  top = NULL, bottom = NULL, left = NULL, right = NULL,
+  padding = unit(0.5, "line"))
 
 grid.arrange(..., newpage = TRUE)
 }

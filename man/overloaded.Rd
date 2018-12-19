@@ -46,7 +46,7 @@ informative error messages.}
 
 \item{element}{The name of the theme element to calculate}
 
-\item{theme}{A theme object (like theme_grey())}
+\item{theme}{A theme object (like \code{\link[=theme_grey]{theme_grey()}})}
 
 \item{verbose}{If TRUE, print out which elements this one inherits from}
 
@@ -57,18 +57,6 @@ informative error messages.}
 \item{...}{named list of theme settings}
 }
 \description{
-\code{plot_theme} is a local copy of the method that determines the net theme between a plot and the current global theme.
-
-\code{add_theme} is a local copy of the ggplot2 function which modifies the current theme, by a proposed theme. 
-It is slightly modified to handle 'logical' values the same way it handles 'character' or 'numeric' values, 
-which do not inherit from 'element' objects.
-
-\code{"\%+replace\%"} is a local copy of the ggplot2 replace operator, no different other than being exported from the ggtern namespace.
-
-\code{update_theme} is a local copy of a ggplot2 function, which copies elements from the new theme into an old theme.
-
-\code{calc_element} is a local copy of the ggplot2 function which determines the net element based on inheritances, given input theme.
-
 INTERNAL FUNCTIONS (Overloaded from ggplot2): The source of the following functions originate 
 from ggplot2, however, minor patches were required in order for them to function under the ggtern framework. 
 Patches were mainly to do with handling the new theme elements and heirarchies.

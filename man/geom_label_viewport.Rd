@@ -8,9 +8,9 @@
 \usage{
 geom_label_viewport(mapping = NULL, data = NULL, stat = "identity",
   position = "identity", ..., hjust = "inward", vjust = "inward",
-  parse = FALSE, label.padding = unit(0.25, "lines"), label.r = unit(0.15,
-  "lines"), label.size = 0.25, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE)
+  parse = FALSE, label.padding = unit(0.25, "lines"),
+  label.r = unit(0.15, "lines"), label.size = 0.25, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -29,7 +29,7 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
+the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data.}
 
 \item{stat}{The statistical transformation to use on the data for this
@@ -40,7 +40,7 @@ a call to a position adjustment function.}
 
 \item{...}{Other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
+\code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
 \item{hjust}{horizontal justification}
@@ -48,7 +48,7 @@ to the paired geom/stat.}
 \item{vjust}{vertical justification}
 
 \item{parse}{If \code{TRUE}, the labels will be parsed into expressions and
-displayed as described in ?plotmath}
+displayed as described in \code{?plotmath}.}
 
 \item{label.padding}{Amount of padding around label. Defaults to 0.25 lines.}
 

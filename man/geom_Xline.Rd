@@ -12,22 +12,13 @@
 \alias{lline}
 \alias{Rline}
 \alias{rline}
-\alias{geom_Tline}
 \alias{GeomTline}
-\alias{Tline}
-\alias{tline}
-\alias{geom_Lline}
 \alias{GeomLline}
-\alias{Lline}
-\alias{lline}
-\alias{geom_Rline}
 \alias{GeomRline}
-\alias{Rline}
-\alias{rline}
 \title{Fixed Value Lines}
 \usage{
-geom_Tline(mapping = NULL, data = NULL, ..., Tintercept, na.rm = FALSE,
-  show.legend = NA)
+geom_Tline(mapping = NULL, data = NULL, ..., Tintercept,
+  na.rm = FALSE, show.legend = NA)
 
 Tline(mapping = NULL, data = NULL, ..., Tintercept, na.rm = FALSE,
   show.legend = NA)
@@ -35,8 +26,8 @@ Tline(mapping = NULL, data = NULL, ..., Tintercept, na.rm = FALSE,
 tline(mapping = NULL, data = NULL, ..., Tintercept, na.rm = FALSE,
   show.legend = NA)
 
-geom_Lline(mapping = NULL, data = NULL, ..., Lintercept, na.rm = FALSE,
-  show.legend = NA)
+geom_Lline(mapping = NULL, data = NULL, ..., Lintercept,
+  na.rm = FALSE, show.legend = NA)
 
 Lline(mapping = NULL, data = NULL, ..., Lintercept, na.rm = FALSE,
   show.legend = NA)
@@ -44,8 +35,8 @@ Lline(mapping = NULL, data = NULL, ..., Lintercept, na.rm = FALSE,
 lline(mapping = NULL, data = NULL, ..., Lintercept, na.rm = FALSE,
   show.legend = NA)
 
-geom_Rline(mapping = NULL, data = NULL, ..., Rintercept, na.rm = FALSE,
-  show.legend = NA)
+geom_Rline(mapping = NULL, data = NULL, ..., Rintercept,
+  na.rm = FALSE, show.legend = NA)
 
 Rline(mapping = NULL, data = NULL, ..., Rintercept, na.rm = FALSE,
   show.legend = NA)
@@ -70,12 +61,12 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
+the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data.}
 
 \item{...}{Other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
+\code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
 \item{Tintercept, Lintercept, Rintercept}{the intercepts for the T, L and R axis respectively}

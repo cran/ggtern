@@ -80,36 +80,6 @@ layers_add_or_remove_mask(plot)
 }
 \description{
 INTERNAL FUNCTIONS: \code{ggtern} makes use of several non-exported internal functions, list are as follows:
-
-\code{ifthenelse} function takes input arguments \code{x}, \code{a} and \code{b} and returns \code{a} if \code{x} is \code{TRUE}, else, returns \code{b}
-
-\code{is.numericor} function takes input arguments \code{A} and \code{B} and returns \code{A} if \code{A} is numeric, else, returns \code{B}
-
-\code{find_global_tern} is a function that conducts a named search for the \code{name} object instance, within the \code{env} environment. 
-If an instance doesn't exist within the \code{env} environment, a search is then conducted within the \code{ggtern} and \code{ggplot2} 
-namespaces \emph{(in that order)}. This is a modified version of the original source as provided in \code{ggplot2}, which has the same functionality, however, the modification is such that the function
-now additionally searches within the \code{ggtern} namespace prior to the \code{ggplot2} namespace.
-
-\code{tern_dep} is a function that gives a deprecation error, warning, or messsage, 
-depending on version number, it is based of the \code{\link[ggplot2]{gg_dep}} function which is
-used inside the \code{ggplot2} package
-
-\code{arrow_label_formatter} is a function that formats the labels directly adjacent to the ternary arrows.
-
-\code{joinCharacterSeries} is a function will turn a character vector 
-from the format \code{c('a','b','c')} to a single string
-in the following format: \code{"'a','b' and 'c'"}
-
-\code{identityInv} is a function which returns exactly the same as \code{\link{identity}} however
-it can be used within transformation logic via \code{do.call(...)} in the same way as for example
-\code{\link{ilrInv}} is to \code{\link{ilr}}.
-
-\code{getFormulaVars} is a function that returns a list of either dependent or independent variables used
-in an input formula
-
-Function to add missing scales and other items to the plot and its coordinates sytem
-
-Function to add clipping mask if it isn't already present
 }
 \author{
 Nicholas Hamilton

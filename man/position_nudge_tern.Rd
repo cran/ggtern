@@ -21,4 +21,5 @@ Other position adjustments: \code{\link{position_jitter_tern}}
 \author{
 Nicholas Hamilton
 }
+\concept{position adjustments}
 \keyword{datasets}

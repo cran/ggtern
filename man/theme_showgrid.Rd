@@ -10,16 +10,9 @@
 \alias{theme_tern_nogrid_major}
 \alias{theme_nogrid}
 \alias{theme_tern_nogrid}
-\alias{theme_showgrid}
 \alias{theme_hidegrid}
-\alias{theme_nogrid}
-\alias{theme_tern_nogrid}
 \alias{theme_showgrid_major}
 \alias{theme_hidegrid_major}
-\alias{theme_nogrid_major}
-\alias{theme_tern_nogrid_major}
-\alias{theme_showgrid_minor}
-\alias{theme_hidegrid_minor}
 \title{Show or Hide Grid}
 \usage{
 theme_showgrid()

@@ -14,10 +14,6 @@ theme_showarrows()
 }
 \description{
 \code{theme_noarrows} is a function that appends to the current theme a flag to switch OFF the ternary arrows
-
-\code{theme_hidearrows} is an alias for \code{theme_noarrows}
-
-\code{theme_showarrows} is a function that appends to the current theme a flag to switch ON the ternary arrows
 }
 \author{
 Nicholas Hamilton

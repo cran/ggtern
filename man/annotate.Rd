@@ -4,9 +4,10 @@
 \alias{annotate}
 \title{Create an annotation layer (ggtern version).}
 \usage{
-annotate(geom, x = NULL, y = NULL, z = NULL, xmin = NULL, xmax = NULL,
-  ymin = NULL, ymax = NULL, zmin = NULL, zmax = NULL, xend = NULL,
-  yend = NULL, zend = NULL, ..., na.rm = FALSE)
+annotate(geom, x = NULL, y = NULL, z = NULL, xmin = NULL,
+  xmax = NULL, ymin = NULL, ymax = NULL, zmin = NULL,
+  zmax = NULL, xend = NULL, yend = NULL, zend = NULL, ...,
+  na.rm = FALSE)
 }
 \arguments{
 \item{geom}{name of geom to use for annotation}
@@ -16,7 +17,7 @@ you must specify at least one of these.}
 
 \item{...}{Other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
+\code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
