@@ -40,7 +40,7 @@ geom_mask <- function() {
 #' @export
 GeomMask <- ggproto("GeomMask", Geom,
   default_aes = aes("x","y","z"),
-  draw_panel  = function(self, data, panel_scales, coord){
+  draw_panel  = function(self, data, panel_params, coord){
     
     #Initially Empty Items
     items = list()
@@ -58,8 +58,8 @@ GeomMask <- ggproto("GeomMask", Geom,
           dbg   = getOption('tern.mask.debug',FALSE)
           
           #1st pass is master triangle.
-          ex  = .get.tern.extremes(coord,panel_scales,transform=FALSE)
-          ex  = coord$transform(ex,scale_details = panel_scales)
+          ex  = .get.tern.extremes(coord,panel_params,transform=FALSE)
+          ex  = coord$transform(ex,panel_params = panel_params)
           ex  = rbind(ex,ex[1,,drop=F])
           
           #Build a specific viewport value
@@ -118,7 +118,7 @@ GeomMask <- ggproto("GeomMask", Geom,
         #Render Axis items on top of the mask, if grids are on top, this
         #will be rendered in the coord_tern render_fg routine instead.
         if(!.theme.get.gridsontop(theme)){
-          extrm = .get.tern.extremes(coord,panel_scales,transform=TRUE)
+          extrm = .get.tern.extremes(coord,panel_params,transform=TRUE)
           items = .render.fgset(coord,extrm,scale_details,theme,items)
         }
         

@@ -1,3 +1,21 @@
+
+ggtern 3.3.0
+----------------------------------------------------------------
+* Fixed broken compatability with ggplot2 3.3.0
+
+ggtern 3.1.1
+----------------------------------------------------------------
+* Bug fix within the stat density tern funtion
+
+ggtern 3.1.0
+----------------------------------------------------------------
+* Fix citation information to reference the JSS article (https://doi.org/10.18637/jss.v087.c03)
+
+ggtern 3.0.0
+----------------------------------------------------------------
+* Bug fixes and S3 methods, 
+* Fixed broken compatability with ggplot2 3.0.0
+
 ggtern 2.2.2
 ----------------------------------------------------------------
 * Fixed bug to do with enabling arrows on theme_bw theme preset

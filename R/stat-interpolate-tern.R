@@ -108,7 +108,7 @@ StatInterpolateTern <- ggproto("StatInterpolateTern",
 
     
     #Draw the contours
-    result    = StatContour$compute_group(data,scales,bins=bins,binwidth=binwidth,breaks=breaks,complete=complete,na.rm=na.rm)
+    result    = StatContour$compute_group(data,scales,bins=bins,binwidth=binwidth,breaks=breaks,na.rm=na.rm)
 
       if(closure %in% c('upper','lower')){
         result = ddply(result,setdiff(names(result),c('x','y')),function(df){

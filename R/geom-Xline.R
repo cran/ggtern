@@ -50,8 +50,11 @@ geom_Tline <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomTline <- ggproto("GeomTline",Geom,
-                     draw_panel = function(self,data, panel_scales,coord){
-                       .drawTRLLinesX(self,data,panel_scales,coord,'T')
+                     setup_data = function(self, data,params){
+                       .setupXLineData(self, data, params, 'T');
+                     },
+                     draw_group = function(self,data,panel_params,coord){
+                       .drawTRLLinesX(self,data,panel_params,coord,'T')
                      },
                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
                      required_aes = c("Tintercept"),
@@ -100,8 +103,11 @@ geom_Lline <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomLline <- ggproto("GeomLline",Geom,
-                     draw_panel = function(self,data, panel_scales,coord){
-                       .drawTRLLinesX(self,data,panel_scales,coord,'L')
+                     setup_data = function(self, data,params){
+                       .setupXLineData(self, data, params, 'L');
+                     },
+                     draw_group = function(self,data,panel_params,coord){
+                       .drawTRLLinesX(self,data,panel_params,coord,'L')
                      },
                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
                      required_aes = c("Lintercept"),
@@ -150,8 +156,11 @@ geom_Rline <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomRline <- ggproto("GeomRline",Geom,
-                     draw_panel = function(self,data, panel_scales,coord){
-                       .drawTRLLinesX(self,data,panel_scales,coord,'R')
+                     setup_data = function(self, data,params){
+                       .setupXLineData(self, data, params, 'R');
+                     },
+                     draw_group = function(self,data,panel_params,coord){
+                       .drawTRLLinesX(self,data,panel_params,coord,'R')
                      },
                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
                      required_aes = c("Rintercept"),
@@ -167,20 +176,17 @@ Rline <- geom_Rline
 #' @export
 rline <- Rline
 
-
-
-
-#internal function
-.drawTRLLinesX <- function(self,data,panel_scales, coord, feat){
-  if(!'CoordTern' %in% class(coord)) return(zeroGrob())
+.setupXLineData = function(self, data, params, feat){
+  #Put into cartesian
+  coord       = coord_tern()
+  
   axisNames = names(coord$mapping)
   if(!feat %in% axisNames) stop(sprintf("Invalid 'feat' variable ('%s'), please use %s",
                                         feat,
                                         joinCharacterSeries(axisNames,'or')),call.=FALSE)
   data      = remove_missing(data,vars=paste(axisNames,'intercept',sep=""),na.rm=TRUE,name=class(self)[1],finite=TRUE)
   if(empty(data)) return(zeroGrob())
-  
-  ranges    = coord$range(panel_scales);
+
   mapping   = coord$mapping
   
   #Get the correct sequence of other axes, relative to the featured axis
@@ -198,9 +204,18 @@ rline <- Rline
     data[,sprintf("%s%s",  others[[1+x]],s) ] = 1 - data[, mapping[[feat]] ] - min(limits)
     data[,sprintf("%s%s",  others[[2-x]],s) ] = min(limits)
   }
-  scale_details = list( x.range = ranges[['x']], y.range = ranges[['y']] )
-  data          = coord$transform(data,scale_details)
-  grob          = zeroGrob()
+  data
+  
+}
+
+#internal function
+.drawTRLLinesX <- function(self,data,panel_params, coord, feat){
+  
+  if(!'CoordTern' %in% class(coord)) return(zeroGrob())
+  grob = zeroGrob()
+  
+  data = coord$transform(data, panel_params)
+  
   tryCatch({
     cw   = calc_element('tern.axis.clockwise',coord$theme) ##Clockwise
     grob = segmentsGrob(if(!cw) data$x else data$xend, 

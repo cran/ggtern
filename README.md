@@ -51,5 +51,5 @@ A bibtex entry can be obtained by executing the following command:
 
 ### Acknowledgments
 
-HUGE thanks to Hadley Wickham and all those that have controbuted to the [ggplot2](http://ggplot2.org/) package, without which, this would not be possible.
+HUGE thanks to Hadley Wickham and all those that have controbuted to the [ggplot2](https://ggplot2.tidyverse.org/) package, without which, this would not be possible.
 

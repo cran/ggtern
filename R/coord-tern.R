@@ -50,8 +50,10 @@ coord_tern <- function(Tlim = NULL, Llim = NULL, Rlim = NULL, expand = TRUE){
 CoordTern <- ggproto("CoordTern", CoordCartesian,
   required_aes    = c("x","y","z"),
   required_scales = c("T","L","R"),
-  aspect          = function(self, ranges) { (diff(ranges$y.range) / diff(ranges$x.range)) * self$ratio },
-  transform       = function(self, data, scale_details){
+  aspect          = function(self, ranges) { 
+    (diff(ranges$y.range) / diff(ranges$x.range)) * self$ratio 
+  },
+  transform       = function(self, data, panel_params){
     
     #Variables and functions.
     ix               = c('x','y')
@@ -71,7 +73,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
                                                       joinCharacterSeries(setdiff(ix.comb,names(data)),lastWord='and') ))
       
       #Determine Origin
-      xtrm           = tlr2xy(.get.tern.extremes(self,scale_details,FALSE),self)
+      xtrm           = tlr2xy(.get.tern.extremes(self,panel_params,FALSE),self)
       origin         = apply(xtrm[,ix],2,function(x){mean(x)}) ##ORIGIN TO BE CENTROID
       
       #Any multiple of 360 degrees can be disregarded
@@ -89,46 +91,46 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       
       #Re-Center
       origin         = apply(xtrm[,ix],2,function(x){ mean(range(x))} ) ##ORIGIN TO BE MEDIAN
-      target         = c(mean(scale_details$x.range),mean(scale_details$y.range)) + coordShift
+      target         = c(mean(panel_params$x.range),mean(panel_params$y.range)) + as.numeric(coordShift)
       data           = addOrigin(data,ix.comb,(target - origin))
     }
     
-    #self$super$super$transform(data,scale_details)
-    self$super()$super()$transform(data,scale_details)
+    #self$super$super$transform(data,panel_params)
+    self$super()$super()$transform(data,panel_params)
   },
-  render_axis_h   = function(self,scale_details, theme){
+  render_axis_h   = function(panel_params, theme){
     list(
       top = zeroGrob(),
       bottom = zeroGrob()
     )
   },
-  render_axis_v   = function(self,scale_details, theme){
+  render_axis_v   = function(panel_params, theme){
     list(
       left = zeroGrob(),
       right = zeroGrob()
     )
   },
   
-  render_bg       = function(self,scale_details, theme){
+  render_bg       = function(self,panel_params, theme){
     items = list() 
-    extrm = .get.tern.extremes(self,scale_details)
+    extrm = .get.tern.extremes(self,panel_params)
     items = .render.background(self,extrm,theme,items)
     if(!.theme.get.gridsontop(theme)){
-      items = .render.grid(self,extrm,scale_details,theme,items)
+      items = .render.grid(self,extrm,panel_params,theme,items)
       if(!.theme.get.showmask(theme))
-        items = .render.fgset(self,extrm,scale_details,theme,items)
+        items = .render.fgset(self,extrm,panel_params,theme,items)
     }
     gTree(children = do.call("gList",items))
   },
   
-  render_fg     = function(self,scale_details, theme){
+  render_fg     = function(self,panel_params, theme){
     items = list() 
-    extrm = .get.tern.extremes(self,scale_details)
+    extrm = .get.tern.extremes(self,panel_params)
     if(.theme.get.gridsontop(theme)){
-      items = .render.grid( self,extrm,scale_details,theme,items)
-      items = .render.fgset(self,extrm,scale_details,theme,items)
+      items = .render.grid( self,extrm,panel_params,theme,items)
+      items = .render.fgset(self,extrm,panel_params,theme,items)
     }
-    items = .render.titles(self,extrm,scale_details,theme,items)
+    items = .render.titles(self,extrm,panel_params,theme,items)
     gTree(children = do.call("gList", items))
   },
   
@@ -144,22 +146,26 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     table
   },
   
-  setup_panel_params = function(self, scale_x, scale_y,params = list() ) {
+  setup_panel_params = function(self, scale_x, scale_y, params = list() ) {
     
-    train_cartesian <- function(scale_details,limits,name,continuousAmount) {
+    train_cartesian <- function(panel_params,limits,name,continuousAmount) {
       if (self$expand) {
-        expand <- ggint$expand_default(scale_details,continuous=continuousAmount)
+        # expand <- ggint$expand_default(panel_params,continuous=continuousAmount)
+        # expand = ggplot2:::expand_limits_continuous(limits, continuousAmount, panel_params)
+        # expand <- c(continuousAmount, continuousAmount)
+        expand <- c(0, 0)
       } else {
         expand <- c(0, 0)
       }
+      print(limits)
       if (is.null(limits)) {
-        range <- scale_details$dimension(expand)
+        range <- panel_params$dimension(expand)
       } else {
-        range <- range(scale_details$transform(limits))
+        range <- range(panel_params$transform(limits))
         range <- expand_range(range, expand[1], expand[2])
       }
       
-      out <- scale_details$break_info(range)
+      out <- panel_params$break_info(range)
       names(out) <- paste(name, names(out), sep = ".")
       out
     }
@@ -168,19 +174,39 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     expand.amount = calc_element('tern.panel.expand',theme=self$theme)
     
     #Adjust for rotation
-    extremes        = .get.tern.extremes(self,list(x.range=self$limits$x,
-                                                   y.range=self$limits$y))[,c('x','y')]
+    extremes        = .get.tern.extremes(self,list(x.range=self$limits$x, y.range=self$limits$y,x.rescale=FALSE,y.rescale=FALSE))
+    extremes        = extremes[,c('x','y')]
     currentMidpoint = c(mean(self$limits$x),mean(self$limits$y))
     ternaryMidpoint = apply(extremes,2,function(x){mean(range(x))})
-    shift           = 0*(currentMidpoint - ternaryMidpoint)
+    shift           = 0.5*(currentMidpoint - ternaryMidpoint)
     
     #Execute the Training
     c(
-      train_cartesian(scale_x, self$limits$x - shift[1],"x",c(expand.amount,0) ),
-      train_cartesian(scale_y, self$limits$y - shift[2],"y",c(expand.amount,0) )
+      # train_cartesian(scale_x, self$limits$x - shift[1],"x",c(expand.amount,0) ),
+      # train_cartesian(scale_y, self$limits$y - shift[2],"y",c(expand.amount,0) )
+      view_scales_from_scale(scale_x, self$limits$x, TRUE, c(expand.amount,0)),
+      view_scales_from_scale(scale_y, self$limits$y, TRUE, c(expand.amount,0))
     )
   }
 )
+
+# Inspired by ggplot2
+view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, expansion) {
+  # expansion <- default_expansion(scale, expand = expand)
+  limits <- scale$get_limits()
+  continuous_range <- ggint$expand_limits_scale(scale, expansion, limits, coord_limits = coord_limits)
+  aesthetic <- scale$aesthetics[1]
+  
+  view_scales <- list(
+    ggint$view_scale_primary(scale, limits, continuous_range),
+    sec = ggint$view_scale_secondary(scale, limits, continuous_range),
+    arrange = scale$axis_order(),
+    range = continuous_range
+  )
+  names(view_scales) <- c(aesthetic, paste0(aesthetic, ".", names(view_scales)[-1]))
+  
+  view_scales
+}
 
 #----------------------------------------------------------------------------------
 #Internals >>>> Ratio
@@ -190,9 +216,9 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
 #----------------------------------------------------------------------------------
 #Internals >>>> Ternary Extremes
 #----------------------------------------------------------------------------------
-.get.tern.extremes <- function(self,scale_details,transform=TRUE){
+.get.tern.extremes <- function(self,panel_params,transform=TRUE){
   ex = .check.tern.extremes(self)
-  if(transform) ex = self$transform(ex,scale_details)
+  if(transform) ex = self$transform(ex,panel_params)
   ex
 }
 
@@ -396,12 +422,12 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   return(existing)
 }
 
-.render.fgset <- function(self,data.extreme,scale_details,theme,items){
-  items = .render.ticks(      self,data.extreme,scale_details,theme,items)
+.render.fgset <- function(self,data.extreme,panel_params,theme,items){
+  items = .render.ticks(      self,data.extreme,panel_params,theme,items)
   items = .render.border.main(self,data.extreme,              theme,items)
   items = .render.border.axis(self,data.extreme,              theme,items)
-  items = .render.labels(     self,data.extreme,scale_details,theme,items)
-  items = .render.arrows(     self,data.extreme,scale_details,theme,items)
+  items = .render.labels(     self,data.extreme,panel_params,theme,items)
+  items = .render.arrows(     self,data.extreme,panel_params,theme,items)
   items
 }
 
@@ -471,7 +497,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   items
 }
 
-.render.ticks  <- function(self,data.extreme,scale_details,theme,items,X=self$required_scales){
+.render.ticks  <- function(self,data.extreme,panel_params,theme,items,X=self$required_scales){
   
   #Only Unique Entries
   X = unique(X)
@@ -545,7 +571,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   items
 }
 
-.render.labels <- function(self,data.extreme,scale_details,theme,items,X=self$required_scales){
+.render.labels <- function(self,data.extreme,panel_params,theme,items,X=self$required_scales){
   #Only Unique Entries
   X = unique(X)
   
@@ -613,7 +639,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   items
 }
 
-.render.grid <- function(self,data.extreme,scale_details,theme,items,X=self$required_scales){
+.render.grid <- function(self,data.extreme,panel_params,theme,items,X=self$required_scales){
   
   #Only Unique Entries
   X = unique(X)
@@ -680,7 +706,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
 }
 
 
-.render.titles <- function(self,data.extreme,scale_details,theme,items){
+.render.titles <- function(self,data.extreme,panel_params,theme,items){
   if(!.theme.get.showtitles(theme)) 
     return(items)
   

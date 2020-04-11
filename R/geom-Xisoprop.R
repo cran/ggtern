@@ -54,12 +54,15 @@ geom_Tisoprop <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomTisoprop <- ggproto("GeomTisoprop",Geom,
-                    draw_group = function(self,data, panel_scales,coord, arrow = NULL, lineend = "butt", na.rm = FALSE){
-                      .drawTRLIsopropX(self,data,panel_scales,coord,'T',arrow=arrow,lineend,na.rm)
-                    },
-                    default_aes     = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
-                    required_aes    = c("value"),
-                    draw_key        = draw_key_Tiso
+                        setup_data = function(self, data,params){
+                          .setupIsopropData(self, data, params, 'T');
+                        },
+                        draw_group = function(self,data, panel_params,coord, arrow = NULL, lineend = "butt", na.rm = FALSE){
+                          .drawTRLIsopropX(self,data,panel_params,coord,'T',arrow=arrow,lineend,na.rm)
+                        },
+                        default_aes     = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
+                        required_aes    = c("value"),
+                        draw_key        = draw_key_Tiso
 )
 
 #' @rdname geom_Xisoprop
@@ -97,12 +100,15 @@ geom_Lisoprop <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomLisoprop <- ggproto("GeomLisoprop",Geom,
-                      draw_group = function(self,data, panel_scales,coord, arrow = NULL, lineend = "butt", na.rm = FALSE){
-                        .drawTRLIsopropX(self,data,panel_scales,coord,'L',arrow=arrow,lineend,na.rm)
-                      },
-                      default_aes  = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA, arrow=NULL),
-                      required_aes = c("value"),
-                      draw_key     = draw_key_Liso
+                        setup_data = function(self, data, params){
+                          .setupIsopropData(self, data, params, 'L');
+                        },
+                        draw_group = function(self,data, panel_params,coord, arrow = NULL, lineend = "butt", na.rm = FALSE){
+                          .drawTRLIsopropX(self,data,panel_params,coord,'L',arrow=arrow,lineend,na.rm)
+                        },
+                        default_aes  = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA, arrow=NULL),
+                        required_aes = c("value"),
+                        draw_key     = draw_key_Liso
 )
 
 #' @rdname geom_Xisoprop
@@ -140,27 +146,29 @@ geom_Risoprop <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomRisoprop <- ggproto("GeomRisoprop",Geom,
-                     draw_group = function(self,data, panel_scales,coord, arrow = NULL, lineend = "butt", na.rm = FALSE){
-                       .drawTRLIsopropX(self,data,panel_scales,coord,'R',arrow=arrow,lineend,na.rm)
-                     },
-                     default_aes     = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA, arrow=NULL),
-                     required_aes    = c("value"),
-                     draw_key        = draw_key_Riso
+                    setup_data = function(self, data,params){
+                        .setupIsopropData(self, data, params, 'R');
+                    },
+                    draw_group = function(self,data, panel_params,coord, arrow = NULL, lineend = "butt", na.rm = FALSE){
+                      .drawTRLIsopropX(self,data,panel_params,coord,'R',arrow=arrow,lineend,na.rm)
+                    },
+                    default_aes     = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA, arrow=NULL),
+                    required_aes    = c("value"),
+                    draw_key        = draw_key_Riso
 )
 
 
-
-#internal function
-.drawTRLIsopropX <- function(self,data,panel_scales, coord, feat, arrow = NULL, lineend = "butt", na.rm = FALSE){
-  if(!'CoordTern' %in% class(coord)) return(zeroGrob())
+.setupIsopropData = function(self, data, params, feat){
+  #Put into cartesian
+  coord       = coord_tern()
+  
   axisNames = names(coord$mapping)
   if(!feat %in% axisNames) stop(sprintf("Invalid 'feat' variable ('%s'), please use %s",
                                         feat,
                                         joinCharacterSeries(axisNames,'or')),call.=FALSE)
-  data = remove_missing(data,vars=paste(axisNames,'intercept',sep=""),na.rm=na.rm,name=class(self)[1],finite=TRUE)
+  data = remove_missing(data,vars=paste(axisNames,'intercept',sep=""),na.rm=TRUE,name=class(self)[1],finite=TRUE)
   if(empty(data)) return(zeroGrob())
   
-  ranges    = coord$range(panel_scales);
   mapping   = coord$mapping
   
   #Get the correct sequence of other axes, relative to the featured axis
@@ -178,13 +186,21 @@ GeomRisoprop <- ggproto("GeomRisoprop",Geom,
     data[,sprintf("%s%s",  others[[ if(!cw) 1+x else 2-x ]],s) ]  = x*data$value
     data[,sprintf("%s%s",  others[[ if(!cw) 2-x else 1+x ]],s) ]  = x*(1-data$value)
   }
-  scale_details = list( x.range = ranges[['x']], y.range = ranges[['y']] )
   
   ##Now plot the data
-  grob          = zeroGrob()
-  data          = coord$transform(data,scale_details)
+  data
+}
+
+#internal function
+.drawTRLIsopropX <- function(self,data,panel_params, coord, feat, arrow = NULL, lineend = "butt", na.rm = FALSE){
   
+  if(!'CoordTern' %in% class(coord)) return(zeroGrob())
+  
+  grob  = zeroGrob()
   if(empty(data)) return(grob)
+  
+  data = coord$transform(data, panel_params)
+  
   tryCatch({
     grob = segmentsGrob(data$x,data$y,data$xend,data$yend, 
                         default.units     = "npc",

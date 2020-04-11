@@ -6,6 +6,7 @@
   
   #Set the theme and the last coordinates.
   theme_set(theme_gray())
+  ggtern_register_theme_elements();
 }
 
 .onAttach <- function(libname, pkgname){
@@ -60,6 +61,7 @@
   options("tern.mesh.buffer"           = 1.50)
   options("tern.mesh.size"             = 200)
 }
+
 
 #------------------------------------------------------------------------------
 #MANUAL EXECUTION -- BUILD STATICDOCS

@@ -49,8 +49,8 @@ stat_density_tern <- function(mapping = NULL, data = NULL, geom = "density_tern"
       expand    = expand,
       weight    = weight,
       ...
-    )
-  )
+    ) 
+  )  
 }
 
 #' @rdname geom_density_tern
@@ -62,7 +62,7 @@ StatDensityTern  = ggproto("StatDensityTern",
   retransform  = FALSE,
   required_aes = c("x",'y',"z"),
   setup_data = function(data, params) {
-    data$weight = data$weight %||% params$weight %||% numeric(nrow(data)) + 1
+    data$weight = data$weight %||% params$weight %||% 1
     data
   },
   compute_group  = function(self,data, scales, 
@@ -85,7 +85,7 @@ StatDensityTern  = ggproto("StatDensityTern",
     #Required aesthetics
     raes  = self$required_aes
     
-    ##Set values below the detection limit to the below degtection limit value
+    ##Set values below the detection limit to the below detection limit value
     data[raes] = suppressWarnings(compositions::acomp(data[raes]))
     data[raes][data[raes] <= bdl] = bdl.val[1]
     
@@ -93,6 +93,24 @@ StatDensityTern  = ggproto("StatDensityTern",
     data   = remove_missing(data,vars=self$required_aes,na.rm=na.rm,name='StatDensityTern',finite=TRUE)
     if(empty(data)) 
       return(data.frame())
+    
+    if(base == 'ilr' && bdl <= 0){
+      MINIMUM_BDL = 0.01
+      x  = data[raes]
+      ix = which(apply(x,1,min) < MINIMUM_BDL)
+      if(length(ix) > 0){
+        nBDL = length(ix)
+        msg = 
+"%s: You have not specified a below-detection-limit (bdl) value (Ref. 'bdl' and 'bdl.val' arguments in ?stat_density_tern). Presently you have %sx value/s below a detection limit of %.3f, which acounts for %.3f%% of your data. Density values at fringes may appear abnormally high attributed to the mathematics of the ILR transformation. 
+You can either:
+1. Ignore this warning,
+2. Set the bdl value appropriately so that fringe values are omitted from the ILR calculation, or
+3. Accept the high density values if they exist, and manually set the 'breaks' argument 
+   so that the countours at lower densities are represented appropriately."
+        msg = sprintf(msg,ggint$snake_class(self),nBDL,MINIMUM_BDL,100*nBDL/nrow(data))
+        warning(msg,call.=FALSE)
+      }
+    }
     
     ##Default Coordinates
     coord = coord_tern()
@@ -123,9 +141,17 @@ StatDensityTern  = ggproto("StatDensityTern",
     #Put back into dataframe
     df       = data.frame(expand.grid(x = dens$x, y = dens$y), z = as.vector(dens$z),group=data$group[1])
     
+    # Divide by jacobian determinant.
+    # Thanks to alexi19811
+    if(base == 'ilr'){
+      comps = fInv((df[,c('x','y')]))
+      df$z  = df$z / (sqrt(3) * apply(comps,1,prod))
+    }
+    
     ##Build the contours
     if (contour) {
-      df = StatContour$compute_panel(df,scales,bins=bins,binwidth=binwidth,breaks=breaks)
+      z.range <- range(df$z, na.rm = TRUE, finite = TRUE)
+      df = StatContour$compute_panel(df,scales,bins=bins,binwidth=binwidth,breaks=breaks,z.range=z.range)
     } else {
       names(df) <- c("x", "y", "density", "group")
       df$level <- 1

@@ -1,6 +1,6 @@
 Package: ggtern
-Version: 3.1.0
-Date: 2018-12-19
+Version: 3.3.0
+Date: 2020-04-9
 Title: An Extension to 'ggplot2', for the Creation of Ternary Diagrams
 Description: Extends the functionality of 'ggplot2', providing the capability
     to plot ternary diagrams for (subset of) the 'ggplot2' geometries. Additionally,
@@ -11,10 +11,10 @@ Authors@R:
   person("Nicholas","Hamilton", ,"nick@ggtern.com", role = c("aut", "cre"))
 Author: Nicholas Hamilton [aut, cre]
 Maintainer: Nicholas Hamilton <nick@ggtern.com>
-Depends: R (>= 2.10), ggplot2 (>= 3.1.0)
+Depends: R (>= 2.10), ggplot2 (>= 3.3.0)
 Imports: compositions (>= 1.40-2), grid, gridExtra, gtable (>= 0.1.2),
         latex2exp (>= 0.4), MASS, plyr (>= 1.8.3), scales (>= 0.3.0),
-        stats, proto, utils, lattice
+        stats, proto, utils, lattice, hexbin
 Enhances: sp
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
@@ -49,5 +49,5 @@ Collate: 'ggtern-package.R' 'aes.R' 'coord-tern.R' 'calc-tern-tlr2xy.R'
 NeedsCompilation: no
 Repository: CRAN
 RoxygenNote: 6.1.1
-Packaged: 2018-12-19 09:47:13 UTC; nick
-Date/Publication: 2018-12-19 11:20:03 UTC
+Packaged: 2020-04-11 08:27:40 UTC; nick
+Date/Publication: 2020-04-11 14:50:05 UTC

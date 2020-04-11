@@ -4,7 +4,8 @@
 \alias{.getFunctions}
 \title{OLD FUNCTIONS  
 new_panel','train_layout','train_position','train_ranges','map_position','map_layout','reset_scales','facet_render',
-xlabel','ylabel'}
+xlabel','ylabel'
+expand_default', ## REMOVED}
 \usage{
 .getFunctions()
 }
@@ -12,4 +13,5 @@ xlabel','ylabel'}
 OLD FUNCTIONS  
 new_panel','train_layout','train_position','train_ranges','map_position','map_layout','reset_scales','facet_render',
 xlabel','ylabel'
+expand_default', ## REMOVED
 }

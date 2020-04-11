@@ -50,14 +50,17 @@ geom_crosshair_tern <- function(mapping = NULL, data = NULL, stat = "identity",p
 #' @export
 GeomCrosshairTern <- ggproto("GeomCrosshairTern",Geom,
                      setup_data = function(self,data, params) {
-                       data[,self$required_aes] = as.data.frame(acomp(data[,self$required_aes]))
-                       data
+                       rbind(
+                         .setupCrosshairData(self, data, params, 'T'),
+                         .setupCrosshairData(self, data, params, 'L'),
+                         .setupCrosshairData(self, data, params, 'R')
+                       )
                      },
-                     draw_group = function(self, data, panel_scales, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
+                     draw_group = function(self, data, panel_params, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
                        ret = gList()
-                       ret[[1]] = .drawTernaryCrosshair(self,data,panel_scales,coord,'T',arrow,lineend,na.rm)
-                       ret[[2]] = .drawTernaryCrosshair(self,data,panel_scales,coord,'L',arrow,lineend,na.rm)
-                       ret[[3]] = .drawTernaryCrosshair(self,data,panel_scales,coord,'R',arrow,lineend,na.rm)
+                       ret[[1]] = .drawTernaryCrosshair(self,data,panel_params,coord,'T',arrow,lineend,na.rm)
+                       ret[[2]] = .drawTernaryCrosshair(self,data,panel_params,coord,'L',arrow,lineend,na.rm)
+                       ret[[3]] = .drawTernaryCrosshair(self,data,panel_params,coord,'R',arrow,lineend,na.rm)
                        ret
                      },
                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA),
@@ -94,11 +97,10 @@ geom_Tmark <- function(mapping = NULL, data = NULL, stat = "identity",
 #' @export
 GeomTmark <- ggproto("GeomTmark",Geom,
                      setup_data = function(self,data, params) {
-                       data[,self$required_aes] = as.data.frame(acomp(data[,self$required_aes]))
-                       data
+                       .setupCrosshairData(self, data, params, 'T');
                      },
-                     draw_group = function(self, data, panel_scales, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
-                       .drawTernaryCrosshair(self,data,panel_scales,coord,'T',arrow,lineend,na.rm)
+                     draw_group = function(self, data, panel_params, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
+                       .drawTernaryCrosshair(self,data,panel_params,coord,'T',arrow,lineend,na.rm)
                      },
                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA),
                      required_aes = c("x","y","z"),
@@ -133,17 +135,16 @@ geom_Lmark <- function(mapping = NULL, data = NULL, stat = "identity",
 #' @usage NULL
 #' @export
 GeomLmark <- ggproto("GeomLmark",Geom,
-                              setup_data = function(self,data, params) {
-                                data[,self$required_aes] = as.data.frame(acomp(data[,self$required_aes]))
-                                data
-                              },
-                              draw_group = function(self, data, panel_scales, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
-                                .drawTernaryCrosshair(self,data,panel_scales,coord,'L',arrow,lineend,na.rm)
-                              },
-                              default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA),
-                              required_aes = c("x","y","z"),
-                              draw_key = draw_key_Lmark
-)
+                      setup_data = function(self,data, params) {
+                        .setupCrosshairData(self, data, params, 'L');
+                      },
+                      draw_group = function(self, data, panel_params, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
+                        .drawTernaryCrosshair(self,data,panel_params,coord,'L',arrow,lineend,na.rm)
+                      },
+                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA),
+                      required_aes = c("x","y","z"),
+                      draw_key = draw_key_Lmark
+  )
 
 #' @rdname geom_crosshair_tern
 #' @export
@@ -173,21 +174,22 @@ geom_Rmark <- function(mapping = NULL, data = NULL, stat = "identity",
 #' @export
 GeomRmark <- ggproto("GeomRmark",Geom,
                      setup_data = function(self,data, params) {
-                       data[,self$required_aes] = as.data.frame(acomp(data[,self$required_aes]))
-                       data
+                       .setupCrosshairData(self, data, params, 'R');
                      },
-                     draw_group = function(self, data, panel_scales, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
-                       .drawTernaryCrosshair(self,data,panel_scales,coord,'R',arrow,lineend,na.rm)
+                     draw_group = function(self, data, panel_params, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
+                       .drawTernaryCrosshair(self,data,panel_params,coord,'R',arrow,lineend,na.rm)
                      },
                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA),
                      required_aes = c("x","y","z"),
                      draw_key = draw_key_Rmark
 )
 
-
-#internal function
-.drawTernaryCrosshair <- function(self,data,panel_scales, coord, feat, arrow = NULL, lineend = "butt", na.rm = FALSE){
-  if(!'CoordTern' %in% class(coord)) return(zeroGrob())
+.setupCrosshairData <- function(self, data, params, feat){
+  
+  data[,self$required_aes] = as.data.frame(acomp(data[,self$required_aes]))
+  
+  #Put into cartesian
+  coord       = coord_tern()
   
   #Check Asis Names
   axisNames = names(coord$mapping)
@@ -195,10 +197,9 @@ GeomRmark <- ggproto("GeomRmark",Geom,
     stop(sprintf("Invalid 'feat' variable ('%s'), please use %s",feat,joinCharacterSeries(axisNames,'or')),call.=FALSE)
   
   #Remove Missing Data
-  data      = remove_missing(data,vars=paste(axisNames,'intercept',sep=""),na.rm=na.rm,name=class(self)[1],finite=TRUE)
+  data      = remove_missing(data,vars=paste(axisNames,'intercept',sep=""),na.rm=TRUE,name=class(self)[1],finite=TRUE)
   if(empty(data)) return(zeroGrob())
   
-  ranges    = coord$range(panel_scales);
   mapping   = coord$mapping
   
   #Get the correct sequence of other axes, relative to the featured axis
@@ -214,9 +215,16 @@ GeomRmark <- ggproto("GeomRmark",Geom,
   data[,sprintf("%send",others[[ 2 - cw ]]) ] = 1 - data[, mapping[[feat]] ] - min(limits)
   data[,sprintf("%send",others[[ 1 + cw ]]) ] = min(limits)
   
-  scale_details = list( x.range = ranges[['x']], y.range = ranges[['y']] )
-  data          = coord$transform(data,scale_details)
-  grob          = zeroGrob()
+  data
+}
+
+#internal function
+.drawTernaryCrosshair <- function(self,data,panel_params, coord, feat, arrow = NULL, lineend = "butt", na.rm = FALSE){
+  if(!'CoordTern' %in% class(coord)) return(zeroGrob())
+  
+  data = coord$transform(data, panel_params)
+  
+  grob = zeroGrob()
   tryCatch({
     grob = segmentsGrob(data$x,data$y,data$xend,data$yend,
                         default.units     = "npc",

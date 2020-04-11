@@ -12,5 +12,8 @@
 #' ggtern(data=data.frame(x=1,y=1,z=1),aes(x,y,z)) + geom_point()
 #' @export
 ggtern <- function(data=NULL,mapping=aes(),...,environment=parent.frame()){
-  ggplot(data = data, mapping = mapping, environment = environment, ... ) + coord_tern()
+  ## Suppress the warning notice of new coordinate system
+  suppressMessages({ 
+    ggplot(data = data, mapping = mapping, environment = environment, ... ) + coord_tern()  
+  })
 }

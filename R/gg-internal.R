@@ -5,15 +5,25 @@
   #'new_panel','train_layout','train_position','train_ranges','map_position','map_layout','reset_scales','facet_render',
   #'xlabel','ylabel'
   
-  .functions.ggplot2   = c('create_layout','expand_default','plot_theme',
+  .functions.ggplot2   = c('create_layout',
+                           #'expand_default', ## REMOVED
+                           'plot_theme',
                            'element_render','message_wrap',
                            'set_last_plot','make_labels','build_guides','is.zero','add_ggplot','labelGrob',
                            'is.layer','is.facet','is.Coord','GeomSegment',
-                           '.element_tree','el_def','combine_elements','aes_to_scale',
-                           'is.Coord','is.facet','is.layer','make_labels','update_labels','update_guides','update_theme',
+                           '.element_tree',
+                           # 'el_def', ## NOW EXPORTED
+                           'expand_limits_scale', ## NEW
+                           'view_scale_primary', ## NEW
+                           'view_scale_secondary', ## NEW
+                           'combine_elements','aes_to_scale',
+                           'is.Coord','is.facet','is.layer','make_labels','update_labels','update_guides',
+                           # 'update_theme', ## REMOVED
                            'aes_to_scale',
                            'scales_add_missing','scales_list','scales_transform_df','scales_map_df','scales_train_df',
-                           'predictdf','contour_lines','check_required_aesthetics','snake_class',
+                           'predictdf',
+                           # 'contour_lines', ## REMOVED
+                           'check_required_aesthetics','snake_class',
                            'ggname','ggplot_gtable','camelize',
                            'element_grob.element_line','element_grob.element_rect','element_grob.element_text','element_grob.element_blank',
                            'plot_clone','compute_just','labelGrob',

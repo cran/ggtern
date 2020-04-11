@@ -37,7 +37,8 @@ data. All objects will be fortified to produce a data frame. See
 
 A \code{function} will be called with a single argument,
 the plot data. The return value must be a \code{data.frame}, and
-will be used as the layer data.}
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
 \item{stat}{The statistical transformation to use on the data for this
 layer, as a string.}
@@ -74,9 +75,9 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 \code{geom_density_2d} and \code{stat_density_2d}.}
 
 \item{contour}{If \code{TRUE}, contour the results of the 2d density
-estimation}
+estimation.}
 
-\item{n}{number of grid points in each direction}
+\item{n}{Number of grid points in each direction.}
 
 \item{h}{Bandwidth (vector of length two) as a multiple of the best estimate, estimated using \code{\link[MASS]{bandwidth.nrd}}.}
 
