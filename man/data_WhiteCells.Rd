@@ -5,14 +5,16 @@
 \alias{data_WhiteCells}
 \alias{WhiteCells}
 \title{Aichisons White Cells}
-\format{1 row per point, 60 points in total, 2 experiments x 30 points each, Each point contains data on the following:
+\format{
+1 row per point, 60 points in total, 2 experiments x 30 points each, Each point contains data on the following:
 \enumerate{ 
 \item \strong{No}: ID, S1 to S30
 \item \strong{Experiment}: MicroscopicInspection or ImageAnalysis
 \item \strong{G}: Fraction Granulocytes
 \item \strong{L}: Fraction Lymphocytes
 \item \strong{M}: Fraction Monocytes
-}}
+}
+}
 \description{
 White-cell compositions of 30 blood cells by two different methods
 }

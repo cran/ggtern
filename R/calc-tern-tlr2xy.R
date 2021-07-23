@@ -155,7 +155,7 @@ xy2tlr <- function(data,coord,...,inverse=FALSE,scale=TRUE)
   missing = unique(setdiff(ix,colNames))
   if(length(missing) > 0){
     dir = c('tlr','xy'); if(inverse) dir = rev(dir)
-    msg = sprintf("%s requires the following missing aesthetics (%s) : %s", 
+    msg = sprintf("ggtern: %s requires the following missing aesthetics (%s) : %s", 
                   class(coord)[1], paste(dir,collapse="->"), paste(missing,collapse="', '"))
     stop(msg,call.=FALSE)
   }

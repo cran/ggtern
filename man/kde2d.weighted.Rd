@@ -19,7 +19,7 @@ y coordinate of data
 
 \item{h}{
 vector of bandwidths for x and y directions.  Defaults to
-normal reference bandwidth (see \code{\link{bandwidth.nrd}}). A scalar
+normal reference bandwidth (see \code{\link[MASS]{bandwidth.nrd}}). A scalar
 value will be taken to apply to both directions.
 }
 

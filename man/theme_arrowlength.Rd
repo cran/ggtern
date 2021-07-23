@@ -11,11 +11,15 @@
 \alias{theme_arrowlong}
 \title{Change the Length of the Ternary Arrows}
 \usage{
-theme_arrowcustomlength(start = getOption("tern.arrow.start"),
-  finish = getOption("tern.arrow.finish"))
+theme_arrowcustomlength(
+  start = getOption("tern.arrow.start"),
+  finish = getOption("tern.arrow.finish")
+)
 
-theme_arrowlength(start = getOption("tern.arrow.start"),
-  finish = getOption("tern.arrow.finish"))
+theme_arrowlength(
+  start = getOption("tern.arrow.start"),
+  finish = getOption("tern.arrow.finish")
+)
 
 theme_arrowsmall()
 

@@ -5,7 +5,8 @@
 \alias{data_Fragments}
 \alias{Fragments}
 \title{Grantham and Valbel Rock Fragment Data}
-\format{1row per point, Each point contains data on the following:
+\format{
+1row per point, Each point contains data on the following:
 \enumerate{ 
 \item \strong{Watershed}: By id: 2, 10, 34, 41, 13, 27, 32 or 37, 
 \item \strong{Position}: By name: Tallulah or Coweeta, 
@@ -20,7 +21,8 @@
 \item \strong{Qp}: Polycrystalline Quarts Amount, percentage
 \item \strong{Rf}: Rock Fragments Amount, percentage
 \item \strong{M}: Mica Amount, percentage
-}}
+}
+}
 \usage{
 data(Fragments)
 }

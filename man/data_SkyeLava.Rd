@@ -5,13 +5,15 @@
 \alias{data_SkyeLava}
 \alias{SkyeLava}
 \title{Aichisons Skye Lavas}
-\format{1 row per point, 23 points in total, Each point contains data on the following:
+\format{
+1 row per point, 23 points in total, Each point contains data on the following:
 \enumerate{ 
 \item \strong{No}: ID, S1 to S23
 \item \strong{A}: Percent Na2O+K2O , 
 \item \strong{F}: Percent Fe2O3
 \item \strong{F}: Percent MgO
-}}
+}
+}
 \description{
 AFM compositions of 23 aphyric Skye lavas.
 }

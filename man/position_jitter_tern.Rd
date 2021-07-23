@@ -15,7 +15,8 @@ position_jitter_tern(x = NULL, y = NULL, z = NULL)
 Jitter ternary points to avoid overplotting.
 }
 \seealso{
-Other position adjustments: \code{\link{position_nudge_tern}}
+Other position adjustments: 
+\code{\link{position_nudge_tern}()}
 }
 \author{
 Nicholas Hamilton

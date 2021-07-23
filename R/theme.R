@@ -18,7 +18,10 @@
 #' This means that you can modify the appearance of multiple elements by
 #' setting a single high-level component.
 #'
-#' @inheritParams ggplot2::theme
+#' @title Modify components of a theme
+#' @name theme
+#' @description Custom theme elements for ggtern
+#' @seealso \code{\link[ggplot2]{theme}}
 #' @param tern.axis.arrow Base Arrow Line (`element_line`; inherits from `axis.line`)
 #' @param tern.axis.arrow.T Arrow Line for TOP Axis (`element_line`; inherits from `tern.axis.arrow`)
 #' @param tern.axis.arrow.L Arrow Line for LHS Axis (`element_line`; inherits from `tern.axis.arrow`)
@@ -82,6 +85,7 @@
 #' @param tern.plot.latex Whether to parse characters as latex commands (`logical`)
 #' @author Nicholas Hamilton
 #' @rdname theme
+NULL
 #theme <- function(
 #  line,
 #  rect,
@@ -272,18 +276,18 @@
 #             validate = validate)
 # }
 
-#' \code{plot_theme} is a local copy of the method that determines the net theme between a plot and the current global theme.
-#' @param x gg object
-#' @rdname overloaded
+# \code{plot_theme} is a local copy of the method that determines the net theme between a plot and the current global theme.
+# @param x gg object
+# @rdname overloaded
 # plot_theme <- function(x) {defaults(x$theme, theme_get())}
 
 
-#' \code{add_theme} is a local copy of the ggplot2 function which modifies the current theme, by a proposed theme. 
-#' It is slightly modified to handle 'logical' values the same way it handles 'character' or 'numeric' values, 
-#' which do not inherit from 'element' objects.
-#' @inheritParams ggplot2::add_theme
-#' @seealso \code{\link[ggplot2]{add_theme}}
-#' @rdname overloaded
+# \code{add_theme} is a local copy of the ggplot2 function which modifies the current theme, by a proposed theme. 
+# It is slightly modified to handle 'logical' values the same way it handles 'character' or 'numeric' values, 
+# which do not inherit from 'element' objects.
+# @inheritParams ggplot2::add_theme
+# @seealso \code{\link[ggplot2]{add_theme}}
+# @rdname overloaded
 #add_theme <- function(t1, t2, t2name) {
 #  if (!is.theme(t2)) {
 #    stop("Don't know how to add ", t2name, " to a theme object",
@@ -324,8 +328,8 @@
 #  t1
 #}
 
-#' \code{"\%+replace\%"} is a local copy of the ggplot2 replace operator, no different other than being exported from the ggtern namespace.
-#' @rdname overloaded 
+# \code{"\%+replace\%"} is a local copy of the ggplot2 replace operator, no different other than being exported from the ggtern namespace.
+# @rdname overloaded 
 #"%+replace%" <- function(e1, e2) {
 #  if (!is.theme(e1) || !is.theme(e2)) {
 #    stop("%+replace% requires two theme objects", call. = FALSE)
@@ -335,10 +339,10 @@
 #  e1
 #}
 
-#' \code{update_theme} is a local copy of a ggplot2 function, which copies elements from the new theme into an old theme.
-#' @param oldtheme previous theme object
-#' @param newtheme new theme object
-#' @rdname overloaded
+# \code{update_theme} is a local copy of a ggplot2 function, which copies elements from the new theme into an old theme.
+# @param oldtheme previous theme object
+# @param newtheme new theme object
+# @rdname overloaded
 #update_theme <- function(oldtheme, newtheme) {
 #  if (attr(newtheme, "complete")) 
 #    return(newtheme)
@@ -353,9 +357,9 @@
 #}
 
 
-#' \code{calc_element} is a local copy of the ggplot2 function which determines the net element based on inheritances, given input theme.
-#' @inheritParams ggplot2::calc_element
-#' @rdname overloaded
+# \code{calc_element} is a local copy of the ggplot2 function which determines the net element based on inheritances, given input theme.
+# @inheritParams ggplot2::calc_element
+# @rdname overloaded
 # @export
 # calc_element <- function (element, theme, verbose = FALSE) {
 #  if (verbose) 
@@ -399,13 +403,13 @@
 #' @name zzz-overloaded
 NULL
 
-#' @description \code{validate_element} is a local copy of the ggplot2 function which checks the validity of a given theme element 
-#' against the elements table. Since the \code{.elements_tree} is an internal function, which is not exported, and modifications could not be made, 
-#' a new (and equivalent) \code{.element_tree} is created within ggtern to handle the new theme elements created within this package.
-#' @param el the element
-#' @param elname the element name
-#' @author Nicholas Hamilton
-#' @rdname overloaded
+# @description \code{validate_element} is a local copy of the ggplot2 function which checks the validity of a given theme element 
+# against the elements table. Since the \code{.elements_tree} is an internal function, which is not exported, and modifications could not be made, 
+# a new (and equivalent) \code{.element_tree} is created within ggtern to handle the new theme elements created within this package.
+# @param el the element
+# @param elname the element name
+# @author Nicholas Hamilton
+# @rdname overloaded
 #validate_element <- function(el, elname) {
 #  eldef <- ggint$.element_tree[[elname]]
 #  
@@ -430,9 +434,9 @@ NULL
 #  invisible()
 #}
 
-#' @rdname overloaded
-#' @inheritParams ggplot2::theme_update
-#' @seealso \code{\link[ggplot2]{theme_update}}
+# @rdname overloaded
+# @inheritParams ggplot2::theme_update
+# @seealso \code{\link[ggplot2]{theme_update}}
 #theme_update <- function(...) {
 #  # Make a call to theme, then add to theme
 #  theme_set(theme_get() %+replace% do.call(theme, list(...)))

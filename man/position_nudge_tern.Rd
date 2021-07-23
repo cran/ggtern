@@ -16,7 +16,8 @@ This is useful if you want to nudge labels a little ways from their points, inpu
 nudge, so the nudge variables should be as a fraction ie (0,1)
 }
 \seealso{
-Other position adjustments: \code{\link{position_jitter_tern}}
+Other position adjustments: 
+\code{\link{position_jitter_tern}()}
 }
 \author{
 Nicholas Hamilton

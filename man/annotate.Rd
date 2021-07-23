@@ -4,10 +4,23 @@
 \alias{annotate}
 \title{Create an annotation layer (ggtern version).}
 \usage{
-annotate(geom, x = NULL, y = NULL, z = NULL, xmin = NULL,
-  xmax = NULL, ymin = NULL, ymax = NULL, zmin = NULL,
-  zmax = NULL, xend = NULL, yend = NULL, zend = NULL, ...,
-  na.rm = FALSE)
+annotate(
+  geom,
+  x = NULL,
+  y = NULL,
+  z = NULL,
+  xmin = NULL,
+  xmax = NULL,
+  ymin = NULL,
+  ymax = NULL,
+  zmin = NULL,
+  zmax = NULL,
+  xend = NULL,
+  yend = NULL,
+  zend = NULL,
+  ...,
+  na.rm = FALSE
+)
 }
 \arguments{
 \item{geom}{name of geom to use for annotation}
@@ -15,7 +28,7 @@ annotate(geom, x = NULL, y = NULL, z = NULL, xmin = NULL,
 \item{x, y, z, xmin, ymin, zmin, xmax, ymax, zmax, xend, yend, zend}{positioning aesthetics -
 you must specify at least one of these.}
 
-\item{...}{Other arguments passed on to \code{\link[=layer]{layer()}}. These are
+\item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}

@@ -7,14 +7,32 @@
 \alias{scale_R_continuous}
 \title{Ternary Position Scales}
 \usage{
-scale_T_continuous(name = waiver(), limits = NULL, breaks = waiver(),
-  minor_breaks = waiver(), labels = waiver(), ...)
+scale_T_continuous(
+  name = waiver(),
+  limits = NULL,
+  breaks = waiver(),
+  minor_breaks = waiver(),
+  labels = waiver(),
+  ...
+)
 
-scale_L_continuous(name = waiver(), limits = NULL, breaks = waiver(),
-  minor_breaks = waiver(), labels = waiver(), ...)
+scale_L_continuous(
+  name = waiver(),
+  limits = NULL,
+  breaks = waiver(),
+  minor_breaks = waiver(),
+  labels = waiver(),
+  ...
+)
 
-scale_R_continuous(name = waiver(), limits = NULL, breaks = waiver(),
-  minor_breaks = waiver(), labels = waiver(), ...)
+scale_R_continuous(
+  name = waiver(),
+  limits = NULL,
+  breaks = waiver(),
+  minor_breaks = waiver(),
+  labels = waiver(),
+  ...
+)
 }
 \arguments{
 \item{name}{The name of the scale. Used as the axis or legend title. If
@@ -28,10 +46,11 @@ omitted.}
 \item A numeric vector of length two providing limits of the scale.
 Use \code{NA} to refer to the existing minimum or maximum
 \item A function that accepts the existing (automatic) limits and returns
-new limits
+new limits. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
 Note that setting limits on positional scales will \strong{remove} data outside of the limits.
 If the purpose is to zoom, use the limit argument in the coordinate system
-(see \code{\link[=coord_cartesian]{coord_cartesian()}}).
+(see \code{\link[ggplot2:coord_cartesian]{coord_cartesian()}}).
 }}
 
 \item{breaks}{One of:
@@ -41,7 +60,8 @@ If the purpose is to zoom, use the limit argument in the coordinate system
 \link[scales:trans_new]{transformation object}
 \item A numeric vector of positions
 \item A function that takes the limits as input and returns breaks
-as output (e.g., a function returned by \code{\link[scales:extended_breaks]{scales::extended_breaks()}})
+as output (e.g., a function returned by \code{\link[scales:breaks_extended]{scales::extended_breaks()}}).
+Also accepts rlang \link[rlang:as_function]{lambda} function notation.
 }}
 
 \item{minor_breaks}{One of:
@@ -50,7 +70,8 @@ as output (e.g., a function returned by \code{\link[scales:extended_breaks]{scal
 \item \code{waiver()} for the default breaks (one minor break between
 each major break)
 \item A numeric vector of positions
-\item A function that given the limits returns a vector of minor breaks.
+\item A function that given the limits returns a vector of minor breaks. Also
+accepts rlang \link[rlang:as_function]{lambda} function notation.
 }}
 
 \item{labels}{One of:
@@ -60,7 +81,8 @@ each major break)
 transformation object
 \item A character vector giving labels (must be same length as \code{breaks})
 \item A function that takes the breaks as input and returns labels
-as output
+as output. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
 }}
 
 \item{...}{not used}

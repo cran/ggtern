@@ -4,8 +4,13 @@
 \alias{mahalanobis_distance}
 \title{Mahalanobis Distance}
 \usage{
-mahalanobis_distance(x, x.mean, x.cov, whichlines = c(0.975, 0.9, 0.75),
-  m = 360)
+mahalanobis_distance(
+  x,
+  x.mean,
+  x.cov,
+  whichlines = c(0.975, 0.9, 0.75),
+  m = 360
+)
 }
 \arguments{
 \item{x}{data}

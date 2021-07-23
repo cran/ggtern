@@ -18,18 +18,30 @@ http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
 \usage{
 tern_stop(src = "target")
 
-clipPolygons(df, coord, plyon = c("level", "piece", "group"),
-  op = "intersection")
+clipPolygons(
+  df,
+  coord,
+  plyon = c("level", "piece", "group"),
+  op = "intersection"
+)
 
 theme_arrowbaseline(label = "labels")
 
-element_ternary(showarrows, padding, arrowsep, arrowstart, arrowfinish,
-  vshift, hshift, ticklength.major, ticklength.minor)
+element_ternary(
+  showarrows,
+  padding,
+  arrowsep,
+  arrowstart,
+  arrowfinish,
+  vshift,
+  hshift,
+  ticklength.major,
+  ticklength.minor
+)
 
 ggtern.multi(..., plotlist = NULL, cols = 1, layout = NULL)
 
-point.in.sequence(x, y, ..., df = data.frame(x = x, y = y),
-  close = FALSE)
+point.in.sequence(x, y, ..., df = data.frame(x = x, y = y), close = FALSE)
 }
 \arguments{
 \item{src}{character name of current procedure}

@@ -5,7 +5,9 @@
 \alias{data_USDA}
 \alias{USDA}
 \title{USDA Textural Classification Data}
-\format{1row per point, many points per classification representing the extremes of the area.}
+\format{
+1row per point, many points per classification representing the extremes of the area.
+}
 \source{
 Soil Mechanics Level 1, Module 3, USDA Textural Classification Study Guide
 }

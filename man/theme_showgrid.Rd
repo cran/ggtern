@@ -39,13 +39,13 @@ theme_hidegrid_minor()
 A set of convenience functions to enable or disable the use of major or minor (or both) gridlines.
 }
 \details{
-These flags operate at the 'rendering' level, and, supercede the presence of theme elements, therefore,
+These flags operate at the 'rendering' level, and, supercede the presence of theme elements, therefore, 
 
 \code{theme_hidegrid(...)} or its aliases will PREVENT rendering of grid elements, 
-irrespective of whether those grid elements are valid (renderable). From the counter perspective,
+irrespective of whether those grid elements are valid (renderable). From the counter perspective, 
 
 \code{theme_showgrid(...)} or its aliases will ALLOW rendering of grid elements, subject to those grid 
-elements being valid (renderable, ie say \code{\link{element_line}} as opposed to \code{\link{element_blank}}).
+elements being valid (renderable, ie say \code{\link{element_line}} as opposed to \code{\link{element_blank}}). 
 
 \code{theme_hidegrid} or \code{theme_nogrid} (alias) is a function which \strong{disables} both MAJOR and MINOR gridlines.
 

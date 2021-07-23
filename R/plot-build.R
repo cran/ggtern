@@ -49,10 +49,15 @@ ggplot_build.ggplot <- function(plot) {
     out
   }
   
+  # Allow all layers to make any final adjustments based
+  # on raw input data and plot info
+  data <- layer_data
+  data <- by_layer(function(l, d) l$setup_layer(d, plot))
+  
   # Initialise panels, add extra data for margins & missing facetting
   # variables, and add on a PANEL variable to data
   layout <- ggint$create_layout(plot$facet,plot$coordinates)
-  data   <- layout$setup(layer_data, plot$data, plot$plot_env)
+  data   <- layout$setup(data, plot$data, plot$plot_env)
   
   # Compute aesthetics to produce data with generalised variable names
   data <- by_layer(function(l, d) l$compute_aesthetics(d, plot))
@@ -170,11 +175,15 @@ ggplot_gtable.ggplot_built <- function(data) {
   data <- data$data
   theme <- ggint$plot_theme(plot) #NH
   
+  # Is the current plot a ternary plot
+  isTernary  <- inherits(plot$coordinates,'CoordTern') ##NH
+  
   geom_grobs <- Map(function(l, d) l$draw_geom(d, layout), plot$layers, data)
+  if(!isTernary) ## NH This is in the base ggplot code, but causes error for ggtern
+    layout$setup_panel_guides(plot$guides, plot$layers, plot$mapping) ## NH 21st Jul 2021
   plot_table <- layout$render(geom_grobs, data, theme, plot$labels)
   
   #NH For Ternary Plot.
-  isTernary  <- inherits(plot$coordinates,'CoordTern') ##NH
   if(isTernary){
     latex      <- calc_element('tern.plot.latex', theme, verbose = FALSE)
     plot$labels<- lapply(plot$labels,function(x) label_formatter(x,latex = latex))

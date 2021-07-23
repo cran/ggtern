@@ -6,7 +6,9 @@
 \alias{Feldspar}
 \alias{FeldsparRaster}
 \title{Elkin and Groves Feldspar Data}
-\format{\code{Feldsdpar} - One (1) row per Feldspar composition, \code{FeldsdparRaster} - Raster Matrix}
+\format{
+\code{Feldsdpar} - One (1) row per Feldspar composition, \code{FeldsdparRaster} - Raster Matrix
+}
 \usage{
 #Experimental Data
 data(Feldspar)

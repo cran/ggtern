@@ -35,7 +35,7 @@ scales_add_missing_tern(plot)
 layers_add_or_remove_mask(plot)
 }
 \arguments{
-\item{x}{logical input to check}
+\item{x}{formula object}
 
 \item{a}{value to return if \code{x} is TRUE}
 
@@ -69,12 +69,6 @@ layers_add_or_remove_mask(plot)
 \item{plot}{ggplot object}
 
 \item{latex}{logical as to whether latex formats should be parsed}
-
-\item{x}{character vector}
-
-\item{x}{input object}
-
-\item{x}{formula object}
 
 \item{ggplot}{object}
 }

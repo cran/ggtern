@@ -5,8 +5,12 @@
 \alias{getLabels}
 \title{Generate Axis Labels}
 \usage{
-labels_tern(limits = c(0, 1), breaks = breaks_tern(limits),
-  format = "\%g", factor = 100)
+labels_tern(
+  limits = c(0, 1),
+  breaks = breaks_tern(limits),
+  format = "\%g",
+  factor = 100
+)
 }
 \arguments{
 \item{limits}{the scale limits}

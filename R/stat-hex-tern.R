@@ -43,7 +43,7 @@ StatHexTern <- ggproto("StatHexTern", Stat,
       data
     },
     compute_group = function(self, data, scales, binwidth = NULL, bins = 30, na.rm = FALSE, fun = sum) {
-      ggint$try_require("hexbin", "stat_binhex_tern")
+      # ggint$try_require("hexbin", "stat_binhex_tern")
       
       #Transform to cartesian space
       coord       = coord_tern()

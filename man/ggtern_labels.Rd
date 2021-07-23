@@ -50,7 +50,7 @@ however for the new axes used in the \code{ggtern} package
 as is \code{Llab} and \code{\link{ylab}} (when \code{L='y'}) , and \code{Rlab} and \code{zlab} (when \code{R='z'}), for other
 assignments when \code{coord_tern} is defined, the equivalence is not the case, however, if \code{T='XXX'}, 
 then \code{Tlab} will be the same as \code{XXXlab} (where \code{XXX} can be substituted for \code{'x', 'y' or 'z'}, and likewise for
-\code{Llab} and \code{Rlab}).
+\code{Llab} and \code{Rlab}). 
 
 \code{zlab} is new to \code{ggtern}, but is intended to be an analogous to \code{xlab} and \code{ylab} 
 as per the definitions in \code{ggplot2}.

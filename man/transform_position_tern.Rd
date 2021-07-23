@@ -4,8 +4,13 @@
 \alias{transform_position_tern}
 \title{Convenience function to transform all position variables in a ternary plot}
 \usage{
-transform_position_tern(df, trans_x = NULL, trans_y = NULL,
-  trans_z = NULL, ...)
+transform_position_tern(
+  df,
+  trans_x = NULL,
+  trans_y = NULL,
+  trans_z = NULL,
+  ...
+)
 }
 \arguments{
 \item{trans_x, trans_y, trans_z}{Transformation functions for x, y and z aesthetics.
