@@ -17,7 +17,8 @@ If not specified, must be supplied in each layer added to the plot.}
 
 \item{...}{additional arguments passed through to \code{\link{ggplot}}}
 
-\item{environment}{DEPRECATED. Used prior to tidy evaluation.}
+\item{environment}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Used prior to tidy
+evaluation.}
 }
 \value{
 \code{ggtern(...)} returns an object of class \code{ggplot}.

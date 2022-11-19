@@ -4,7 +4,7 @@
 #' and \code{\link{geom_vline}} geometries in \code{\link[=ggplot]{ggplot2}}
 #' 
 #' @aliases geom_Tline geom_Lline geom_Rline Tline tline Lline lline Rline rline
-#' @inheritParams ggplot2:::geom_hline
+#' @inheritParams ggplot2::geom_hline
 #' @param Tintercept,Lintercept,Rintercept the intercepts for the T, L and R axis respectively
 #' @examples 
 #' ggtern() + 

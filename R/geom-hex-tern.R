@@ -70,6 +70,7 @@ geom_hex_tern <- function(mapping = NULL, data = NULL,
 #' @rdname geom_hex_tern
 #' @format NULL
 #' @usage NULL
+#' @import hexbin
 #' @export
 GeomHexTern <- ggproto("GeomHexTern", Geom,
     setup_data = function(data,params){
@@ -85,6 +86,7 @@ GeomHexTern <- ggproto("GeomHexTern", Geom,
       dx          = resolution(round(data$x,6), FALSE)
       dy          = resolution(round(data$y,6), FALSE) / sqrt(3) / 2 * 1.15
       hexC        = hexbin::hexcoords(dx, dy, n = 1)
+      hexC        = hexcoords(dx, dy, n = 1)
       
       #Base Points
       n           = nrow(data)

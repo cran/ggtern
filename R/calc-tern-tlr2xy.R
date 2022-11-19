@@ -32,7 +32,7 @@ tlr2xy <- function(data,coord,...,inverse=FALSE,scale=TRUE,drop=FALSE){
   #Run Some Checks
   if(!inherits(coord,"CoordTern")) 
     stop("argument 'coord' must be a CoordTern coordinate structure")
-  if(class(data) != "data.frame")
+  if(!is(data,"data.frame"))
     stop("argument 'data' must be of type 'data.frame'")
   if(!is.logical(inverse) | !is.logical(scale))
     stop("argument 'inverse' and 'scale' (both) must be logical")

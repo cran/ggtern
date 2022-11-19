@@ -2,6 +2,7 @@
 #' @inheritParams geom_density_tern
 #' @param base the base transformation of the data, options include 'identity' (ie direct on the cartesian space), or 'ilr'
 #' which means to use the isometric log ratio transformation.
+#' @param geom Use to override the default connection between geom_density_tern() and stat_density_tern()
 #' @param h Bandwidth (vector of length two) as a multiple of the best estimate, estimated using \code{\link[MASS]{bandwidth.nrd}}. 
 #' @param bdl the threshold for detection limit. This is applied against the output of \code{\link[compositions]{acomp}} function, 
 #' so it is expected as a fraction in the range [0,1]

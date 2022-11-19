@@ -7,7 +7,7 @@
 #' 
 #' @section Aesthetics:
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "crosshair_tern")}
-#' @inheritParams ggplot2:::geom_segment
+#' @inheritParams ggplot2::geom_segment
 #' @examples 
 #' set.seed(1)
 #' df = data.frame(x=runif(10),y=runif(10),z=runif(10))

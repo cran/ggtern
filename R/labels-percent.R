@@ -36,7 +36,7 @@ atomic_percent <- percent_atomic
 #' @rdname ggtern_labels_arrow_suffix
 #' @export
 percent_custom <- function(x){
-  if(class(x) == 'character'){
+  if(is(x,'character')){
     x = gsub("%","%",x)
     x = gsub('([[:punct:]])\\1+', '\\1', x)
   }

@@ -24,7 +24,7 @@
 #' data frame. See the first example below. The second
 #' method specifies the default data frame to use for the plot,
 #' but no aesthetics are defined up front. This is useful when
-#' one data frame is used predominantly as layers are added,
+#' one data frame is used predominantly as layers are added, 
 #' but the aesthetics may vary from one layer to another. The
 #' third method initializes a skeleton \code{ggplot} object which
 #' is fleshed out as layers are added. This method is useful when

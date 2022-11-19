@@ -17,7 +17,7 @@
 #' @param Tlim the range of T in the ternary space
 #' @param Llim the range of L in the ternary space
 #' @param Rlim the range of R in the ternary space
-#' @inheritParams ggplot2:::coord_cartesian
+#' @inheritParams ggplot2::coord_cartesian
 #' @return \code{coord_tern} returns a CoordTern ggproto
 #' @rdname coord_tern
 #' @author Nicholas Hamilton

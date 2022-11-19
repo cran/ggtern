@@ -77,13 +77,5 @@ INTERNAL FUNCTIONS: \code{ggtern} makes use of several non-exported internal fun
 }
 \author{
 Nicholas Hamilton
-
-Nicholas Hamilton
-
-Nicholas Hamilton
-
-Nicholas Hamilton
-
-Nicholas Hamilton
 }
 \keyword{internal}

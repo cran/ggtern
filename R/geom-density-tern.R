@@ -7,7 +7,7 @@
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "density_tern")}
 #' @inheritParams ggplot2::geom_point
 #' @inheritParams ggplot2::geom_path
-#' @inheritParams ggplot2:::geom_density2d
+#' @inheritParams ggplot2::geom_density2d
 #' @examples
 #' #Plot Density Estimate, on isometric log ratio transformation of original data
 #' data('Feldspar')

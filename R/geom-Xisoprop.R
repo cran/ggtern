@@ -5,7 +5,7 @@
 #' 
 #'@section Aesthetics:
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "Tisoprop")}
-#' @inheritParams ggplot2:::geom_segment
+#' @inheritParams ggplot2::geom_segment
 #' @param value, the isoproportion ratio to draw
 #' @examples 
 #' data(Feldspar)

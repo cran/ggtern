@@ -8,7 +8,7 @@
   .functions.ggplot2   = c('create_layout',
                            #'expand_default', ## REMOVED
                            'plot_theme',
-                           'element_render','message_wrap',
+                           'element_render',# 'message_wrap',
                            'set_last_plot','make_labels','build_guides','is.zero','add_ggplot','labelGrob',
                            'is.layer','is.facet','is.Coord','GeomSegment',
                            '.element_tree',

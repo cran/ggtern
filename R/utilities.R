@@ -226,7 +226,7 @@ tern_dep <- function(version, msg) {
 #internal
 .makeValid <- function(x){
   x = x[[1]]
-  if(class(x) == 'character'){
+  if(is(x,'character')){
     x = gsub("%","'%'",x)
     x = gsub('([[:punct:]])\\1+', '\\1', x)
     x = gsub(" ","~",x)
@@ -302,7 +302,7 @@ identityInv = function(z) identity(z)
 #' @keywords internal
 #' @author Nicholas Hamilton
 getFormulaVars = function(x,dependent=TRUE) {
-  if(class(x) != 'formula') stop("x argument must be a formula",call.=FALSE)
+  if(!is(x,'formula')) stop("x argument must be a formula",call.=FALSE)
   all.vars(x[[if(dependent) 3 else 2]])
 }
 
