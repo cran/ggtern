@@ -1,3 +1,7 @@
+ggtern 3.4.1
+----------------------------------------------------------------
+* Fix redundant version specifier for methods dependency
+
 ggtern 3.4.0
 ----------------------------------------------------------------
 * Fixed broken compatability with ggplot2 3.4.0

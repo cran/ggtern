@@ -1,7 +1,7 @@
-0d6571a704ae6f7c2040ba20f0c3d56a *DESCRIPTION
+fbacdda2d38717c244f0e75d6d8e4a8c *DESCRIPTION
 4641e94ec96f98fabc56ff9cc48be14b *LICENSE
 c1c50dba84504bda4fc0d270719466d5 *NAMESPACE
-b6ca0838a89aa81d54af34be8efa4735 *NEWS
+4fc5f8c2cd3a5c6abd90cf77b6cdabd5 *NEWS
 258d0c70c92a7d75cf81cb5d09fe0ecf *R/aes.R
 faa22fb1bb6810e3b0d1e21e0727bae6 *R/annotation-raster-tern.R
 a54977e5ecef02e7c3c1d4f4736218a9 *R/annotation-tern.R
@@ -78,7 +78,7 @@ e1e17c847c238a95d98ebbb9124c52b5 *R/theme-showtitles.R
 e8de4da21f19b6ce6072d5811931acb6 *R/utilities.R
 f700b92a79173d44589fd28426c4b8a4 *README.md
 fffe98d62c626813aac492a5e552cbb9 *TODO
-f1ccac33e306fd48830d62282614cc5b *build/partial.rdb
+1b1b9a7b43f3fe0caa05149f6b7648c1 *build/partial.rdb
 2adda94c822c68c313d37edbbad3f051 *data/Feldspar.RData
 f0c2294ed428439992ef427304b48942 *data/FeldsparRaster.RData
 c2e0de5a148aaf55a306a066a8787712 *data/Fragments.RData
