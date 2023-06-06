@@ -3,7 +3,7 @@
 rd_theme <- function(){
   dic <- ggint$.element_tree[which(!ggint$.element_tree %in% ggint$.element_tree.orig)]
   nam <- names(dic)
-  nolink <- c()
+  # nolink <- c()
   paste(
     "\nBased on the \\code{ggplot2} existing structure (\\link[ggplot2]{theme}), the \\strong{NEW} individual theme elements for the ternary plot are as follows:",
     "\\tabular{lll}{",
@@ -11,12 +11,16 @@ rd_theme <- function(){
     paste(sapply(nam,function(x){
       obj  = dic[[x]]
       paste("\\code{",x,"} \\tab \\code{",
-            ifthenelse(obj$class %in% nolink,obj$class,paste0("\\link{",obj$class,"}")) ,
+            # ifthenelse(obj$class %in% nolink, obj$class, paste0("\\link{",obj$class,"}")),
+            paste0("\\link{",obj$class,"}"),
             "}",
             ifthenelse(!is.null(obj$inherit),"/(",""),"",
             obj$inherit,
             ifthenelse(!is.null(obj$inherit),")",""),
-            " \\tab ",obj$description,sep="")
+            " \\tab ",
+            obj$description,
+            sep=""
+     )
     }),collapse="\\cr "),
     "\n}\n"
   )
