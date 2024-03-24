@@ -27,7 +27,7 @@ NULL
 #' transforms between cartesian to ternary spaces
 #' @rdname ternary_transformation
 #' @export
-tlr2xy <- function(data,coord,...,inverse=FALSE,scale=TRUE,drop=FALSE){
+tlr2xy <- function(data, coord, ..., inverse=FALSE,scale=TRUE,drop=FALSE){
   
   #Run Some Checks
   if(!inherits(coord,"CoordTern")) 
@@ -95,6 +95,7 @@ tlr2xy <- function(data,coord,...,inverse=FALSE,scale=TRUE,drop=FALSE){
   
   #Forward transformation is ternary to cartesian
   if(!inverse[1]){
+    
     #Check the missing aesthetics
     .check.aes(coord,ix.trl,names(data),inverse=FALSE)
     #If scale to composition sum of 1
@@ -106,7 +107,7 @@ tlr2xy <- function(data,coord,...,inverse=FALSE,scale=TRUE,drop=FALSE){
     #Calculate
     data$y = data[,as.character(mapping['T'])]*tan(pi/3)*0.5 
     data$x = data[,as.character(mapping['R'])]+data$y*tan(pi/6)
-    data = data[,-which(names(data) == 'z')]
+    data   = data[,-which(names(data) == 'z')]
     
   #Inverse transformation is cartesian to ternary
   }else{
@@ -151,7 +152,7 @@ xy2tlr <- function(data,coord,...,inverse=FALSE,scale=TRUE)
 }
 
 #Check the aesthetics
-.check.aes = function(coord,ix,colNames,inverse=FALSE){
+.check.aes = function(coord, ix, colNames, inverse=FALSE){
   missing = unique(setdiff(ix,colNames))
   if(length(missing) > 0){
     dir = c('tlr','xy'); if(inverse) dir = rev(dir)

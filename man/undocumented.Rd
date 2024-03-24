@@ -7,6 +7,10 @@
 \alias{find_global_tern}
 \alias{tern_dep}
 \alias{arrow_label_formatter}
+\alias{arrow_label_formatter.default}
+\alias{arrow_label_formatter.call}
+\alias{arrow_label_formatter.expression}
+\alias{arrow_label_formatter.character}
 \alias{joinCharacterSeries}
 \alias{identityInv}
 \alias{getFormulaVars}
@@ -23,6 +27,14 @@ find_global_tern(name, env = environment(), mode = "any")
 tern_dep(version, msg)
 
 arrow_label_formatter(label, suffix = NULL, sep = "/", ...)
+
+\method{arrow_label_formatter}{default}(label, suffix = NULL, sep = "/", ...)
+
+\method{arrow_label_formatter}{call}(label, suffix = NULL, sep = "/", ...)
+
+\method{arrow_label_formatter}{expression}(label, suffix = NULL, sep = "/", ...)
+
+\method{arrow_label_formatter}{character}(label, suffix = NULL, sep = "/", latex = FALSE, ...)
 
 joinCharacterSeries(x, lastWord = "and")
 
@@ -64,13 +76,11 @@ layers_add_or_remove_mask(plot)
 
 \item{...}{additional arguments}
 
+\item{latex}{logical as to whether latex formats should be parsed}
+
 \item{dependent}{whether to return the dependent variables (TRUE) or the indpenedent variables (FALSE)}
 
 \item{plot}{ggplot object}
-
-\item{latex}{logical as to whether latex formats should be parsed}
-
-\item{ggplot}{object}
 }
 \description{
 INTERNAL FUNCTIONS: \code{ggtern} makes use of several non-exported internal functions, list are as follows:

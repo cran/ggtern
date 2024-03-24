@@ -5,8 +5,6 @@
 \alias{layer_data}
 \title{Build ggplot for rendering (ggtern version).}
 \usage{
-ggplot_build(plot)
-
 layer_data(plot, i = 1L)
 }
 \arguments{

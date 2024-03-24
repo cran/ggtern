@@ -3,7 +3,6 @@
 \name{ggplot}
 \alias{ggplot}
 \alias{ggplot.default}
-\alias{ggplot.data.frame}
 \alias{print.ggplot}
 \alias{plot.ggplot}
 \title{Create a new ggplot plot.}

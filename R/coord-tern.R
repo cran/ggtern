@@ -53,6 +53,36 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   aspect          = function(self, ranges) { 
     (diff(ranges$y.range) / diff(ranges$x.range)) * self$ratio 
   },
+  
+  train_panel_guides = function(self, panel_params, layers, params = list()) {
+    aesthetics <- c("x", "y", "x.sec", "y.sec")
+    
+    # If the panel_params doesn't contain the scale, there's no guide for the aesthetic
+    aesthetics <- intersect(aesthetics, names(panel_params$guides$aesthetics))
+    names(aesthetics) <- aesthetics
+    
+    guides <- panel_params$guides$get_guide(aesthetics)
+    empty  <- vapply(guides, inherits, logical(1), "GuideNone")
+    guide_params <- panel_params$guides$get_params(aesthetics)
+    aesthetics <- aesthetics[!empty]
+    
+    guide_params[!empty] <- Map(
+      function(guide, guide_param, scale) {
+        guide_param <- guide$train(guide_param, scale)
+        #guide_param <- guide$transform(guide_param, self, panel_params) # NH
+        guide_param <- guide$get_layer_key(guide_param, layers)
+        guide_param
+      },
+      guide = guides[!empty],
+      guide_param = guide_params[!empty],
+      scale = panel_params[aesthetics]
+    )
+    
+    panel_params$guides$update_params(guide_params)
+    
+    panel_params
+  },
+
   transform       = function(self, data, panel_params){
     
     #Variables and functions.
@@ -91,7 +121,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       
       #Re-Center
       origin         = apply(xtrm[,ix],2,function(x){ mean(range(x))} ) ##ORIGIN TO BE MEDIAN
-      target         = c(mean(panel_params$x.range),mean(panel_params$y.range)) + as.numeric(coordShift)
+      target         = c(mean(panel_params$x.range), mean(panel_params$y.range)) + as.numeric(coordShift)
       data           = addOrigin(data,ix.comb,(target - origin))
     }
     
@@ -111,7 +141,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
     )
   },
   
-  render_bg       = function(self,panel_params, theme){
+  render_bg       = function(self, panel_params, theme){
     items = list() 
     extrm = .get.tern.extremes(self,panel_params)
     items = .render.background(self,extrm,theme,items)
@@ -120,10 +150,12 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       if(!.theme.get.showmask(theme))
         items = .render.fgset(self,extrm,panel_params,theme,items)
     }
-    gTree(children = do.call("gList",items))
+    gTree(
+      children = do.call("gList",items)
+    )
   },
   
-  render_fg     = function(self,panel_params, theme){
+  render_fg     = function(self, panel_params, theme){
     items = list() 
     extrm = .get.tern.extremes(self,panel_params)
     if(.theme.get.gridsontop(theme)){
@@ -131,7 +163,9 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
       items = .render.fgset(self,extrm,panel_params,theme,items)
     }
     items = .render.titles(self,extrm,panel_params,theme,items)
-    gTree(children = do.call("gList", items))
+    gTree(
+      children = do.call("gList", items)
+    )
   },
   
   remove_labels = function(self,table){
@@ -148,42 +182,18 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
   
   setup_panel_params = function(self, scale_x, scale_y, params = list() ) {
     
-    train_cartesian <- function(panel_params,limits,name,continuousAmount) {
-      if (self$expand) {
-        # expand <- ggint$expand_default(panel_params,continuous=continuousAmount)
-        # expand = ggplot2:::expand_limits_continuous(limits, continuousAmount, panel_params)
-        # expand <- c(continuousAmount, continuousAmount)
-        expand <- c(0, 0)
-      } else {
-        expand <- c(0, 0)
-      }
-      print(limits)
-      if (is.null(limits)) {
-        range <- panel_params$dimension(expand)
-      } else {
-        range <- range(panel_params$transform(limits))
-        range <- expand_range(range, expand[1], expand[2])
-      }
-      
-      out <- panel_params$break_info(range)
-      names(out) <- paste(name, names(out), sep = ".")
-      out
-    }
-    
     #Determine the epansiion amount
     expand.amount = calc_element('tern.panel.expand',theme=self$theme)
     
     #Adjust for rotation
     extremes        = .get.tern.extremes(self,list(x.range=self$limits$x, y.range=self$limits$y,x.rescale=FALSE,y.rescale=FALSE))
     extremes        = extremes[,c('x','y')]
-    currentMidpoint = c(mean(self$limits$x),mean(self$limits$y))
-    ternaryMidpoint = apply(extremes,2,function(x){mean(range(x))})
+    currentMidpoint = c(mean(self$limits$x), mean(self$limits$y))
+    ternaryMidpoint = apply(extremes, 2, function(x){mean(range(x))} )
     shift           = 0.5*(currentMidpoint - ternaryMidpoint)
     
     #Execute the Training
     c(
-      # train_cartesian(scale_x, self$limits$x - shift[1],"x",c(expand.amount,0) ),
-      # train_cartesian(scale_y, self$limits$y - shift[2],"y",c(expand.amount,0) )
       view_scales_from_scale(scale_x, self$limits$x, TRUE, c(expand.amount,0)),
       view_scales_from_scale(scale_y, self$limits$y, TRUE, c(expand.amount,0))
     )
@@ -192,6 +202,7 @@ CoordTern <- ggproto("CoordTern", CoordCartesian,
 
 # Inspired by ggplot2
 view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, expansion) {
+  
   # expansion <- default_expansion(scale, expand = expand)
   limits <- scale$get_limits()
   continuous_range <- ggint$expand_limits_scale(scale, expansion, limits, coord_limits = coord_limits)
@@ -200,7 +211,6 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
   view_scales <- list(
     ggint$view_scale_primary(scale, limits, continuous_range),
     sec = ggint$view_scale_secondary(scale, limits, continuous_range),
-    arrange = scale$axis_order(),
     range = continuous_range
   )
   names(view_scales) <- c(aesthetic, paste0(aesthetic, ".", names(view_scales)[-1]))
@@ -461,7 +471,7 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
     if(inherits(e, "element_blank"))
       return(items)
     ex     = rbind(data.extreme,data.extreme[1,])
-    grob   = ggint$element_grob.element_line(e,size=e$size,x=ex$x,y=ex$y)
+    grob   = ggint$element_grob.element_line(e,linewidth=e$linewidth,x=ex$x,y=ex$y)
     items[[length(items) + 1]] = grob
   },error=function(e){ 
     warning(e)
@@ -535,7 +545,7 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
                      gp            = gpar(col     = e$colour %||% 'transparent', 
                                           lty     = e$linetype,
                                           lineend = 'butt',
-                                          lwd     = e$size %||% 0)
+                                          lwd     = e$linewidth %||% 0)
         )
       })
       
@@ -683,7 +693,7 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
                        gp            = gpar(col     = e$colour %||% 'transparent', 
                                             lty     = e$linetype,
                                             lineend = 'butt',
-                                            lwd     = (e$size %||% 0)*.pt)
+                                            lwd     = (e$linewidth %||% 0)*.pt)
           )
         })
         items = c(items,g)
@@ -697,11 +707,15 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
   #PROCESS TICKS AND LABELS
   if(showgrid.major | showgrid.minor){
     for(name in unique(df$NameGrid)){ 
-      items <- grobs(name=name, items=items, df = df[ which(df$NameGrid  == name),,drop=FALSE], 
-                     showgrid.major = showgrid.major, showgrid.minor = showgrid.minor)
+      items <- grobs(
+        name=name, 
+        items=items, 
+        df = df[ which(df$NameGrid  == name),,drop=FALSE], 
+        showgrid.major = showgrid.major, 
+        showgrid.minor = showgrid.minor
+      )
     } 
   }
-  
   items
 }
 
@@ -860,7 +874,7 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
                             gp            = gpar(col     = e$colour %||% 'transparent', 
                                                  lty     = e$linetype,
                                                  lineend = 'butt',
-                                                 lwd     = e$size)
+                                                 lwd     = e$linewidth)
         )
         items[[length(items) + 1]] <- g
       },error = function(e){

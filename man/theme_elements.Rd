@@ -18,7 +18,7 @@ Some convenience functions have been also newly created, proceed to \code{\link{
 }
 \section{New/Additional Inheritance Structures}{
 
-\Sexpr[results=rd,stage=build]{ggtern:::rd_theme()}
+
 **  \strong{NB:} \code{tern.panel.background}, whilst the ternary area is 'triangular' per-se, \code{\link{element_rect}} has been used, 
 as it actually holds NO information regarding the geometry (width, height), only fill, color, 
 size and linetype border (ie the style of how it will be rendered).

@@ -59,7 +59,7 @@ GeomMask <- ggproto("GeomMask", Geom,
           
           #1st pass is master triangle.
           ex  = .get.tern.extremes(coord,panel_params,transform=FALSE)
-          ex  = coord$transform(ex,panel_params = panel_params)
+          ex  = coord$transform(ex, panel_params = panel_params)
           ex  = rbind(ex,ex[1,,drop=F])
           
           #Build a specific viewport value
@@ -92,7 +92,7 @@ GeomMask <- ggproto("GeomMask", Geom,
               sizeLoc = if(ix == 2) 0.5 else 1
               colLoc  = if(ix == 2) 'black' else 'red'
             }else{
-              sizeLoc = if(ix == 2) is.numericor(e$size,0) else 0
+              sizeLoc = if(ix == 2) is.numericor(e$linewidth,0) else 0
               colLoc  = if(ix == 2) e$colour else fillLoc
             }
             

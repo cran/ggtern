@@ -9,7 +9,9 @@
                            #'expand_default', ## REMOVED
                            'plot_theme',
                            'element_render',# 'message_wrap',
-                           'set_last_plot','make_labels','build_guides','is.zero','add_ggplot','labelGrob',
+                           'set_last_plot','make_labels',
+                        # 'build_guides',
+                           'is.zero','add_ggplot','labelGrob',
                            'is.layer','is.facet','is.Coord','GeomSegment',
                            '.element_tree',
                            # 'el_def', ## NOW EXPORTED
@@ -20,7 +22,12 @@
                            'is.Coord','is.facet','is.layer','make_labels','update_labels','update_guides',
                            # 'update_theme', ## REMOVED
                            'aes_to_scale',
-                           'scales_add_missing','scales_list','scales_transform_df','scales_map_df','scales_train_df',
+                        # 'scales_add_missing',
+                           'scales_list',
+                           'guides_list',
+                        # 'scales_transform_df',
+                        # 'scales_map_df',
+                        # 'scales_train_df',
                            'predictdf',
                            # 'contour_lines', ## REMOVED
                            'check_required_aesthetics','snake_class',
@@ -30,7 +37,13 @@
                            'hexGrob',
                            # 'try_require', ## REMOVED
                            'hex_binwidth','hexBinSummarise',
-                           'find_args','is.margin','justify_grobs')
+                           'find_args','is.margin','justify_grobs',
+                           'attach_plot_env',
+                           'by_layer',
+                           'table_add_tag',
+                           'table_add_legends',
+                           'table_add_tag'
+                           )
   .functions.gridExtra  = c('latticeGrob')
     .functions          = rbind(data.frame(p='ggplot2',  f=unique(.functions.ggplot2)),
                                 data.frame(p='gridExtra',f=unique(.functions.gridExtra)))

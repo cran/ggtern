@@ -116,6 +116,7 @@ GeomLabelViewport <- ggproto("GeomLabelViewport",
     data     = data[!duplicated(data[,intersect(names(data),uniqueOn)]), ]
     
     grobs <- lapply(1:nrow(data), function(i) {
+      
        row <- data[i, , drop = FALSE]
        lab <- row$lab
        if (parse){
@@ -127,7 +128,7 @@ GeomLabelViewport <- ggproto("GeomLabelViewport",
          x       = unit(row$x, "native"),
          y       = unit(row$y, "native"),
          just    = c(row$hjust, row$vjust),
-         padding = label.padding,
+         padding = rep(label.padding,4),
          r       = label.r,
          text.gp = gpar(
            col        = row$colour,
@@ -145,7 +146,10 @@ GeomLabelViewport <- ggproto("GeomLabelViewport",
        )
      })
      class(grobs) <- "gList"
-     ggint$ggname("geom_label", grobTree(children = grobs))
+     ggint$ggname(
+       "geom_label", 
+       grobTree(children = grobs)
+     )
    }
 )
 

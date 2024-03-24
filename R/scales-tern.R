@@ -14,10 +14,12 @@ scale_T_continuous <- function(name         = waiver(),
                                labels       = waiver(),...) {
   sc <- continuous_scale(
     c("T"),
-    "tern_T", identity, name = name, breaks = breaks,
+    # "tern_T", 
+    palette = identity, 
+    name = name, breaks = breaks,
     minor_breaks = minor_breaks, labels = labels, limits = limits,
-    expand = waiver(), oob = censor, na.value = NA_real_, trans = "identity",
-    guide = "none",super = ScaleContinuousPosition
+    expand = waiver(), oob = censor, na.value = NA_real_, transform = "identity",
+    guide = "none", super = ScaleContinuousPosition
   )
   # TODO: Fix this hack. We're reassigning the parent ggproto object, but this
   # object should in the first place be created with the correct parent.
@@ -36,9 +38,11 @@ scale_L_continuous <- function(name         = waiver(),
                                labels       = waiver(),...) {
   sc <- continuous_scale(
     c("L"),
-    "tern_L", identity, name = name, breaks = breaks,
+    # "tern_L", 
+    palette = identity, 
+    name = name, breaks = breaks,
     minor_breaks = minor_breaks, labels = labels, limits = limits,
-    expand = waiver(), oob = censor, na.value = NA_real_, trans = "identity",
+    expand = waiver(), oob = censor, na.value = NA_real_, transform = "identity",
     guide = "none",super = ScaleContinuousPosition
   )
   # TODO: Fix this hack. We're reassigning the parent ggproto object, but this
@@ -57,10 +61,12 @@ scale_R_continuous <- function(name         = waiver(),
                                labels       = waiver(),...) {
   sc <- continuous_scale(
     c("R"),
-    "tern_R", identity, name = name, breaks = breaks,
+    # "tern_R", 
+    palette = identity, 
+    name = name, breaks = breaks,
     minor_breaks = minor_breaks, labels = labels, limits = limits,
-    expand = waiver(), oob = censor, na.value = NA_real_, trans = "identity",
-    guide = "none",super = ScaleContinuousPosition
+    expand = waiver(), oob = censor, na.value = NA_real_, transform = "identity",
+    guide = "none", super = ScaleContinuousPosition
   )
   # TODO: Fix this hack. We're reassigning the parent ggproto object, but this
   # object should in the first place be created with the correct parent.

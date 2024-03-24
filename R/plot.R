@@ -44,31 +44,34 @@ ggplot <- function(data = NULL, mapping = aes(), ...,
 #' @usage NULL
 ggplot.default <- function(data = NULL, mapping = aes(), ...,
                            environment = parent.frame()) {
-  ggplot.data.frame(fortify(data, ...), mapping, environment = environment)
-}
 
-#' @export
-#' @rdname ggplot
-#' @usage NULL
-ggplot.data.frame <- function(data, mapping = aes(), ...,
-                              environment = parent.frame()) {
   if (!missing(mapping) && !inherits(mapping, "uneval")) {
+    #cli::cli_abort(c(
+    #  "{.arg mapping} must be created with {.fn aes}.",
+    #  "x" = "You've supplied {.obj_type_friendly {mapping}}."
+    #))
     stop("Mapping should be created with aes or aes_string")
   }
+  
+  data = fortify(data, ...)
   
   p <- structure(list(
     data = data,
     layers = list(),
     scales = ggint$scales_list(),
+    guides = ggint$guides_list(),
     mapping = mapping,
     theme = list(),
-    coordinates = coord_cartesian(),
+    coordinates = coord_cartesian(default = TRUE),
     facet = facet_null(),
-    plot_env = environment
+    plot_env = environment,
+    layout = ggproto(NULL, Layout)
   ), class = c("gg", "ggplot"))
   
-  p$labels <- ggint$make_labels(mapping) ##NH
+  p$labels <- ggint$make_labels(mapping) #NH
+  
   ggint$set_last_plot(p) ##NH
+  
   p
 }
 
@@ -96,9 +99,8 @@ print.ggplot <- function(x, newpage = is.null(vp), vp = NULL, ...) {
     list(),
     getNamespace("ggplot2")
   )
-  
+
   data <- ggplot_build(x)
-  
   gtable <- ggplot_gtable(data)
   if (is.null(vp)) {
     grid.draw(gtable)
@@ -108,7 +110,11 @@ print.ggplot <- function(x, newpage = is.null(vp), vp = NULL, ...) {
     upViewport()
   }
   
-  invisible(data)
+  if (isTRUE(getOption("BrailleR.VI")) && rlang::is_installed("BrailleR")) {
+    print(asNamespace("BrailleR")$VI(x))
+  }
+  
+  invisible(x)
 }
 
 #' @rdname ggplot

@@ -243,13 +243,25 @@ tern_dep <- function(version, msg) {
 #' @keywords internal
 #' @rdname undocumented
 arrow_label_formatter             = function(label,suffix=NULL,sep="/",...) UseMethod("arrow_label_formatter")
+
+#' @export
+#' @rdname undocumented
 arrow_label_formatter.default     = function(label,suffix=NULL,sep="/",...) arrow_label_formatter.character( as.character(label), suffix, sep, ...)
+
+#' @export
+#' @rdname undocumented
 arrow_label_formatter.call        = function(label,suffix=NULL,sep="/",...) arrow_label_formatter.expression(as.expression(label),suffix, sep, ...)    
+
+#' @export
+#' @rdname undocumented
 arrow_label_formatter.expression  = function(label,suffix=NULL,sep="/",...){
   suffix = if(suffix  == "")   NULL else suffix
   sep    = if(is.null(suffix)) ""   else .trimAndPad(sep)
   parse(text=paste(as.character(label),suffix,sep))
 }
+
+#' @export
+#' @rdname undocumented
 arrow_label_formatter.character   = function(label,suffix=NULL,sep="/",latex = FALSE,...) {
   suffix = if(suffix  == "")   NULL else suffix
   sep    = if(is.null(suffix)) ""   else .trimAndPad(sep)
@@ -307,7 +319,7 @@ getFormulaVars = function(x,dependent=TRUE) {
 }
 
 #' Function to add missing scales and other items to the plot and its coordinates sytem
-#' @param ggplot object
+#' @param plot ggplot object
 #' @rdname undocumented
 #' @keywords internal
 #' @author Nicholas Hamilton

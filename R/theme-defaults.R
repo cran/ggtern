@@ -3,7 +3,7 @@
 #' \code{ggtern} ships with a number of complete themes, summarized as follows. 
 #' These themes combine the base themes available to \code{ggplot2} and a number of NEW themes, which
 #' are unique to \code{ggtern}.
-#' \itemize{
+#' \describe{
 #'  \item{ Black and White Theme:}{ 
 #'    \code{\link[=theme_bw]{theme_bw(...)}}
 #'  }
