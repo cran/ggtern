@@ -20,10 +20,12 @@ White-cell compositions of 30 blood cells by two different methods
 }
 \examples{
 data(WhiteCells)
-   ggtern(WhiteCells,aes(G,L,M)) + 
-   geom_density_tern(aes(color=Experiment)) +
-   geom_point(aes(shape=Experiment)) +
-   facet_wrap(~Experiment,nrow=2)
+ggtern(WhiteCells,aes(G,L,M)) + 
+  geom_density_tern(aes(color=Experiment),bdl = 0) +
+  geom_point(aes(shape=Experiment)) +
+  scale_color_manual(values=c("red","blue")) +
+  scale_shape_manual(values=c(21,24)) +
+  facet_wrap(~Experiment,nrow=2)
 }
 \references{
 Aitchison, J. 

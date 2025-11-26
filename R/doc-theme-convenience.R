@@ -42,8 +42,8 @@
 #' 
 #' #Load data and create the base plot.
 #' plot <- ggtern() + theme_bw() + 
-#'  theme(tern.axis.ticks.length.major=unit(3.0,'mm'),
-#'        tern.axis.ticks.length.minor=unit(1.5,'mm'))
+#'  theme(tern.axis.ticks.length.major=rel(1.0),
+#'        tern.axis.ticks.length.minor=rel(0.5))
 #' plot
 #' 
 #' #Show Arrows

@@ -1,17 +1,16 @@
 Package: ggtern
-Version: 3.5.0
-Date: 2024-3-24
+Version: 4.0.0
+Date: 2025-11-12
 Title: An Extension to 'ggplot2', for the Creation of Ternary Diagrams
 Description: Extends the functionality of 'ggplot2', providing the capability
     to plot ternary diagrams for (subset of) the 'ggplot2' geometries. Additionally,
     'ggtern' has implemented several NEW geometries which are unavailable to the
-    standard 'ggplot2' release. For further examples and documentation, please
-    proceed to the 'ggtern' website.
+    standard 'ggplot2' release.
 Authors@R: 
-  person("Nicholas","Hamilton", ,"nick@ggtern.com", role = c("aut", "cre"))
+  person("Nicholas","Hamilton", ,"nicholasehamilton@gmail.com", role = c("aut", "cre"))
 Author: Nicholas Hamilton [aut, cre]
-Maintainer: Nicholas Hamilton <nick@ggtern.com>
-Depends: R (>= 4.0), ggplot2 (>= 3.5.0)
+Maintainer: Nicholas Hamilton <nicholasehamilton@gmail.com>
+Depends: R (>= 4.0), ggplot2 (>= 4.0.0)
 Imports: compositions (>= 2.0-2), grid, gridExtra (>= 2.3), gtable (>=
         0.1.2), latex2exp (>= 0.5), MASS, plyr (>= 1.8.3), scales (>=
         1.3.0), stats, proto (>= 1.0), utils, lattice, hexbin (>=
@@ -19,36 +18,35 @@ Imports: compositions (>= 2.0-2), grid, gridExtra (>= 2.3), gtable (>=
 Enhances: sp
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
-URL: http://www.ggtern.com
-Collate: 'ggtern-package.R' 'aes.R' 'coord-tern.R' 'calc-tern-tlr2xy.R'
-        'calc-mahalanobis-distance.R' 'calc-kde2d-weighted.R'
-        'doc-data.R' 'doc-theme-convenience.R' 'depreciated.R'
-        'labels-new.R' 'labels-percent.R' 'legend-draw-tern.R'
-        'ggtern-constructor.R' 'gg-internal.R'
-        'modifications-gridExtra.R' 'onLoad.R' 'plot.R' 'plot-build.R'
-        'plot-construction.R' 'position-.R' 'position-nudge-tern.R'
-        'position-jitter-tern.R' 'save.R' 'scales-tern.R'
-        'strip-unapproved.R' 'tern-limits.R' 'theme.R'
-        'theme-arrowlength.R' 'theme-clockwise.R' 'theme-defaults.R'
-        'theme-elements.R' 'theme-gridsontop.R' 'theme-bordersontop.R'
-        'theme-legend-position.R' 'theme-latex.R' 'theme-mesh.R'
-        'theme-noarrows.R' 'theme-nomask.R' 'theme-novar-tern.R'
-        'theme-rotate.R' 'theme-showgrid.R' 'theme-showlabels.R'
-        'theme-ticks.R' 'theme-showtitles.R' 'theme-ticksoutside.R'
-        'theme-zoom.R' 'utilities.R' 'utilities-help.R'
-        'geom-density-tern.R' 'stat-density-tern.R' 'geom-mask.R'
-        'geom-Xline.R' 'geom-Xisoprop.R' 'geom-confidence-tern.R'
-        'stat-confidence-tern.R' 'geom-errorbarX.R'
-        'geom-smooth-tern.R' 'stat-smooth-tern.R' 'geom-mean-ellipse.R'
-        'stat-mean-ellipse.R' 'geom-interpolate-tern.R'
-        'stat-interpolate-tern.R' 'stat-interpolate-methods.R'
-        'geom-crosshair-tern.R' 'geom-point-swap.R' 'geom-hex-tern.R'
-        'stat-hex-tern.R' 'annotation-tern.R'
-        'annotation-raster-tern.R' 'geom-text-viewport.R'
-        'geom-label-viewport.R' 'geom-polygon-closed.R'
-        'geom-tri-tern.R' 'stat-tri-tern.R'
+Collate: 'aes.R' 'annotation-raster-tern.R' 'annotation-tern.R'
+        'calc-kde2d-weighted.R' 'calc-mahalanobis-distance.R'
+        'calc-tern-tlr2xy.R' 'coord-tern.R' 'depreciated.R'
+        'doc-data.R' 'doc-theme-convenience.R' 'legend-draw-tern.R'
+        'utilities.R' 'geom-Xisoprop.R' 'geom-Xline.R'
+        'geom-confidence-tern.R' 'geom-crosshair-tern.R'
+        'geom-density-tern.R' 'geom-errorbarX.R' 'geom-hex-tern.R'
+        'geom-interpolate-tern.R' 'geom-text-viewport.R'
+        'geom-label-viewport.R' 'geom-mask.R' 'geom-mean-ellipse.R'
+        'geom-point-swap.R' 'geom-polygon-closed.R'
+        'geom-smooth-tern.R' 'geom-tri-tern.R' 'gg-internal.R'
+        'ggtern-constructor.R' 'ggtern-package.R' 'labels-new.R'
+        'labels-percent.R' 'modifications-gridExtra.R' 'onLoad.R'
+        'plot-build.R' 'plot-construction.R' 'plot.R' 'position-.R'
+        'position-jitter-tern.R' 'position-nudge-tern.R' 'save.R'
+        'scales-tern.R' 'stat-confidence-tern.R' 'stat-density-tern.R'
+        'stat-hex-tern.R' 'stat-interpolate-methods.R'
+        'stat-interpolate-tern.R' 'stat-mean-ellipse.R'
+        'stat-smooth-tern.R' 'stat-tri-tern.R' 'strip-unapproved.R'
+        'tern-limits.R' 'theme-arrowlength.R' 'theme-bordersontop.R'
+        'theme-clockwise.R' 'theme-defaults.R' 'theme-elements.R'
+        'theme-gridsontop.R' 'theme-latex.R' 'theme-legend-position.R'
+        'theme-mesh.R' 'theme-noarrows.R' 'theme-nomask.R'
+        'theme-novar-tern.R' 'theme-rotate.R' 'theme-showgrid.R'
+        'theme-showlabels.R' 'theme-showtitles.R' 'theme-ticks.R'
+        'theme-ticksoutside.R' 'theme-zoom.R' 'theme.R'
+        'utilities-help.R'
 NeedsCompilation: no
 Repository: CRAN
-RoxygenNote: 7.3.1
-Packaged: 2024-03-24 19:53:34 UTC; nick
-Date/Publication: 2024-03-24 21:50:02 UTC
+RoxygenNote: 7.3.3
+Packaged: 2025-11-18 17:01:27 UTC; nick
+Date/Publication: 2025-11-26 13:40:13 UTC

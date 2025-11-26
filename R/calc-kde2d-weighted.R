@@ -6,7 +6,7 @@
 #' @inheritParams MASS::kde2d
 #' @param w numeric value or vector of same length as x (and y), for weighting, if not provided, 
 #' a unified weighting of '1' will which will result in the regular density calculation.
-#' @seealso \code{\link{kde2d}}
+#' @seealso \code{\link[MASS]{kde2d}}
 #' @author Nicholas Hamilton
 #' @export
 kde2d.weighted <- function (x, y, h, n = 25,lims = c(range(x), range(y)),w) {

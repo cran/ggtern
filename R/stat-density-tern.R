@@ -18,9 +18,9 @@
 #' ggtern(data=Feldspar,aes(Ab,An,Or)) + 
 #'     stat_density_tern(
 #'         geom='polygon',
-#'         aes(fill=..level..),
-#'         bins=5,
-#'         color='grey') +
+#'         aes(fill=after_stat(level),color=after_stat(level)),
+#'         bins=20
+#'     ) +
 #'     geom_point()
 #'         
 #' @author Nicholas Hamilton
@@ -96,7 +96,7 @@ StatDensityTern  = ggproto("StatDensityTern",
       return(data.frame())
     
     if(base == 'ilr' && bdl <= 0){
-      MINIMUM_BDL = 0.01
+      MINIMUM_BDL = 0.001
       x  = data[raes]
       ix = which(apply(x,1,min) < MINIMUM_BDL)
       if(length(ix) > 0){

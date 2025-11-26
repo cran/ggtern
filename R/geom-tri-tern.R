@@ -73,12 +73,12 @@ GeomTriTern <- ggproto("GeomTriTern", Geom,
                                                     fill = alpha(data$fill[1], 
                                                                  data$alpha[1]),
                                                     lty  = data$linetype[1], 
-                                                    lwd  = data$size[1]
+                                                    lwd  = data$linewidth[1]
                                                   )
                                       )
                          )
                        },
                        required_aes = c("x", "y", "z"),
-                       default_aes = aes(colour = NA, fill = "grey50", size = 0.5, alpha = 1, linetype=1),
+                       default_aes = aes(colour = NA, fill = "grey50", linewidth = 0.5, alpha = 1, linetype=1),
                        draw_key = draw_key_polygon
 )

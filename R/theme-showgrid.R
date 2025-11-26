@@ -8,7 +8,7 @@
 #' irrespective of whether those grid elements are valid (renderable). From the counter perspective, 
 #' 
 #' \code{theme_showgrid(...)} or its aliases will ALLOW rendering of grid elements, subject to those grid 
-#' elements being valid (renderable, ie say \code{\link{element_line}} as opposed to \code{\link{element_blank}}). 
+#' elements being valid (renderable, ie say \code{\link[ggplot2]{element_line}} as opposed to \code{\link[ggplot2]{element_blank}}). 
 #' 
 #' \code{theme_hidegrid} or \code{theme_nogrid} (alias) is a function which \strong{disables} both MAJOR and MINOR gridlines.
 #' 

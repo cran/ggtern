@@ -13,7 +13,7 @@
 #' 
 #' @section New/Additional Inheritance Structures:
 #' 
-#' **  \strong{NB:} \code{tern.panel.background}, whilst the ternary area is 'triangular' per-se, \code{\link{element_rect}} has been used, 
+#' **  \strong{NB:} \code{tern.panel.background}, whilst the ternary area is 'triangular' per-se, \code{\link[ggplot2]{element_rect}} has been used, 
 #' as it actually holds NO information regarding the geometry (width, height), only fill, color, 
 #' size and linetype border (ie the style of how it will be rendered).
 #' 
@@ -56,6 +56,11 @@ ggtern_register_theme_elements = function(){
     tern.axis.line.L               = element_line(),
     tern.axis.line.R               = element_line(),
     tern.axis.line.ontop           = getOption("tern.line.ontop"),
+    
+    # Axis Labels
+    # Tarrow                         = element_text(),
+    # Larrow                         = element_text(),
+    # Rarrow                         = element_text(),
     
     #Axis Text
     tern.axis.text                 = element_text(),
@@ -121,6 +126,9 @@ ggtern_register_theme_elements = function(){
     
     ## DO NOT EDIT BELOW
     element_tree = list(
+      #Tarrow                         = el_def("text",                                 description="Top Arrow Label"),
+      #Larrow                         = el_def("text",                                 description="Left Arrow Label"),
+      #Rarrow                         = el_def("text",                                 description="Right Arrow Label"),
       tern.panel.background          = el_def("element_rect", "panel.background",     description="Background of Ternary Plot Area**"),
       tern.plot.background           = el_def("element_rect", "plot.background",      description="Background of Ternary Clipping Area**"),
       tern.plot.latex                = el_def("logical",                              description="Whether to parse characters as latex commands"),
@@ -159,8 +167,8 @@ ggtern_register_theme_elements = function(){
       tern.axis.ticks.major.T        = el_def("element_line", "tern.axis.ticks.major",description="Base Major Ticks for TOP Axis"),
       tern.axis.ticks.major.L        = el_def("element_line", "tern.axis.ticks.major",description="Base Major Ticks for LHS Axis"),
       tern.axis.ticks.major.R        = el_def("element_line", "tern.axis.ticks.major",description="Base Major Ticks for RHS Axis"),
-      tern.axis.ticks.length.major   = el_def("unit",                                 description="Ticks Major Ticklength"),
-      tern.axis.ticks.length.minor   = el_def("unit",                                 description="Ticks Minor Ticklength"),
+      tern.axis.ticks.length.major   = el_def("rel",                                  description="Ticks Major Ticklength"),
+      tern.axis.ticks.length.minor   = el_def("rel",                                  description="Ticks Minor Ticklength"),
       tern.axis.ticks.outside        = el_def("logical",                              description="Ticks Outside or Inside"),
       tern.axis.ticks.primary.show   = el_def("logical",                              description="Ticks Show Primary"),
       tern.axis.ticks.secondary.show = el_def("logical",                              description="Ticks Show Secondary"),

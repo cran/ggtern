@@ -1,6 +1,6 @@
 #' Annotation: High-performance rectangular tiling (ggtern version)
 #'
-#' This is a special version of \code{\link{geom_raster}} optimised for static
+#' This is a special version of \code{\link[ggplot2]{geom_raster}} optimised for static
 #' annotations that are the same in every panel. These annotations will not
 #' affect scales (i.e. the x and y axes will not grow to cover the range
 #' of the raster, and the raster must already have its own colours).
@@ -23,6 +23,7 @@
 #' geom_mask() + 
 #' geom_point(size=5,aes(shape=Feldspar,fill=Feldspar),color='black') +
 #' scale_shape_manual(values=c(21,24)) +
+#' scale_fill_manual(values=c("red", "blue")) +
 #' labs(title="Demonstration of Raster Annotation")
 #' @author Nicholas Hamilton
 #' @rdname annotation_raster_tern

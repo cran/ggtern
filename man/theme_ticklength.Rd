@@ -14,15 +14,15 @@ theme_ticklength_minor(minor)
 }
 \arguments{
 \item{major, minor}{lenth of major and minor ticklengths respectively. 
-Must be a unit object, or will be ignored.}
+Must be a 'rel' (ie ex rel(5.0)), or will be ignored.}
 }
 \description{
 Convenience Function for changing the major and/or minor ticklengths.
 }
 \examples{
 ggtern() +
-  theme_ticklength(major = unit(5.0,'mm'),
-                   minor = unit(2.5,'mm'))
+  theme_ticklength(major = rel(1.0),
+                   minor = rel(0.5))
 }
 \author{
 Nicholas Hamilton

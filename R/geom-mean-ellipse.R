@@ -1,7 +1,7 @@
 #' Mean Ellipse
 #' 
 #' Produce ellipses from a mean and a variance of ternary compositional data, based off the function 
-#' included in the \code{\link{compositions}} package.
+#' included in the \code{\link[compositions]{compositions}} package.
 #' 
 #' @inheritParams ggplot2::geom_smooth
 #' @inheritParams ggplot2::geom_density2d
@@ -48,5 +48,5 @@ geom_mean_ellipse <- function(mapping = NULL, data = NULL, stat = "MeanEllipse",
 GeomMeanEllipse <- ggproto(
   "GeomMeanEllipse", 
   GeomPath,
-  default_aes = aes(colour = "#3366FF", size = 0.5, linetype = 1, alpha = NA))
+  default_aes = aes(colour = "#3366FF", linewidth = 0.5, linetype = 1, alpha = NA))
 

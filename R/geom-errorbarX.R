@@ -144,7 +144,7 @@ GeomErrorbarr <- ggproto("GeomErrorbarr",
   if(!"CoordTern" %in% class(coord)) return(zeroGrob())
   if(!"arrow"     %in% class(arrow)) arrow = arrow(angle=90,unit(0.01,'npc'))
   
-  data <- remove_missing(data, na.rm = na.rm, c("x", "y","z", "linetype", "size", "shape"),name = "geom_errorbarX")
+  data <- remove_missing(data, na.rm = na.rm, c("x", "y","z", "linetype", "linewidth", "shape"),name = "geom_errorbarX")
   if (empty(data)) return(zeroGrob())
   
   #Work out the mapping

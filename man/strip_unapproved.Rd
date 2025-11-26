@@ -16,5 +16,5 @@ strip_unapproved(layers)
 \code{strip_unapproved} is an internal function which essentially 'deletes' layers 
 from the current ternary plot in the event that such layers are not one of the 
 approved layers. For a layer to be approved, it must use an approved geometry, and also an approved stat. 
-Refer to \link{approved_layers} for the current list of approved geometries and stats
+Refer to \link[ggtern]{approved_layers} for the current list of approved geometries and stats
 }

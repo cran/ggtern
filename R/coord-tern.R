@@ -9,7 +9,7 @@
 #' Abovementioned limitations include the types of geometries which can be used (ie approved geometries), 
 #' or modifications to required aesthetic mappings. One such essential patch is, for approved geometries previously 
 #' requiring \code{x} and \code{y} coordinates, now require an additional \code{z} coordinate, and, 
-#' \code{\link{geom_segment}} goes one step further in that it requires both an additional 
+#' \code{\link[ggplot2]{geom_segment}} goes one step further in that it requires both an additional 
 #' \code{z} and \code{zend} coordinate mappings. 
 #' 
 #' In essence, the required aesthetics are the product between what
@@ -25,14 +25,20 @@
 coord_tern <- function(Tlim = NULL, Llim = NULL, Rlim = NULL, expand = TRUE){
   rs      = CoordTern$required_scales
   ra      = CoordTern$required_aes
-  mapping = sapply(rs,function(x) getOption(sprintf('tern.default.%s',x)) )
-  if(!all(ra %in% as.character(mapping)))
+  
+  opts = sapply(rs,function(x) getOption(sprintf('tern.default.%s',x)) )
+  
+  if(!all(ra %in% as.character(opts)))
     stop(sprintf("Options for %s are %s, must be assigned and NOT duplicated, alter the 'tern.default.X' (X=%s) global option",
                  joinCharacterSeries(rs,'and'),
                  joinCharacterSeries(ra,'and'),
                  joinCharacterSeries(rs,'or')),call.=FALSE)
+  
+  # Convert to aes object
+  mapping <- do.call(aes, as.list(opts))
+  
   ggproto(NULL, CoordTern,
-          mapping         = as.list(mapping),
+          mapping         = ggint$validate_mapping(mapping),
           limits          = list(x = c(0,1), y = c(0,1)*.ratio(), T=Tlim, L=Llim, R=Rlim),
           ratio           = 1,
           expand          = expand,
@@ -343,6 +349,7 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
   existing    = data.frame()
   
   tryCatch({
+    
     scale = self$scales[[X]]
     
     #Determine the limits
@@ -363,17 +370,23 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
     if(inherits(labels,'waiver'))
       labels = labels_tern(limits=limits,breaks=breaks)
     
-    #major ticklength
-    tl.major <- 0
-    tryCatch({
-      tl.major <- convertUnit(theme$tern.axis.ticks.length.major,"npc",valueOnly=T)
-    },error=function(e){ warning(e) })
+    convert_tick_to_npc <- function(x, base_size = 11) {
+      # x can be unit or rel
+      if (inherits(x, "unit")) {
+        # convert unit to npc numeric
+        return(as.numeric(convertUnit(x, "npc", valueOnly = TRUE)))
+      }
+      if (ggint$is_rel(x)) {
+        # convert rel to numeric relative to base size
+        # first multiply by base_size and then convert to npc
+        u <- unit(as.numeric(x) * base_size, "pt")
+        return(as.numeric(convertUnit(u, "npc", valueOnly = TRUE)))
+      }
+      stop("Tick length must be a unit or rel object")
+    }
     
-    #minor ticklength
-    tl.minor <- 0
-    tryCatch({
-      tl.minor <- convertUnit(theme$tern.axis.ticks.length.minor,"npc",valueOnly=T)
-    },error=function(e){  warning(e) })
+    tl.major <- convert_tick_to_npc(theme$tern.axis.ticks.length.major, theme$base_size %||% 11)
+    tl.minor <- convert_tick_to_npc(theme$tern.axis.ticks.length.minor, theme$base_size %||% 11)
     
     #Assign new id.
     id     <- (max(existing$ID,0) + 1)
@@ -464,18 +477,33 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
   items
 }
 
-.render.border.main <- function(self,data.extreme,theme,items){
+.render.border.main <- function(self, data.extreme, theme, items) {
   tryCatch({
-    #e      = calc_element('tern.panel.background',theme,verbose=F)
-    e      = calc_element('panel.border',theme,verbose=F)
-    if(inherits(e, "element_blank"))
+    e <- calc_element("panel.border", theme, verbose = FALSE)
+    if (inherits(e, "element_blank")) {
       return(items)
-    ex     = rbind(data.extreme,data.extreme[1,])
-    grob   = ggint$element_grob.element_line(e,linewidth=e$linewidth,x=ex$x,y=ex$y)
-    items[[length(items) + 1]] = grob
-  },error=function(e){ 
+    }
+    
+    # Close polygon
+    ex <- rbind(data.extreme, data.extreme[1, ])
+    
+    grob <- grid::polylineGrob(
+      x = ex$x,
+      y = ex$y,
+      gp = grid::gpar(
+        col     = e$colour,
+        lwd     = e$linewidth * .pt,   # convert to grid units
+        lty     = e$linetype,
+        lineend = e$lineend %||% "butt"
+      )
+    )
+    
+    items[[length(items) + 1]] <- grob
+  },
+  error = function(e) {
     warning(e)
   })
+  
   items
 }
 
@@ -868,12 +896,22 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
         if(inherits(e, "element_blank"))
           return(items)
         
+        g_arrow <- if (inherits(e$arrow, "gridArrow")) {
+          e$arrow
+        } else {
+          grid::arrow(
+            length = unit(e$linewidth * 0.05, "npc"),  # relative to line width / plot
+            type   = "open",                          # or "open" as desired
+            angle  = 30
+          )
+        }
+        
         g = segmentsGrob(x0 = d$x[ix], x1 = d$xend[ix], y0 = d$y[ix], y1 = d$yend[ix],
                             default.units ="npc",
-                            arrow         = e$lineend,
+                            arrow         = g_arrow,
                             gp            = gpar(col     = e$colour %||% 'transparent', 
                                                  lty     = e$linetype,
-                                                 lineend = 'butt',
+                                                 lineend = e$lineend,
                                                  lwd     = e$linewidth)
         )
         items[[length(items) + 1]] <- g

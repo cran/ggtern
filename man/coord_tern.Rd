@@ -17,7 +17,11 @@ coord_tern(Tlim = NULL, Llim = NULL, Rlim = NULL, expand = TRUE)
 
 \item{expand}{If \code{TRUE}, the default, adds a small expansion factor to
 the limits to ensure that data and axes don't overlap. If \code{FALSE},
-limits are taken exactly from the data or \code{xlim}/\code{ylim}.}
+limits are taken exactly from the data or \code{xlim}/\code{ylim}.
+Giving a logical vector will separately control the expansion for the four
+directions (top, left, bottom and right). The \code{expand} argument will be
+recycled to length 4 if necessary. Alternatively, can be a named logical
+vector to control a single direction, e.g. \code{expand = c(bottom = FALSE)}.}
 }
 \value{
 \code{coord_tern} returns a CoordTern ggproto
@@ -33,7 +37,7 @@ It inherits from the fixed coordinate system, employing fixed ratio between x an
 Abovementioned limitations include the types of geometries which can be used (ie approved geometries), 
 or modifications to required aesthetic mappings. One such essential patch is, for approved geometries previously 
 requiring \code{x} and \code{y} coordinates, now require an additional \code{z} coordinate, and, 
-\code{\link{geom_segment}} goes one step further in that it requires both an additional 
+\code{\link[ggplot2]{geom_segment}} goes one step further in that it requires both an additional 
 \code{z} and \code{zend} coordinate mappings. 
 
 In essence, the required aesthetics are the product between what

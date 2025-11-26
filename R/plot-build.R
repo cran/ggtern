@@ -10,7 +10,7 @@
 #' layer. These are useful for tests.
 #'
 #' @param plot ggplot object
-#' @seealso \code{\link{print.ggplot}} and \code{\link{benchplot}} for
+#' @seealso \code{\link{print.ggplot}} and \code{\link[ggplot2]{benchplot}} for
 #'  functions that contain the complete set of steps for generating
 #'  a ggplot2 plot.
 #' @keywords internal
@@ -20,43 +20,52 @@
 NULL
 
 #' @export
-ggplot_build <- function(plot) {
-  # Attaching the plot env to be fetched by deprecations etc.
-  ggint$attach_plot_env(plot$plot_env)
-  UseMethod('ggplot_build')
+ggplot_build <- function(plot, ...) {
+  # TODO: Swap to S7 generic once S7/#543 is resolved
+  env <- ggint$try_prop(plot, "plot_env")
+  if (!is.null(env)) {
+    ggint$attach_plot_env(env)
+  }
+  UseMethod("ggplot_build")
 }
 
-#' @export
-ggplot_build.ggplot <- function(plot) {
+S7::method(ggplot_build, class_ggplot_built) <- function(plot, ...) {
+  plot # This is a no-op
+}
+
+# The build_ggplot is a temporary concession to {thematic} after we put in
+# a compatibility PR that uses this function
+build_ggplot <- S7::method(ggplot_build, class_ggplot) <- function(plot, ...) {
   plot <- ggint$plot_clone(plot)
-  if (length(plot$layers) == 0) {
+  if (length(plot@layers) == 0) {
     plot <- plot + geom_blank()
   }
 
   #NH Check the plot is a teryary plot
-  isTernary = inherits(plot$coordinates,'CoordTern') ##NH
+  isTernary = inherits(plot@coordinates,'CoordTern') ##NH
   if(isTernary){
-    plot$layers <- strip_unapproved(plot$layers) ##NH
+    plot@layers <- strip_unapproved(plot@layers) ##NH
     plot <- layers_add_or_remove_mask(plot) #NH
   }
 
-  layers <- plot$layers
+  layers <- plot@layers
   data <- rep(list(NULL), length(layers))
 
-  scales <- plot$scales
+  scales <- plot@scales
 
   # Allow all layers to make any final adjustments based
   # on raw input data and plot info
-  data <- ggint$by_layer(function(l, d) l$layer_data(plot$data), layers, data, "computing layer data")
+  data <- ggint$by_layer(function(l, d) l$layer_data(plot@data), layers, data, "computing layer data")
   data <- ggint$by_layer(function(l, d) l$setup_layer(d, plot), layers, data, "setting up layer")
 
   # Initialise panels, add extra data for margins & missing faceting
   # variables, and add on a PANEL variable to data
-  layout <- ggint$create_layout(plot$facet, plot$coordinates, plot$layout)
-  data <- layout$setup(data, plot$data, plot$plot_env)
+  layout <- ggint$create_layout(plot@facet, plot@coordinates, plot@layout)
+  data <- layout$setup(data, plot@data, plot@plot_env)
 
   # Compute aesthetics to produce data with generalised variable names
   data <- ggint$by_layer(function(l, d) l$compute_aesthetics(d, plot), layers, data, "computing aesthetics")
+  plot@labels <- ggint$setup_plot_labels(plot, layers, data)
   data <- .ignore_data(data)
 
   # Transform all scales
@@ -77,7 +86,7 @@ ggplot_build.ggplot <- function(plot) {
 
   # Make sure missing (but required) aesthetics are added
   # if(!isTernary)
-  plot$scales$add_missing(c("x", "y"), plot$plot_env)
+  plot@scales$add_missing(c("x", "y"), plot@plot_env)
 
   # Make sure missing (but required) ternary aesthetics are added, and ensure the limits are common
   if(isTernary) 
@@ -99,22 +108,29 @@ ggplot_build.ggplot <- function(plot) {
   data <- layout$map_position(data)
 
   # Hand off position guides to layout
-  layout$setup_panel_guides(plot$guides, plot$layers)
+  layout$setup_panel_guides(plot@guides, plot@layers)
+  
+  # Complete the plot's theme
+  plot@theme <- ggint$plot_theme(plot)
 
   # Train and map non-position scales and guides
   npscales <- scales$non_position_scales()
   if (npscales$n() > 0) {
+    npscales$set_palettes(plot@theme)
     lapply(data, npscales$train_df)
-    plot$guides <- plot$guides$build(npscales, plot$layers, plot$labels, data)
+    plot@guides <- plot@guides$build(npscales, plot@layers, plot@labels, data, plot@theme)
     data <- lapply(data, npscales$map_df)
   } else {
     # Only keep custom guides if there are no non-position scales
-    plot$guides <- plot$guides$get_custom()
+    plot@guides <- plot@guides$get_custom()
   }
   data <- .expose_data(data)
 
   # Fill in defaults etc.
-  data <- ggint$by_layer(function(l, d) l$compute_geom_2(d), layers, data, "setting up geom aesthetics")
+  data <- ggint$by_layer(
+    function(l, d) l$compute_geom_2(d, theme = plot@theme), 
+    layers, data, "setting up geom aesthetics"
+  )
 
   # Let layer stat have a final say before rendering
   data <- ggint$by_layer(function(l, d) l$finish_statistics(d), layers, data, "finishing layer stat")
@@ -123,12 +139,16 @@ ggplot_build.ggplot <- function(plot) {
   data <- layout$finish_data(data)
 
   # Consolidate alt-text
-  plot$labels$alt <- get_alt_text(plot)
+  plot@labels$alt <- get_alt_text(plot)
 
-  structure(
-    list(data = data, layout = layout, plot = plot),
-    class = "ggplot_built"
-  )
+  #structure(
+  #  list(data = data, layout = layout, plot = plot),
+  #  class = "ggplot_built"
+  #)
+  
+  build <- class_ggplot_built(data = data, layout = layout, plot = plot)
+  class(build) <- union(c("ggplot2::ggplot_built", "ggplot_built"), class(build))
+  build
 }
 
 #ggplot_build.ggplot <- function(plot) {
@@ -252,22 +272,22 @@ layer_data <- function(plot, i = 1L) {
 #' Build a plot with all the usual bits and pieces.
 #'
 #' This function builds all grobs necessary for displaying the plot, and
-#' stores them in a special data structure called a \code{\link{gtable}}.
+#' stores them in a special data structure called a \code{\link[gtable]{gtable}}.
 #' This object is amenable to programmatic manipulation, should you want
 #' to (e.g.) make the legend box 2 cm wide, or combine multiple plots into
 #' a single display, preserving aspect ratios across the plots.
 #'
-#' @seealso \code{\link{print.ggplot}} and \code{link{benchplot}} for
+#' @seealso \code{\link{print.ggplot}} and \code{link[ggplot2]{benchplot}} for
 #'  for functions that contain the complete set of steps for generating
 #'  a ggplot2 plot.
-#' @return a \code{\link{gtable}} object
+#' @return a \code{\link[gtable]{gtable}} object
 #' @keywords internal
-#' @param data plot data generated by \code{\link{ggplot_build}}
+#' @param data plot data generated by \code{\link[ggtern]{ggplot_build}}
 #' @rdname ggplot_gtable
 #' @export
 ggplot_gtable <- function(data) {
   # Attaching the plot env to be fetched by deprecations etc.
-  ggint$attach_plot_env(data$plot$plot_env)
+  ggint$attach_plot_env(data$plot@plot_env)
 
   UseMethod('ggplot_gtable')
 }
@@ -280,43 +300,43 @@ ggplot_gtable.ggplot_built <- function(data) {
   theme <- ggint$plot_theme(plot)
 
   # Is the current plot a ternary plot
-  isTernary  <- inherits(plot$coordinates,'CoordTern') ##NH
+  isTernary  <- inherits(plot@coordinates,'CoordTern') ##NH
   
-  geom_grobs <- ggint$by_layer(function(l, d) l$draw_geom(d, layout), plot$layers, data, "converting geom to grob")
+  geom_grobs <- ggint$by_layer(function(l, d) l$draw_geom(d, layout), plot@layers, data, "converting geom to grob")
   
   if(!isTernary) ## NH This is in the base ggplot code, but causes error for ggtern
-    layout$setup_panel_guides(plot$guides, plot$layers) #, plot$mapping) ## NH 21st Jul 2021
+    layout$setup_panel_guides(plot@guides, plot@layers) #, plot$mapping) ## NH 21st Jul 2021
   
-  plot_table <- layout$render(geom_grobs, data, theme, plot$labels)
+  plot_table <- layout$render(geom_grobs, data, theme, plot@labels)
 
   #NH For Ternary Plot.
   if(isTernary){
     latex      <- calc_element('tern.plot.latex', theme, verbose = FALSE)
-    plot$labels<- lapply(plot$labels, function(x) label_formatter(x,latex = latex))
-    plot_table <- plot$coordinates$remove_labels(plot_table)
+    plot@labels<- class_labels(lapply(plot@labels, function(x) label_formatter(x,latex = latex)))
+    plot_table <- plot@coordinates$remove_labels(plot_table)
   }
 
   # Legends
-  legend_box <- plot$guides$assemble(theme)
+  legend_box <- plot@guides$assemble(theme)
   plot_table <- ggint$table_add_legends(plot_table, legend_box, theme)
 
   # Title
   title <- element_render(
-    theme, "plot.title", plot$labels$title,
+    theme, "plot.title", plot@labels$title,
     margin_y = TRUE, margin_x = TRUE
   )
   title_height <- grobHeight(title)
 
   # Subtitle
   subtitle <- element_render(
-    theme, "plot.subtitle", plot$labels$subtitle,
+    theme, "plot.subtitle", plot@labels$subtitle,
     margin_y = TRUE, margin_x = TRUE
   )
   subtitle_height <- grobHeight(subtitle)
 
   # whole plot annotation
   caption <- element_render(
-    theme, "plot.caption", plot$labels$caption,
+    theme, "plot.caption", plot@labels$caption,
     margin_y = TRUE, margin_x = TRUE
   )
   caption_height <- grobHeight(caption)
@@ -367,7 +387,7 @@ ggplot_gtable.ggplot_built <- function(data) {
   plot_table <- gtable_add_grob(plot_table, caption, name = "caption",
     t = -1, b = -1, l = caption_l, r = caption_r, clip = "off")
 
-  plot_table <- ggint$table_add_tag(plot_table, plot$labels$tag, theme)
+  plot_table <- ggint$table_add_tag(plot_table, plot@labels$tag, theme)
 
   # Margins
   plot_table <- gtable_add_rows(plot_table, theme$plot.margin[1], pos = 0)
@@ -384,7 +404,7 @@ ggplot_gtable.ggplot_built <- function(data) {
   }
 
   # add alt-text as attribute
-  attr(plot_table, "alt-label") <- plot$labels$alt
+  attr(plot_table, "alt-label") <- plot@labels$alt
 
   plot_table
 }
@@ -422,7 +442,7 @@ ggplot_gtable.ggplot_built <- function(data) {
 #    zeroGrob()
 #  }
 #  
-#  if (ggint$is.zero(legend_box)) { ##NH
+#  if (ggint$is_zero(legend_box)) { ##NH
 #    position <- "none"
 #  } else {
 #    # these are a bad hack, since it modifies the contents of viewpoint directly...

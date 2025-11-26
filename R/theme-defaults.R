@@ -187,6 +187,7 @@ NULL
 #' @rdname ggtern_themes
 #' @export
 theme_ggtern <- function(base_size = 11, base_family = ""){
+  
   #Base ggplot2 theme
   baseTheme = get("theme_gray",asNamespace("ggplot2"))
   
@@ -231,7 +232,7 @@ theme_ggtern <- function(base_size = 11, base_family = ""){
     tern.axis.text.show            = getOption("tern.text.show"),
     
     #Arrow
-    tern.axis.arrow                = element_line(lineend = getOption('tern.arrow')),
+    tern.axis.arrow                = element_line(arrow = getOption('tern.arrow')),
     tern.axis.arrow.T              = element_line(),
     tern.axis.arrow.L              = element_line(),
     tern.axis.arrow.R              = element_line(),
@@ -250,8 +251,8 @@ theme_ggtern <- function(base_size = 11, base_family = ""){
     tern.axis.ticks.major.T        = element_line(),
     tern.axis.ticks.major.L        = element_line(),
     tern.axis.ticks.major.R        = element_line(),
-    tern.axis.ticks.length.major   = 1.0*base$axis.ticks.length,
-    tern.axis.ticks.length.minor   = 0.5*base$axis.ticks.length,
+    tern.axis.ticks.length.major   = 1.0 * base$axis.ticks.length,
+    tern.axis.ticks.length.minor   = 0.5 * base$axis.ticks.length,
     tern.axis.ticks.outside        = getOption("tern.ticks.outside"),
     tern.axis.ticks.primary.show   = getOption("tern.ticks.primary.show"),
     tern.axis.ticks.secondary.show = getOption("tern.ticks.secondary.show"),
@@ -285,10 +286,10 @@ theme_gray  <- function(base_size = 11, base_family = ""){
   base = theme_ggtern(base_size = base_size, base_family = base_family) 
   base %+replace%
   theme(
-    tern.plot.background  = element_rect(size=NA,color=NA),
+    tern.plot.background  = element_rect(linewidth = NULL, colour = NA),
     tern.axis.arrow       = element_line(
       color               = calc_element('axis.text',base)$colour,
-      lineend             = getOption('tern.arrow')
+      arrow               = getOption('tern.arrow')
     ),
     tern.axis.line.T    = element_blank(),
     tern.axis.line.L    = element_blank(),
@@ -304,11 +305,11 @@ theme_bw <- function(base_size = 12, base_family = "") {
   theme_ggtern(base_size,base_family) %+replace% 
   base %+replace%
   theme(
-    tern.plot.background  = element_rect(size=NA,color=NA),
+    tern.plot.background  = element_rect(linewidth = NULL, colour = NA),
     tern.axis.line        = element_line(color  = base$panel.border$colour),
     tern.axis.arrow       = element_line(
       color               = base$panel.border$colour,
-      lineend             = getOption('tern.arrow')
+      arrow               = getOption('tern.arrow')
     )
   )
 }
@@ -321,11 +322,11 @@ theme_linedraw <- function(base_size = 12, base_family = "") {
     base %+replace%
     theme(
       tern.axis.line    = element_line(color = base$panel.border$colour,
-                                       size  = base$panel.border$size/2),
+                                       linewidth  = base$panel.border$linewidth/2),
       tern.axis.ticks.minor = element_blank(),
       tern.axis.arrow       = element_line(
         color               = base$panel.border$colour,
-        lineend             = getOption('tern.arrow')
+        arrow               = getOption('tern.arrow')
       )
     )
 }
@@ -335,18 +336,18 @@ theme_linedraw <- function(base_size = 12, base_family = "") {
 theme_light <- function(base_size = 12, base_family = "") {
   base     = ggplot2::theme_light(base_size, base_family) 
   baseline = element_line(color = base$panel.border$colour,
-                          size  = base$panel.border$size/2)
+                          linewidth  = base$panel.border$linewidth/2)
   theme_ggtern() %+replace%
     base %+replace%
     theme(
-      tern.plot.background  = element_rect(size=NA,color=NA),
+      tern.plot.background  = element_rect(linewidth = NULL, colour = NA),
       tern.axis.line        = baseline,
       tern.axis.ticks       = base$axis.ticks,
       tern.axis.ticks.minor = element_blank(),
       tern.axis.arrow       = element_line(
         color               = baseline$colour,
-        size                = baseline$size,
-        lineend             = getOption('tern.arrow')
+        linewidth           = baseline$linewidth,
+        arrow               = getOption('tern.arrow')
       )
     )
 }
@@ -396,9 +397,9 @@ theme_dark <- function(base_size = 12, base_family = "") {
   theme_ggtern(base_size,base_family) %+replace% 
   base %+replace%
   theme(
-    tern.plot.background  = element_rect(size=NA,color=NA),
-    tern.axis.line  = element_line( colour = "grey40", size = 0.25),
-    tern.axis.ticks = element_line( colour = "grey40", size = 0.25),
+    tern.plot.background  = element_rect(linewidth = NULL, colour = NA),
+    tern.axis.line  = element_line( colour = "grey40", linewidth = 0.25),
+    tern.axis.ticks = element_line( colour = "grey40", linewidth = 0.25),
     tern.axis.ticks.minor = element_blank()
   )
 }
@@ -453,13 +454,13 @@ theme_custom <- function(base_size             = 12,
   
   #Elements to replace
   theme(
-    tern.plot.background    = element_rect(fill  = tern.plot.background,size=NA,color=NA),
+    tern.plot.background    = element_rect(fill  = tern.plot.background,linewidth=NULL,color=NA),
     tern.panel.background   = element_rect(fill  = tern.panel.background),
-    tern.panel.grid.major   = element_line(linetype=6,size=0.50),
+    tern.panel.grid.major   = element_line(linetype=6,linewidth=0.50),
     tern.panel.grid.major.T = element_line(color = col.T),
     tern.panel.grid.major.L = element_line(color = col.L),
     tern.panel.grid.major.R = element_line(color = col.R),
-    tern.panel.grid.minor   = element_line(linetype=1,size=0.25,colour=col.grid.minor),
+    tern.panel.grid.minor   = element_line(linetype=1,linewidth=0.25,colour=col.grid.minor),
     tern.axis.title.T       = element_text(color = col.T),
     tern.axis.title.L       = element_text(color = col.L),
     tern.axis.title.R       = element_text(color = col.R),
@@ -570,7 +571,7 @@ theme_bluedark = function(base_size = 12, base_family = ""){
                col.grid.minor        = featB) +
     theme(text                    = element_text(color = featA),
           plot.background         = element_rect(fill  = featD),
-          strip.background        = element_rect(color = featA, fill = featE, size=1),
+          strip.background        = element_rect(color = featA, fill = featE, linewidth=1),
           strip.text              = element_text(color = featA),
           tern.panel.grid.major.T = element_line(color = featAG),
           tern.panel.grid.major.L = element_line(color = featAG),
@@ -593,7 +594,7 @@ theme_bluelight = function(base_size = 12, base_family = ""){
                col.grid.minor        = featB) +
     theme(text                    = element_text(color = featA),
           plot.background         = element_rect(fill  = featD),
-          strip.background        = element_rect(color = featC, fill = featE, size=1),
+          strip.background        = element_rect(color = featC, fill = featE, linewidth=1),
           strip.text              = element_text(color = featC),
           tern.panel.grid.major.T = element_line(color = featAG),
           tern.panel.grid.major.L = element_line(color = featAG),

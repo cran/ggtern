@@ -35,6 +35,7 @@
 #'     annotation_raster_tern(FeldsparRaster,xmin=0,xmax=1,ymin=0,ymax=1) +
 #'     geom_point(size=5,aes(shape=Feldspar,fill=Feldspar),color='black') +
 #'     scale_shape_manual(values=c(21,24)) +
+#'     scale_fill_manual(values=c("red", "blue")) +
 #'     labs(title = "Demonstration of Raster Annotation")
 #'     
 #' @seealso \link[=data]{Data}
@@ -137,10 +138,11 @@ NULL
 #' @author Jeremy Hummon Grantham and Michael Anthony Velbel
 #' @examples 
 #' data(Fragments)
-#' ggtern(Fragments,aes(Qm+Qp,Rf,M,colour=Sample)) +
-#'   geom_density_tern(h=2,aes(fill=..level..),
-#'   expand=0.75,alpha=0.5,bins=5) + 
+#' ggtern(Fragments,aes(Qm+Qp,Rf,M,color=Sample)) +
 #'   geom_point(aes(shape=Position,size=Relief)) + 
+#'   scale_size_continuous(range = c(1, 5)) + 
+#'   scale_shape_manual(values = c(21, 24)) + 
+#'   scale_color_manual(values=c("red", "blue", "darkgreen")) +
 #'   theme_bw(base_size=8) + 
 #'   theme_showarrows() + 
 #'   custom_percent('%') + 
@@ -220,8 +222,10 @@ NULL
 #' }
 #' @examples
 #' data(WhiteCells)
-#'    ggtern(WhiteCells,aes(G,L,M)) + 
-#'    geom_density_tern(aes(color=Experiment)) +
-#'    geom_point(aes(shape=Experiment)) +
-#'    facet_wrap(~Experiment,nrow=2)
+#' ggtern(WhiteCells,aes(G,L,M)) + 
+#'   geom_density_tern(aes(color=Experiment),bdl = 0) +
+#'   geom_point(aes(shape=Experiment)) +
+#'   scale_color_manual(values=c("red","blue")) +
+#'   scale_shape_manual(values=c(21,24)) +
+#'   facet_wrap(~Experiment,nrow=2)
 NULL

@@ -3,7 +3,7 @@
 #' @param steps the number of discretisation points to draw the ellipses
 #' @param r a scaling of the half-diameters
 #' @section Computed variables: 
-#' Same as \code{\link{stat_contour}}
+#' Same as \code{\link[ggplot2]{stat_contour}}
 #' @examples
 #' data(Feldspar)
 #' ggtern(data=Feldspar,aes(Ab,An,Or)) +

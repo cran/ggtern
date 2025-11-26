@@ -11,7 +11,9 @@
                            'element_render',# 'message_wrap',
                            'set_last_plot','make_labels',
                         # 'build_guides',
-                           'is.zero','add_ggplot','labelGrob',
+                        # 'is.zero',
+                        #  is_zero,
+                           'add_ggplot','labelGrob',
                            'is.layer','is.facet','is.Coord','GeomSegment',
                            '.element_tree',
                            # 'el_def', ## NOW EXPORTED
@@ -19,7 +21,8 @@
                            'view_scale_primary', ## NEW
                            'view_scale_secondary', ## NEW
                            'combine_elements','aes_to_scale',
-                           'is.Coord','is.facet','is.layer','make_labels','update_labels','update_guides',
+                           'is.Coord','is.facet','is.layer','make_labels',
+                           #'update_labels','update_guides', ## REMOVED 12 Nov 2025
                            # 'update_theme', ## REMOVED
                            'aes_to_scale',
                         # 'scales_add_missing',
@@ -32,17 +35,29 @@
                            # 'contour_lines', ## REMOVED
                            'check_required_aesthetics','snake_class',
                            'ggname','ggplot_gtable','camelize',
-                           'element_grob.element_line','element_grob.element_rect','element_grob.element_text','element_grob.element_blank',
+                        
+                           # 'element_grob.element_line', 'element_grob.element_rect','element_grob.element_text','element_grob.element_blank', #REMOVED 12 NOV 2025
+                             'element_line', 'element_rect','element_text','element_blank', #REPLACED 12 NOV 2025
+                        
                            'plot_clone','compute_just','labelGrob',
-                           'hexGrob',
+                           # 'hexGrob', ## REMOVED 12 Nov 2025
                            # 'try_require', ## REMOVED
                            'hex_binwidth','hexBinSummarise',
-                           'find_args','is.margin','justify_grobs',
+                           'find_args','is.margin',
+                           #'justify_grobs', ## REMOVED 12 Nov 2025
                            'attach_plot_env',
                            'by_layer',
                            'table_add_tag',
                            'table_add_legends',
-                           'table_add_tag'
+                           'table_add_tag',
+                        
+                           'validate_mapping', ##NEH V4.0
+                           'arg_enquos', ##NEH V4.0
+                           'setup_plot_labels', ## NEH 4.0
+                           'plot_theme', ## NEH 4.0
+                           'try_prop', ## NH 4.0
+                           'attach_plot_env', ## NH 4.0
+                           'is_rel' ## NH 4.0
                            )
   .functions.gridExtra  = c('latticeGrob')
     .functions          = rbind(data.frame(p='ggplot2',  f=unique(.functions.ggplot2)),

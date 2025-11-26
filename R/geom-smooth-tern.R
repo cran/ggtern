@@ -54,7 +54,7 @@ GeomSmoothTern <- ggproto("GeomSmoothTern", Geom,
     )
   },
   draw_key = draw_key_smooth,
-  default_aes = aes(colour = "#3366FF", fill = "grey60", size = 1,linetype = 1, weight = 1, alpha = 0.4)
+  default_aes = aes(colour = "#3366FF", fill = "grey60", linewidth = 1,linetype = 1, weight = 1, alpha = 0.4)
 )
 
 
@@ -72,7 +72,7 @@ GeomSmoothTern <- ggproto("GeomSmoothTern", Geom,
   #data <- tlr2xy(data,coord,inverse=TRUE)
   
   # Check that aesthetics are constant
-  aes <- unique(data[c("colour", "fill", "size", "linetype", "alpha")])
+  aes <- unique(data[c("colour", "fill", "linewidth", "linetype", "alpha")])
   if (nrow(aes) > 1) stop("Aesthetics can not vary with a ribbon")
   aes <- as.list(aes)
   
@@ -90,7 +90,7 @@ GeomSmoothTern <- ggproto("GeomSmoothTern", Geom,
     gp = gpar(
       fill = alpha(aes$fill, aes$alpha),
       col = alpha(aes$colour, aes$alpha),
-      lwd = aes$size * .pt,
+      lwd = aes$linewidth * .pt,
       lty = aes$linetype)
   ))
 }

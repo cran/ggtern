@@ -19,8 +19,8 @@ theme_hidelatex()
 \item{value}{logical as to whether to enable latex parsing or not}
 }
 \description{
-A series of convenience functions that either enable or disable the use of the \code{\link{latex2exp}} package 
-for parsing the various text elements using the \code{\link{TeX}} method. In many cases, by turning the latex parsing
+A series of convenience functions that either enable or disable the use of the \code{\link[latex2exp]{latex2exp}} package 
+for parsing the various text elements using the \code{\link[latex2exp]{TeX}} method. In many cases, by turning the latex parsing
 on, this prevents confusing use of expressions to obtain greeks, superscripts, subscripts etc... Note that when 
 latex parsing is enabled, this can override specific formatting directives from the element tree, see the third 
 and fourth example below.

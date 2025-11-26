@@ -43,10 +43,11 @@ topographic slope in the sediment source area.
 }
 \examples{
 data(Fragments)
-ggtern(Fragments,aes(Qm+Qp,Rf,M,colour=Sample)) +
-  geom_density_tern(h=2,aes(fill=..level..),
-  expand=0.75,alpha=0.5,bins=5) + 
+ggtern(Fragments,aes(Qm+Qp,Rf,M,color=Sample)) +
   geom_point(aes(shape=Position,size=Relief)) + 
+  scale_size_continuous(range = c(1, 5)) + 
+  scale_shape_manual(values = c(21, 24)) + 
+  scale_color_manual(values=c("red", "blue", "darkgreen")) +
   theme_bw(base_size=8) + 
   theme_showarrows() + 
   custom_percent('\%') + 

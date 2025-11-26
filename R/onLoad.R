@@ -1,4 +1,6 @@
 .onLoad <- function(libname, pkgname){
+  
+  ggint <<- .getFunctions()
 
   #Set the options
   .setOptionsCurrent()

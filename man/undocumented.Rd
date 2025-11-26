@@ -6,11 +6,6 @@
 \alias{is.numericor}
 \alias{find_global_tern}
 \alias{tern_dep}
-\alias{arrow_label_formatter}
-\alias{arrow_label_formatter.default}
-\alias{arrow_label_formatter.call}
-\alias{arrow_label_formatter.expression}
-\alias{arrow_label_formatter.character}
 \alias{joinCharacterSeries}
 \alias{identityInv}
 \alias{getFormulaVars}
@@ -25,16 +20,6 @@ is.numericor(A, B)
 find_global_tern(name, env = environment(), mode = "any")
 
 tern_dep(version, msg)
-
-arrow_label_formatter(label, suffix = NULL, sep = "/", ...)
-
-\method{arrow_label_formatter}{default}(label, suffix = NULL, sep = "/", ...)
-
-\method{arrow_label_formatter}{call}(label, suffix = NULL, sep = "/", ...)
-
-\method{arrow_label_formatter}{expression}(label, suffix = NULL, sep = "/", ...)
-
-\method{arrow_label_formatter}{character}(label, suffix = NULL, sep = "/", latex = FALSE, ...)
 
 joinCharacterSeries(x, lastWord = "and")
 
@@ -67,16 +52,6 @@ layers_add_or_remove_mask(plot)
 (in other words, the last version where it was not deprecated).}
 
 \item{msg}{The message to print.}
-
-\item{label}{character label}
-
-\item{suffix}{chacater suffix behind each label}
-
-\item{sep}{the seperator between label and suffix}
-
-\item{...}{additional arguments}
-
-\item{latex}{logical as to whether latex formats should be parsed}
 
 \item{dependent}{whether to return the dependent variables (TRUE) or the indpenedent variables (FALSE)}
 

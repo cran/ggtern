@@ -1,9 +1,9 @@
 #' Approved Geoms, Stats and Positions
 #' 
-#' \code{ggtern} is a specialist extension to \code{\link[=ggplot]{ggplot2}} for rendering ternary diagrams, as such, many stats and 
-#' geoms which come packaged with \code{\link[=ggplot]{ggplot2}} are either not relevant or will not work, as such, 
+#' \code{ggtern} is a specialist extension to \code{\link[ggplot2:ggplot]{ggplot2}} for rendering ternary diagrams, as such, many stats and 
+#' geoms which come packaged with \code{\link[ggplot2:ggplot]{ggplot2}} are either not relevant or will not work, as such, 
 #' \code{ggtern} regulates during the plot construction process, which geoms and stats are able to be applied 
-#' when using the \code{\link{coord_tern}} coordinate system. Attempting to apply non-approved geometries or stats 
+#' when using the \code{\link[ggtern]{coord_tern}} coordinate system. Attempting to apply non-approved geometries or stats 
 #' (ie geometries / stats not in the below list), will result in the respective layers being stripped from the final plot.
 #' 
 #' @section Approved Geometries:
@@ -29,7 +29,7 @@ NULL
 #' \code{strip_unapproved} is an internal function which essentially 'deletes' layers 
 #' from the current ternary plot in the event that such layers are not one of the 
 #' approved layers. For a layer to be approved, it must use an approved geometry, and also an approved stat. 
-#' Refer to \link{approved_layers} for the current list of approved geometries and stats
+#' Refer to \link[ggtern]{approved_layers} for the current list of approved geometries and stats
 #' 
 #' @param layers list of the layers to strip unnaproved layers from.
 #' @return \code{strip_unapproved} returns a list of approved layers (may be empty if none are approved).
@@ -129,12 +129,60 @@ strip_unapproved <- function(layers){
     stop("Invalid type",call.=FALSE)
   
   theNames = .nonBlankNames(type)
-  theObjs  = unlist(lapply(theNames,function(x){
-    o = sprintf("%s_%s",type,x)
-    #if(find(o) != 'package:ggplot2') 
-    o = sprintf("\\link{%s}",o)
-    o
+  
+  #theObjs  = unlist(lapply(theNames,function(x){
+  #  o = sprintf("%s_%s",type,x)
+  #  #if(find(o) != 'package:ggplot2') 
+  #  o = sprintf("\\link{%s}",o)
+  #  o
+  #}))
+  
+  theObjs <- unlist(lapply(theNames, function(x) {
+    
+    force_ggplot2 <- c(
+      "geom_point",
+      "geom_path",
+      "geom_line",
+      "geom_label",
+      "geom_text",
+      "geom_jitter",
+      "geom_polygon",
+      "geom_segment",
+      "geom_count",
+      "geom_curve",
+      "geom_blank",
+      "geom_rect",
+      "stat_identity",
+      "stat_sum",
+      "stat_unique",
+      "position_identity"
+    )
+    
+    # Full name with prefix, e.g. "geom_point_tern"
+    fun <- sprintf("%s_%s", type, x)
+    
+    # --- OVERRIDE LOGIC ---
+    # If the base function is in force_ggplot2,
+    # we anchor to ggplot2 *regardless of where it's found*.
+    if (fun %in% force_ggplot2) {
+      pkg <- "ggplot2"
+      
+    } else {
+      # Otherwise detect actual location
+      loc <- utils::getAnywhere(fun)$where
+      
+      if (any(grepl("package:ggtern", loc))) {
+        pkg <- "ggtern"
+      } else if (any(grepl("package:ggplot2", loc))) {
+        pkg <- "ggplot2"
+      } else {
+        pkg <- "ggtern"  # safe fallback
+      }
+    }
+    
+    sprintf("\\link[%s]{%s}", pkg, fun)
   }))
+  
   paste(sprintf("The following %ss have been approved so far, including a combination of existing %ss and newly created %ss for the ggtern package\n",type,type,type),
         sprintf("APPROVED %ss in \\code{ggtern} are as follows:\n\n\\itemize{\n",type),
         paste("\\item\\code{",theObjs,"}",collapse="\n",sep=""),

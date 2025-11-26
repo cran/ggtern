@@ -54,5 +54,5 @@ geom_interpolate_tern <- function( mapping = NULL, data = NULL,
 #' @export
 GeomInterpolateTern <- ggproto("GeomInterpolateTern", 
                                 GeomPath,
-                                default_aes = aes(colour = "#3366FF", size = 0.5, linetype = 1, alpha = NA)
+                                default_aes = aes(colour = "#3366FF", linewidth = 0.5, linetype = 1, alpha = NA)
 )

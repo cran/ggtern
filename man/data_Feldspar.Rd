@@ -39,6 +39,7 @@ ggtern(Feldspar,aes(Ab,An,Or)) +
     annotation_raster_tern(FeldsparRaster,xmin=0,xmax=1,ymin=0,ymax=1) +
     geom_point(size=5,aes(shape=Feldspar,fill=Feldspar),color='black') +
     scale_shape_manual(values=c(21,24)) +
+    scale_fill_manual(values=c("red", "blue")) +
     labs(title = "Demonstration of Raster Annotation")
     
 }

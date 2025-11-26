@@ -234,44 +234,50 @@ tern_dep <- function(version, msg) {
   x
 }
 
-#' \code{arrow_label_formatter} is a function that formats the labels directly adjacent to the ternary arrows.
-#' @param label character label
-#' @param suffix chacater suffix behind each label
-#' @param sep the seperator between label and suffix 
-#' @param ... additional arguments
-#' @param latex logical as to whether latex formats should be parsed
-#' @keywords internal
-#' @rdname undocumented
-arrow_label_formatter             = function(label,suffix=NULL,sep="/",...) UseMethod("arrow_label_formatter")
+# Load methods package if not already
+if(!"methods" %in% loadedNamespaces()) library(methods)
+if(!exists("TeX")) stop("Please import TeX from latex2exp")
 
-#' @export
-#' @rdname undocumented
-arrow_label_formatter.default     = function(label,suffix=NULL,sep="/",...) arrow_label_formatter.character( as.character(label), suffix, sep, ...)
+# Define S7 generic
+setGeneric("arrow_label_formatter",
+           function(label, suffix = NULL, sep = "/", latex = FALSE, ...) 
+             standardGeneric("arrow_label_formatter"))
 
-#' @export
-#' @rdname undocumented
-arrow_label_formatter.call        = function(label,suffix=NULL,sep="/",...) arrow_label_formatter.expression(as.expression(label),suffix, sep, ...)    
+# Default method (applies to ANY type)
+setMethod("arrow_label_formatter", "ANY",
+          function(label, suffix = NULL, sep = "/", latex = FALSE, ...) {
+            # fallback: coerce to character
+            arrow_label_formatter(as.character(label), suffix, sep, latex, ...)
+          })
 
-#' @export
-#' @rdname undocumented
-arrow_label_formatter.expression  = function(label,suffix=NULL,sep="/",...){
-  suffix = if(suffix  == "")   NULL else suffix
-  sep    = if(is.null(suffix)) ""   else .trimAndPad(sep)
-  parse(text=paste(as.character(label),suffix,sep))
-}
+# Method for character
+setMethod("arrow_label_formatter", "character",
+          function(label, suffix = NULL, sep = "/", latex = FALSE, ...) {
+            suffix <- if (is.null(suffix) || suffix == "") NULL else suffix
+            sep <- if (is.null(suffix)) "" else .trimAndPad(sep)
+            result <- paste(label, suffix, sep = sep)
+            if (isTRUE(latex)) result <- TeX(result)
+            result
+          })
 
-#' @export
-#' @rdname undocumented
-arrow_label_formatter.character   = function(label,suffix=NULL,sep="/",latex = FALSE,...) {
-  suffix = if(suffix  == "")   NULL else suffix
-  sep    = if(is.null(suffix)) ""   else .trimAndPad(sep)
-  result = paste(label,suffix,sep=sep)
-  if(latex[1]) result = TeX(result)
-  result
-}
+# Method for expression
+setMethod("arrow_label_formatter", "expression",
+          function(label, suffix = NULL, sep = "/", latex = FALSE, ...) {
+            suffix <- if (suffix == "") NULL else suffix
+            sep <- if (is.null(suffix)) "" else .trimAndPad(sep)
+            parse(text = paste(as.character(label), suffix, sep))
+          })
+
+# Method for call (e.g., language objects)
+setMethod("arrow_label_formatter", "call",
+          function(label, suffix = NULL, sep = "/", latex = FALSE, ...) {
+            arrow_label_formatter(as.expression(label), suffix, sep, latex, ...)
+          })
+
+# Internal helper
 .trimAndPad <- function(x){
-  x = gsub("^(\\s+)","",gsub("(\\s+)$","",x))
-  if(nchar(x) == 1) x = sprintf(" %s ",x)
+  x <- gsub("^(\\s+)","",gsub("(\\s+)$","",x))
+  if(nchar(x) == 1) x <- sprintf(" %s ", x)
   x
 }
 
@@ -373,6 +379,10 @@ layers_add_or_remove_mask = function(plot){
   }
   plot
 } 
+
+is_bang <- function(x) {
+  is_call(x, "!", n = 1)
+}
 
 
 

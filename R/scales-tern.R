@@ -13,7 +13,7 @@ scale_T_continuous <- function(name         = waiver(),
                                minor_breaks = waiver(),
                                labels       = waiver(),...) {
   sc <- continuous_scale(
-    c("T"),
+    aesthetics = c("T"),
     # "tern_T", 
     palette = identity, 
     name = name, breaks = breaks,
@@ -37,13 +37,13 @@ scale_L_continuous <- function(name         = waiver(),
                                minor_breaks = waiver(),
                                labels       = waiver(),...) {
   sc <- continuous_scale(
-    c("L"),
+    aesthetics = c("L"),
     # "tern_L", 
     palette = identity, 
     name = name, breaks = breaks,
     minor_breaks = minor_breaks, labels = labels, limits = limits,
     expand = waiver(), oob = censor, na.value = NA_real_, transform = "identity",
-    guide = "none",super = ScaleContinuousPosition
+    guide = "none", super = ScaleContinuousPosition
   )
   # TODO: Fix this hack. We're reassigning the parent ggproto object, but this
   # object should in the first place be created with the correct parent.
@@ -60,7 +60,7 @@ scale_R_continuous <- function(name         = waiver(),
                                minor_breaks = waiver(),
                                labels       = waiver(),...) {
   sc <- continuous_scale(
-    c("R"),
+    aesthetics = c("R"),
     # "tern_R", 
     palette = identity, 
     name = name, breaks = breaks,

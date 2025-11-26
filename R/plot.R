@@ -1,3 +1,6 @@
+# Load methods if not already
+if(!"methods" %in% loadedNamespaces()) library(methods)
+
 #' Create a new ggplot plot.
 #'
 #' \code{ggplot()} initializes a ggplot object. It can be used to
@@ -42,38 +45,68 @@ ggplot <- function(data = NULL, mapping = aes(), ...,
 #' @export
 #' @rdname ggplot
 #' @usage NULL
-ggplot.default <- function(data = NULL, mapping = aes(), ...,
-                           environment = parent.frame()) {
-
-  if (!missing(mapping) && !inherits(mapping, "uneval")) {
-    #cli::cli_abort(c(
-    #  "{.arg mapping} must be created with {.fn aes}.",
-    #  "x" = "You've supplied {.obj_type_friendly {mapping}}."
-    #))
-    stop("Mapping should be created with aes or aes_string")
-  }
-  
-  data = fortify(data, ...)
-  
-  p <- structure(list(
-    data = data,
-    layers = list(),
-    scales = ggint$scales_list(),
-    guides = ggint$guides_list(),
-    mapping = mapping,
-    theme = list(),
-    coordinates = coord_cartesian(default = TRUE),
-    facet = facet_null(),
-    plot_env = environment,
-    layout = ggproto(NULL, Layout)
-  ), class = c("gg", "ggplot"))
-  
-  p$labels <- ggint$make_labels(mapping) #NH
-  
-  ggint$set_last_plot(p) ##NH
-  
-  p
+ggplot.default <-
+  function(data, mapping = aes(), ..., environment = parent.frame()) {
+    
+    if (!missing(mapping)) {
+      mapping <- ggint$validate_mapping(mapping)
+    }
+    if (missing(data)) {
+      data <- NULL
+    }
+    
+    data <- fortify(data, ...)
+    
+    p <- class_ggplot(
+      data = data,
+      mapping = mapping,
+      plot_env = environment
+    )
+    
+    class(p) <- union(union(c("ggplot"), class(p)), "gg")
+    
+    p$labels <- class_labels(ggint$make_labels(mapping)) #NH
+    
+    ggint$set_last_plot(p) ##NH
+    ##set_last_plot(p)
+    
+    p
 }
+
+
+# ggplot.default <- function(data = NULL, mapping = aes(), ...,
+#                           environment = parent.frame()) {
+#
+#  if (!missing(mapping) && !inherits(mapping, "uneval")) {
+#    #cli::cli_abort(c(
+#    #  "{.arg mapping} must be created with {.fn aes}.",
+#    #  "x" = "You've supplied {.obj_type_friendly {mapping}}."
+#    #))
+#    stop("Mapping should be created with aes or aes_string")
+#  }
+  
+#  data = fortify(data, ...)
+  
+#  p <- structure(list(
+#    data = data,
+#    layers = list(),
+#    scales = ggproto(ggint$scales_list()),
+#    guides = ggproto(ggint$guides_list()),
+#    mapping = mapping,
+#    theme = list(),
+#    coordinates = coord_cartesian(default = TRUE),
+#    facet = facet_null(),
+#    plot_env = environment,
+#    layout = ggproto(NULL, Layout)
+#  ), class = c("gg", "ggplot"))
+#  
+#  
+#  p$labels <- ggint$make_labels(mapping) #NH
+#  
+#  ggint$set_last_plot(p) ##NH
+#  
+#  p
+#}
 
 #' Draw plot on current graphics device.
 #'

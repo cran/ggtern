@@ -39,7 +39,7 @@ a unified weighting of '1' will which will result in the regular density calcula
 Based of an algorithm found online at \code{https://stat.ethz.ch/pipermail/r-help/2006-June/107405.html}.
 }
 \seealso{
-\code{\link{kde2d}}
+\code{\link[MASS]{kde2d}}
 }
 \author{
 Nicholas Hamilton

@@ -7,7 +7,7 @@
 #' 
 #' This geometry is loosely based on the base ggplot2 geom_hex, with a few subtle
 #' (but advantageous differences). The user can control the border thickness of the
-#' hexagonal polygons using the size aesthetic. The user can also control the
+#' hexagonal polygons using the linewidth aesthetic. The user can also control the
 #' particular statistic to use, by defining the \code{fun} argument (sum by default), which by default
 #' is applied over a value of 1 per point, however, this can also be mapped to a data variable
 #' via the 'value' mapping.
@@ -117,12 +117,12 @@ GeomHexTern <- ggproto("GeomHexTern", Geom,
                         fill = alpha(data$fill[1], 
                                      data$alpha[1]),
                         lty  = data$linetype[1], 
-                        lwd  = data$size[1]
+                        lwd  = data$linewidth[1]
                       )
           )
       )
     },
     required_aes = c("x", "y", "z"),
-    default_aes = aes(colour = NA, fill = "grey50", size = 0.5, alpha = 1, linetype=1),
+    default_aes = aes(colour = NA, fill = "grey50", linewidth = 0.5, alpha = 1, linetype=1),
     draw_key = draw_key_polygon
 )

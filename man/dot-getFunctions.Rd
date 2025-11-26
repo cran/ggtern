@@ -5,7 +5,9 @@
 \title{OLD FUNCTIONS  
 new_panel','train_layout','train_position','train_ranges','map_position','map_layout','reset_scales','facet_render',
 xlabel','ylabel'
-expand_default', ## REMOVED}
+expand_default', ## REMOVED
+update_labels','update_guides', ## REMOVED 12 Nov 2025
+justify_grobs', ## REMOVED 12 Nov 2025}
 \usage{
 .getFunctions()
 }
@@ -14,4 +16,6 @@ OLD FUNCTIONS
 new_panel','train_layout','train_position','train_ranges','map_position','map_layout','reset_scales','facet_render',
 xlabel','ylabel'
 expand_default', ## REMOVED
+update_labels','update_guides', ## REMOVED 12 Nov 2025
+justify_grobs', ## REMOVED 12 Nov 2025
 }

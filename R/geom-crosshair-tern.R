@@ -63,7 +63,7 @@ GeomCrosshairTern <- ggproto("GeomCrosshairTern",Geom,
                        ret[[3]] = .drawTernaryCrosshair(self,data,panel_params,coord,'R',arrow,lineend,na.rm)
                        ret
                      },
-                     default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA),
+                     default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA),
                      required_aes = c("x","y","z"),
                      draw_key = draw_key_crosshair_tern 
 )
@@ -102,7 +102,7 @@ GeomTmark <- ggproto("GeomTmark",Geom,
                      draw_group = function(self, data, panel_params, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
                        .drawTernaryCrosshair(self,data,panel_params,coord,'T',arrow,lineend,na.rm)
                      },
-                     default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA),
+                     default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA),
                      required_aes = c("x","y","z"),
                      draw_key = draw_key_Tmark
 )
@@ -141,7 +141,7 @@ GeomLmark <- ggproto("GeomLmark",Geom,
                       draw_group = function(self, data, panel_params, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
                         .drawTernaryCrosshair(self,data,panel_params,coord,'L',arrow,lineend,na.rm)
                       },
-                      default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA),
+                      default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA),
                       required_aes = c("x","y","z"),
                       draw_key = draw_key_Lmark
   )
@@ -179,7 +179,7 @@ GeomRmark <- ggproto("GeomRmark",Geom,
                      draw_group = function(self, data, panel_params, coord, arrow = NULL, lineend = "butt", na.rm = FALSE ){
                        .drawTernaryCrosshair(self,data,panel_params,coord,'R',arrow,lineend,na.rm)
                      },
-                     default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA),
+                     default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA),
                      required_aes = c("x","y","z"),
                      draw_key = draw_key_Rmark
 )
@@ -230,7 +230,7 @@ GeomRmark <- ggproto("GeomRmark",Geom,
                         default.units     = "npc",
                         gp = gpar(col     = alpha(data$colour, data$alpha),
                                   fill    = alpha(data$colour, data$alpha),
-                                  lwd     = data$size*find_global_tern(".pt"),
+                                  lwd     = data$linewidth*find_global_tern(".pt"),
                                   lty     = data$linetype,
                                   lineend = lineend
                         ),

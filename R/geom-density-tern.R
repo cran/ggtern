@@ -12,7 +12,7 @@
 #' #Plot Density Estimate, on isometric log ratio transformation of original data
 #' data('Feldspar')
 #' ggtern(Feldspar,aes(Ab,An,Or)) + 
-#'  geom_density_tern(aes(color=..level..),bins=5) +
+#'  geom_density_tern(aes(color=after_stat(level)),bins=20) +
 #'  geom_point()
 #' 
 #' @author Nicholas Hamilton
@@ -46,7 +46,7 @@ geom_density_tern <- function(mapping = NULL, data = NULL, stat='DensityTern', p
 #' @export
 GeomDensityTern <- ggproto("GeomDensityTern", 
                            GeomPath,
-                           default_aes = aes(colour = "#3366FF", size = 0.5, linetype = 1, alpha = NA,weight=1.0))
+                           default_aes = aes(colour = "#3366FF", linewidth = 0.5, linetype = 1, alpha = NA,weight=1.0))
 
 
 

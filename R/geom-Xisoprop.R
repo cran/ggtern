@@ -1,19 +1,24 @@
+#' @include utilities.R
+#' @include legend-draw-tern.R
+NULL
+
 #' Fixed Value Isoproportion Lines
 #' 
-#' Create fixed isoproportion lines for each of the ternary axes, \code{geom_Xisoprop(...), (X = T, L, R)} will draw an isoproportion
+#' Create fixed isoproportion lines for each of the ternary axes, 
+#' \code{geom_Xisoprop(...), (X = T, L, R)} will draw an isoproportion
 #' line projecting from the T, L and R apex respectively. 
 #' 
-#'@section Aesthetics:
+#' @section Aesthetics:
 #' \Sexpr[results=rd,stage=build]{ggtern:::rd_aesthetics("geom", "Tisoprop")}
 #' @inheritParams ggplot2::geom_segment
-#' @param value, the isoproportion ratio to draw
+#' @param value the isoproportion ratio to draw
 #' @examples 
 #' data(Feldspar)
-#' ggtern(data=Feldspar,aes(Ab,An,Or)) +
-#' geom_Tisoprop(value=0.5) +
-#' geom_Lisoprop(value=0.5) +
-#' geom_Risoprop(value=0.5) +
-#' geom_point()
+#' ggtern(data = Feldspar, aes(Ab, An, Or)) +
+#'   geom_Tisoprop(value = 0.5) +
+#'   geom_Lisoprop(value = 0.5) +
+#'   geom_Risoprop(value = 0.5) +
+#'   geom_point()
 #' @author Nicholas Hamilton
 #' @name geom_Xisoprop
 #' @rdname geom_Xisoprop
@@ -60,7 +65,7 @@ GeomTisoprop <- ggproto("GeomTisoprop",Geom,
                         draw_group = function(self,data, panel_params,coord, arrow = NULL, lineend = "butt", na.rm = FALSE){
                           .drawTRLIsopropX(self,data,panel_params,coord,'T',arrow=arrow,lineend,na.rm)
                         },
-                        default_aes     = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
+                        default_aes     = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA,arrow=NULL),
                         required_aes    = c("value"),
                         draw_key        = draw_key_Tiso
 )
@@ -106,7 +111,7 @@ GeomLisoprop <- ggproto("GeomLisoprop",Geom,
                         draw_group = function(self,data, panel_params,coord, arrow = NULL, lineend = "butt", na.rm = FALSE){
                           .drawTRLIsopropX(self,data,panel_params,coord,'L',arrow=arrow,lineend,na.rm)
                         },
-                        default_aes  = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA, arrow=NULL),
+                        default_aes  = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA, arrow=NULL),
                         required_aes = c("value"),
                         draw_key     = draw_key_Liso
 )
@@ -152,7 +157,7 @@ GeomRisoprop <- ggproto("GeomRisoprop",Geom,
                     draw_group = function(self,data, panel_params,coord, arrow = NULL, lineend = "butt", na.rm = FALSE){
                       .drawTRLIsopropX(self,data,panel_params,coord,'R',arrow=arrow,lineend,na.rm)
                     },
-                    default_aes     = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA, arrow=NULL),
+                    default_aes     = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA, arrow=NULL),
                     required_aes    = c("value"),
                     draw_key        = draw_key_Riso
 )
@@ -206,7 +211,7 @@ GeomRisoprop <- ggproto("GeomRisoprop",Geom,
                         default.units     = "npc",
                         gp    = gpar(col     = alpha(data$colour,data$alpha),
                                      fill    = alpha(data$colour,data$alpha),
-                                     lwd     = data$size*find_global_tern(".pt"),
+                                     lwd     = data$linewidth*find_global_tern(".pt"),
                                      lty     = data$linetype,
                                      lineend = 'butt'),
                         arrow = arrow %||% data$arrow)

@@ -1,3 +1,10 @@
+ggtern 4.0.0
+----------------------------------------------------------------
+* Fixed broken compatability with ggplot2 4.0.X
+* Changed to S& methods where necessasry
+* Enforced liniewidth vs size for line-type grobs
+* Changed to rel from unit for ticklength theme elements
+
 ggtern 3.5.0
 ----------------------------------------------------------------
 * Fixed broken compatability with ggplot2 3.5.0

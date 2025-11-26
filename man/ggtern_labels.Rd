@@ -42,12 +42,12 @@ Rarrowlab(label)
 \item{labelarrow}{the desired label, if different to label, for the markers along the procession arrows}
 }
 \description{
-New label modification functions, equivalent to the original functions in ggplot2 (\code{\link{xlab}} and \code{\link{ylab}}) 
+New label modification functions, equivalent to the original functions in ggplot2 (\code{\link[ggplot2]{xlab}} and \code{\link[ggplot2]{ylab}}) 
 however for the new axes used in the \code{ggtern} package
 }
 \details{
-\code{Tlab} and \code{\link{xlab}} are equivalent (when \code{T='x'} in the \code{\link{coord_tern}} definition), 
-as is \code{Llab} and \code{\link{ylab}} (when \code{L='y'}) , and \code{Rlab} and \code{zlab} (when \code{R='z'}), for other
+\code{Tlab} and \code{\link[ggplot2]{xlab}} are equivalent (when \code{T='x'} in the \code{\link[ggtern]{coord_tern}} definition), 
+as is \code{Llab} and \code{\link[ggplot2]{ylab}} (when \code{L='y'}) , and \code{Rlab} and \code{zlab} (when \code{R='z'}), for other
 assignments when \code{coord_tern} is defined, the equivalence is not the case, however, if \code{T='XXX'}, 
 then \code{Tlab} will be the same as \code{XXXlab} (where \code{XXX} can be substituted for \code{'x', 'y' or 'z'}, and likewise for
 \code{Llab} and \code{Rlab}). 
@@ -63,7 +63,7 @@ as per the definitions in \code{ggplot2}.
 \section{Arrow Label Suffix}{
 
 \code{Wlab} changes the ternary arrow suffix (ie atomic percent, weight percent etc) when the ternary arrows are enabled 
-(see \code{\link{theme_showarrows}} and \code{\link{weight_percent}})
+(see \code{\link[ggtern]{theme_showarrows}} and \code{\link[ggtern]{weight_percent}})
 }
 
 \section{Precedence}{
@@ -86,7 +86,7 @@ in the event that the user forgets to use an upper-case letter.
 
 Arguments for these functions can be provided as a \code{\link{character}} or \code{\link{expression}}, 
 although other values can be inputed (such as, for example, scalar \code{\link{numeric}} or \code{\link{logical}}).
-ggtern also imports the \code{\link{latex2exp}} package, and these formats can be parsed too.
+ggtern also imports the \code{\link[latex2exp]{latex2exp}} package, and these formats can be parsed too.
 }
 
 \examples{

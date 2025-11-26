@@ -2,20 +2,20 @@
 #' 
 #' Convenience Function for changing the major and/or minor ticklengths.
 #' @param major,minor lenth of major and minor ticklengths respectively. 
-#' Must be a unit object, or will be ignored.
+#' Must be a 'rel' (ie ex rel(5.0)), or will be ignored.
 #' @examples 
 #' ggtern() +
-#'   theme_ticklength(major = unit(5.0,'mm'),
-#'                    minor = unit(2.5,'mm'))
+#'   theme_ticklength(major = rel(1.0),
+#'                    minor = rel(0.5))
 #' @author Nicholas Hamilton
 #' @rdname theme_ticklength
 #' @name theme_ticklength
 #' @export
 theme_ticklength = function(major=NULL,minor=NULL){
   args = list()
-  if(is.unit(major))
+  if(ggint$is_rel(major))
     args$tern.axis.ticks.length.major = major
-  if(is.unit(minor))
+  if(ggint$is_rel(minor))
     args$tern.axis.ticks.length.minor = minor
   do.call(theme,args)
 }

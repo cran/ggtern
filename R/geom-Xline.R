@@ -1,14 +1,14 @@
 #' Fixed Value Lines
 #' 
-#' Plot fixed value lines, for the top, left and right axis, analagous to the \code{\link{geom_hline}}
-#' and \code{\link{geom_vline}} geometries in \code{\link[=ggplot]{ggplot2}}
+#' Plot fixed value lines, for the top, left and right axis, analagous to the \code{\link[ggplot2]{geom_hline}}
+#' and \code{\link[ggplot2]{geom_vline}} geometries in \code{\link[ggplot2:ggplot]{ggplot2}}
 #' 
 #' @aliases geom_Tline geom_Lline geom_Rline Tline tline Lline lline Rline rline
 #' @inheritParams ggplot2::geom_hline
 #' @param Tintercept,Lintercept,Rintercept the intercepts for the T, L and R axis respectively
 #' @examples 
 #' ggtern() + 
-#' geom_Tline(Tintercept=.5,arrow=arrow(), colour='red') + 
+#' geom_Tline(Tintercept=.5, colour='red') + 
 #' geom_Lline(Lintercept=.2, colour='green') + 
 #' geom_Rline(Rintercept=.1, colour='blue')
 #' @author Nicholas Hamilton
@@ -56,7 +56,7 @@ GeomTline <- ggproto("GeomTline",Geom,
                      draw_group = function(self,data,panel_params,coord){
                        .drawTRLLinesX(self,data,panel_params,coord,'T')
                      },
-                     default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
+                     default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA, arrow=NULL),
                      required_aes = c("Tintercept"),
                      draw_key = draw_key_Tline
 )
@@ -109,7 +109,7 @@ GeomLline <- ggproto("GeomLline",Geom,
                      draw_group = function(self,data,panel_params,coord){
                        .drawTRLLinesX(self,data,panel_params,coord,'L')
                      },
-                     default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
+                     default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA, arrow=NULL),
                      required_aes = c("Lintercept"),
                      draw_key = draw_key_Lline
 )
@@ -162,7 +162,7 @@ GeomRline <- ggproto("GeomRline",Geom,
                      draw_group = function(self,data,panel_params,coord){
                        .drawTRLLinesX(self,data,panel_params,coord,'R')
                      },
-                     default_aes = aes(colour = "black", size = 0.5, linetype = 1, alpha = NA,arrow=NULL),
+                     default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA,arrow=NULL),
                      required_aes = c("Rintercept"),
                      draw_key = draw_key_Rline
 )
@@ -170,7 +170,6 @@ GeomRline <- ggproto("GeomRline",Geom,
 #' @rdname geom_Xline
 #' @export
 Rline <- geom_Rline
-
 
 #' @rdname geom_Xline
 #' @export
@@ -217,19 +216,32 @@ rline <- Rline
   data = coord$transform(data, panel_params)
   
   tryCatch({
+    
     cw   = calc_element('tern.axis.clockwise',coord$theme) ##Clockwise
-    grob = segmentsGrob(if(!cw) data$x else data$xend, 
-                        if(!cw) data$y else data$yend, 
-                        if( cw) data$x else data$xend, 
-                        if( cw) data$y else data$yend,
-                        default.units     = "npc",
-                        gp = gpar(col     = alpha(data$colour, data$alpha),
-                                  fill    = alpha(data$colour, data$alpha),
-                                  lwd     = data$size*find_global_tern(".pt"),
-                                  lty     = data$linetype,
-                                  lineend = 'butt'
-                        ),
-                        arrow = data$arrow)
+    
+    x0   = if(cw) data$x else data$xend
+    y0   = if(cw) data$y else data$yend
+    x1   = if(cw) data$xend else data$x
+    y1   = if(cw) data$yend else data$y
+   
+    # One grob per row if arrow is per-row
+    grob <- do.call(gList, lapply(seq_len(nrow(data)), function(i){
+      segmentsGrob(
+        x0 = x0[i],
+        y0 = y0[i],
+        x1 = x1[i],
+        y1 = y1[i],
+        default.units = "npc",
+        gp = gpar(
+          col     = alpha(data$colour[i], data$alpha[i]),
+          fill    = alpha(data$colour[i], data$alpha[i]),
+          lwd     = data$linewidth[i] * find_global_tern(".pt"),
+          lty     = data$linetype[i],
+          lineend = 'butt'
+        ),
+        arrow = data$arrow[[i]]  # must be length 1 or NULL
+      )
+    }))
   },error=function(e){message(as.character(e))})
   grob
 }

@@ -9,10 +9,10 @@ Ternary diagrams are used frequently in a number of disciplines to graph composi
 It is possible to represent a coordinate system having three (3) degrees of freedom, in 2D space, since the third dimention is linear and depends only 
 on the other two. 
 
-The \code{ggtern} package is based on (extends) the very popular \code{\link[=ggplot]{ggplot2}} package, which is an implementation of Wilkinsons 
+The \code{ggtern} package is based on (extends) the very popular \code{\link[ggplot2:ggplot]{ggplot2}} package, which is an implementation of Wilkinsons 
 "The Grammar of Graphics", and, makes provision for a highly methodical construction process for the development 
 of meaningful (graphical) data representations. Of course, the above book by Wilkinson outlines the \emph{theory}, 
-whilst Hadley Wickhams \code{\link[=ggplot]{ggplot2}} implementation is where much of the magic happens, 
+whilst Hadley Wickhams \code{\link[ggplot2:ggplot]{ggplot2}} implementation is where much of the magic happens, 
 and, an ideal base-platform for the \code{ggtern} package.
 
 In this document, some of the main features are highlighted, however, current examples (and corresponding outputs) 
@@ -21,19 +21,19 @@ can be viewed at http://ggtern.com
 \section{\code{ggtern} Constructor}{
 
 Plots in \code{ggtern} are instigated via the default constructor: \code{ggtern(...)}, 
-for additional information, click \link[=ggtern]{HERE}:
+for additional information, click \link[ggtern:ggtern]{HERE}:
 }
 
 \section{\code{ggtern} Ternary Coordinate System}{
 
 The foundation of this package, is the ternary coordinate system, which can be produced with the \code{coord_tern(...)} command and added to an existing 
 ggplot object. The \code{ggtern(...)} constructor adds the \code{coord_tern(...)} coordinate system by default. 
-For further information on the \code{coord_tern(...)} coordinate system, click \link[=coord_tern]{HERE}.
+For further information on the \code{coord_tern(...)} coordinate system, click \link[ggtern:coord_tern]{HERE}.
 }
 
 \section{\code{ggtern} Valid Geometries}{
 
-ggplot2, using the \code{\link{grid}} and \code{\link{proto}} architectures, makes provision for a many number of geometries to be added 
+ggplot2, using the \code{\link{grid}} and \code{\link[proto]{proto}} architectures, makes provision for a many number of geometries to be added 
 progressively in \emph{'layers'} to a given base plot. Due to the nature of the ternary coordinate system, some of the 
 geometries which are available in ggplot2, are \strong{not relevant} (or won't function) with ternary plots and as such, a limited number of 
 'approved' geometries can be used. Click \link[=approved_layers]{HERE} for the full list of approved geometries.

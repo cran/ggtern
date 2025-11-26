@@ -1,6 +1,6 @@
 #' Confidence Interval
 #' 
-#' Calculates the confidence intervals, via the Mahalnobis Distance and use of the \code{\link[=ilr]{Log-Ratio}} Transformation
+#' Calculates the confidence intervals, via the Mahalnobis Distance and use of the \code{\link[compositions:ilr]{Log-Ratio}} Transformation
 #' @inheritParams ggplot2::geom_smooth
 #' @inheritParams ggplot2::geom_density2d
 #' @inheritParams ggplot2::geom_point
@@ -57,5 +57,5 @@ geom_confidence <- function(...){
 GeomConfidenceTern <- ggproto(
   "GeomConfidenceTern", 
   GeomPath,
-  default_aes = aes(colour = "#3366FF", size = 0.5, linetype = 1, alpha = NA))
+  default_aes = aes(colour = "#3366FF", linewidth = 0.5, linetype = 1, alpha = NA))
 
